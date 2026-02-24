@@ -52,7 +52,7 @@ function DashboardContent({ compact }: { compact: boolean }) {
               {card.label}
             </p>
             <p className="mt-2 text-2xl font-semibold text-[var(--color-foreground)]">{card.value}</p>
-            <div className="mt-3 inline-flex items-center rounded-full border border-[var(--color-border)] bg-[var(--color-badge)] px-2.5 py-1 text-xs font-medium text-[var(--color-foreground)]">
+            <div className="mt-3 inline-flex items-center rounded-[var(--radius-token-sm)] border border-[var(--color-border)] bg-[var(--color-badge)] px-2.5 py-1 text-xs font-medium text-[var(--color-foreground)]">
               {card.delta}
             </div>
           </section>
@@ -67,7 +67,7 @@ function DashboardContent({ compact }: { compact: boolean }) {
       >
         <div className="mb-3 flex items-center justify-between gap-3">
           <h3 className="text-sm font-semibold text-[var(--color-foreground)]">Quick action</h3>
-          <span className="inline-flex items-center rounded-full border border-[var(--color-border)] bg-[var(--color-muted)] px-2 py-0.5 text-xs text-[var(--color-muted-foreground)]">
+          <span className="inline-flex items-center rounded-[var(--radius-token-sm)] border border-[var(--color-border)] bg-[var(--color-muted)] px-2 py-0.5 text-xs text-[var(--color-muted-foreground)]">
             Draft
           </span>
         </div>
@@ -148,7 +148,7 @@ function TopnavLayout({ compact }: { compact: boolean }) {
             <span
               key={item}
               className={[
-                "rounded-full border px-3 py-1.5 text-xs",
+                "rounded-[var(--radius-token-sm)] border px-3 py-1.5 text-xs",
                 index === 0
                   ? "border-transparent bg-[var(--color-primary)] text-[var(--color-primary-foreground)]"
                   : "border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-muted-foreground)]",

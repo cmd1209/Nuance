@@ -7,6 +7,8 @@ import {
   cssVarPreviewStyle,
   defaultTokenState,
   formatTokenSummary,
+  type EditableColorToken,
+  type ThemePreset,
   type TokenState,
 } from "./lib/tokens";
 
@@ -15,6 +17,41 @@ export default function App() {
 
   const updateToken = <K extends keyof TokenState>(key: K, value: TokenState[K]) => {
     setTokens((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const updateColorOverride = (theme: ThemePreset, key: EditableColorToken, value: string) => {
+    setTokens((prev) => ({
+      ...prev,
+      colorOverrides: {
+        ...prev.colorOverrides,
+        [theme]: {
+          ...prev.colorOverrides[theme],
+          [key]: value,
+        },
+      },
+    }));
+  };
+
+  const resetColorOverrides = (theme?: ThemePreset) => {
+    setTokens((prev) => {
+      if (!theme) {
+        return {
+          ...prev,
+          colorOverrides: {
+            light: {},
+            dark: {},
+          },
+        };
+      }
+
+      return {
+        ...prev,
+        colorOverrides: {
+          ...prev.colorOverrides,
+          [theme]: {},
+        },
+      };
+    });
   };
 
   const exports = buildExportArtifacts(tokens);
@@ -51,15 +88,9 @@ export default function App() {
               <ControlsPanel
                 tokens={tokens}
                 onChange={updateToken}
+                onColorOverrideChange={updateColorOverride}
+                onResetColorOverrides={resetColorOverrides}
                 onReset={() => setTokens(defaultTokenState)}
-              />
-            </div>
-
-            <div className="rounded-[var(--radius-token)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-[var(--shadow-card)]">
-              <ExportPanel
-                cssVariables={exports.cssVariables}
-                tailwindConfig={exports.tailwindConfig}
-                componentsBundle={exports.componentsBundle}
               />
             </div>
           </section>
@@ -68,6 +99,14 @@ export default function App() {
             <PreviewPanel tokens={tokens} />
           </section>
         </main>
+
+        <footer className="mt-4 rounded-[var(--radius-token)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-[var(--shadow-card)]">
+          <ExportPanel
+            cssVariables={exports.cssVariables}
+            tailwindConfig={exports.tailwindConfig}
+            componentsBundle={exports.componentsBundle}
+          />
+        </footer>
       </div>
     </div>
   );

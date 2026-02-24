@@ -1,9 +1,12 @@
-import type { TokenState } from "../lib/tokens";
-import { accentOptions, tokenOptionLabels } from "../lib/tokens";
+import { useState } from "react";
+import type { EditableColorToken, ThemePreset, TokenState } from "../lib/tokens";
+import { accentOptions, editableColorOptions, getEditableColorValues, tokenOptionLabels } from "../lib/tokens";
 
 type ControlsPanelProps = {
   tokens: TokenState;
   onChange: <K extends keyof TokenState>(key: K, value: TokenState[K]) => void;
+  onColorOverrideChange: (theme: ThemePreset, key: EditableColorToken, value: string) => void;
+  onResetColorOverrides: (theme?: ThemePreset) => void;
   onReset: () => void;
 };
 
@@ -45,7 +48,17 @@ function SegmentedControl<T extends string>({ label, value, options, onChange }:
   );
 }
 
-export function ControlsPanel({ tokens, onChange, onReset }: ControlsPanelProps) {
+export function ControlsPanel({
+  tokens,
+  onChange,
+  onColorOverrideChange,
+  onResetColorOverrides,
+  onReset,
+}: ControlsPanelProps) {
+  const [showAdvancedColors, setShowAdvancedColors] = useState(false);
+  const colorValues = getEditableColorValues(tokens, tokens.theme);
+  const activeThemeOverrideCount = Object.keys(tokens.colorOverrides[tokens.theme]).length;
+
   return (
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-3">
@@ -128,7 +141,7 @@ export function ControlsPanel({ tokens, onChange, onReset }: ControlsPanelProps)
                 title={accent.label}
               >
                 <span
-                  className="h-4 w-4 rounded-full border border-black/10"
+                  className="h-4 w-4 rounded-[var(--radius-token-sm)] border border-black/10"
                   style={{ backgroundColor: accent.swatch }}
                   aria-hidden="true"
                 />
@@ -137,6 +150,76 @@ export function ControlsPanel({ tokens, onChange, onReset }: ControlsPanelProps)
             );
           })}
         </div>
+      </section>
+
+      <section className="rounded-[var(--radius-token)] border border-[var(--color-border)] bg-[var(--color-panel)] p-3">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h3 className="text-sm font-semibold text-[var(--color-foreground)]">Advanced Colors</h3>
+            <p className="text-xs text-[var(--color-muted-foreground)]">
+              Fine-tune semantic tokens for the current <span className="font-medium">{tokens.theme}</span> theme.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowAdvancedColors((open) => !open)}
+            className="rounded-[var(--radius-token-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-xs font-medium text-[var(--color-foreground)] hover:bg-[var(--color-muted)]"
+          >
+            {showAdvancedColors ? "Hide" : "Edit"}
+          </button>
+        </div>
+
+        <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-[var(--color-muted-foreground)]">
+          <span className="rounded-[var(--radius-token-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] px-2 py-1">
+            Editing: {tokens.theme}
+          </span>
+          <span className="rounded-[var(--radius-token-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] px-2 py-1">
+            Overrides: {activeThemeOverrideCount}
+          </span>
+        </div>
+
+        {showAdvancedColors ? (
+          <div className="mt-3 space-y-3">
+            <div className="grid grid-cols-1 gap-2">
+              {editableColorOptions.map((item) => (
+                <label
+                  key={item.key}
+                  className="flex items-center gap-3 rounded-[var(--radius-token-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] p-2"
+                >
+                  <input
+                    type="color"
+                    value={colorValues[item.key]}
+                    onChange={(event) => onColorOverrideChange(tokens.theme, item.key, event.target.value)}
+                    className="h-9 w-10 cursor-pointer rounded border border-[var(--color-border)] bg-transparent p-0"
+                    aria-label={`${item.label} color`}
+                  />
+
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm font-medium text-[var(--color-foreground)]">{item.label}</div>
+                    <div className="truncate text-xs text-[var(--color-muted-foreground)]">{item.description}</div>
+                  </div>
+                </label>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => onResetColorOverrides(tokens.theme)}
+                className="rounded-[var(--radius-token-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-xs font-medium text-[var(--color-foreground)] hover:bg-[var(--color-muted)]"
+              >
+                Reset {tokens.theme} colors
+              </button>
+              <button
+                type="button"
+                onClick={() => onResetColorOverrides()}
+                className="rounded-[var(--radius-token-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-xs font-medium text-[var(--color-muted-foreground)] hover:bg-[var(--color-muted)]"
+              >
+                Reset all colors
+              </button>
+            </div>
+          </div>
+        ) : null}
       </section>
 
       <section className="rounded-[var(--radius-token)] border border-dashed border-[var(--color-border)] bg-[var(--color-panel)] p-3 text-xs text-[var(--color-muted-foreground)]">

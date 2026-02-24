@@ -1,9 +1,25 @@
 export type LayoutPreset = "sidebar" | "topnav" | "centered" | "split";
 export type DensityPreset = "compact" | "cosy";
-export type RadiusPreset = "sm" | "md" | "lg";
+export type RadiusPreset = "none" | "sm" | "md" | "lg";
 export type ShadowPreset = "none" | "subtle" | "elevated";
 export type ThemePreset = "light" | "dark";
 export type AccentPreset = "sky" | "emerald" | "rose" | "amber" | "violet" | "teal";
+export type EditableColorToken =
+  | "background"
+  | "surface"
+  | "panel"
+  | "border"
+  | "foreground"
+  | "muted"
+  | "mutedForeground"
+  | "primary"
+  | "primaryForeground"
+  | "badge";
+
+export type ColorOverrides = {
+  light: Partial<Record<EditableColorToken, string>>;
+  dark: Partial<Record<EditableColorToken, string>>;
+};
 
 export type TokenState = {
   layout: LayoutPreset;
@@ -12,6 +28,7 @@ export type TokenState = {
   shadow: ShadowPreset;
   theme: ThemePreset;
   accent: AccentPreset;
+  colorOverrides: ColorOverrides;
 };
 
 export const defaultTokenState: TokenState = {
@@ -21,6 +38,10 @@ export const defaultTokenState: TokenState = {
   shadow: "subtle",
   theme: "light",
   accent: "sky",
+  colorOverrides: {
+    light: {},
+    dark: {},
+  },
 };
 
 type PaletteMode = {
@@ -159,6 +180,7 @@ const baseDark: Omit<PaletteMode, "primary" | "primaryForeground" | "badge" | "r
 };
 
 const radiusScale: Record<RadiusPreset, { token: string; sm: string }> = {
+  none: { token: "0rem", sm: "0rem" },
   sm: { token: "0.5rem", sm: "0.375rem" },
   md: { token: "0.875rem", sm: "0.625rem" },
   lg: { token: "1.125rem", sm: "0.875rem" },
@@ -185,6 +207,56 @@ const densityScale: Record<DensityPreset, { panelGap: number; cardPad: number; i
 };
 
 type ThemeVars = Record<string, string>;
+
+const colorVarNameByToken: Record<EditableColorToken, keyof ThemeVars> = {
+  background: "--color-background",
+  surface: "--color-surface",
+  panel: "--color-panel",
+  border: "--color-border",
+  foreground: "--color-foreground",
+  muted: "--color-muted",
+  mutedForeground: "--color-muted-foreground",
+  primary: "--color-primary",
+  primaryForeground: "--color-primary-foreground",
+  badge: "--color-badge",
+};
+
+const ringAlphaByTheme: Record<ThemePreset, number> = {
+  light: 0.28,
+  dark: 0.28,
+};
+
+const hexToRgba = (hex: string, alpha: number) => {
+  const normalized = hex.replace("#", "").trim();
+  const full = normalized.length === 3 ? normalized.split("").map((c) => `${c}${c}`).join("") : normalized;
+
+  if (!/^[0-9a-fA-F]{6}$/.test(full)) {
+    return undefined;
+  }
+
+  const r = Number.parseInt(full.slice(0, 2), 16);
+  const g = Number.parseInt(full.slice(2, 4), 16);
+  const b = Number.parseInt(full.slice(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+};
+
+const applyColorOverrides = (mode: ThemePreset, vars: ThemeVars, overrides: Partial<Record<EditableColorToken, string>>) => {
+  const next = { ...vars };
+
+  for (const [tokenKey, value] of Object.entries(overrides) as Array<[EditableColorToken, string]>) {
+    if (!value) continue;
+    next[colorVarNameByToken[tokenKey]] = value;
+  }
+
+  if (overrides.primary) {
+    const ring = hexToRgba(overrides.primary, ringAlphaByTheme[mode]);
+    if (ring) {
+      next["--color-ring"] = ring;
+    }
+  }
+
+  return next;
+};
 
 const toCssBlock = (selector: string, vars: ThemeVars) => {
   const lines = Object.entries(vars).map(([name, value]) => `  ${name}: ${value};`);
@@ -239,7 +311,10 @@ export const buildThemeVars = (tokens: TokenState) => {
     "--space-input-py": `${density.inputPadY}px`,
   };
 
-  return { lightVars, darkVars };
+  return {
+    lightVars: applyColorOverrides("light", lightVars, tokens.colorOverrides.light),
+    darkVars: applyColorOverrides("dark", darkVars, tokens.colorOverrides.dark),
+  };
 };
 
 export const getActiveThemeStyleVars = (tokens: TokenState): Record<string, string> => {
@@ -333,7 +408,7 @@ export function Badge({ tone = "accent", className = "", children }: BadgeProps)
 
   return (
     <span
-      className={\`inline-flex items-center rounded-full border border-border px-2.5 py-1 text-xs font-medium \${tones[tone]} \${className}\`.trim()}
+      className={\`inline-flex items-center rounded-token-sm border border-border px-2.5 py-1 text-xs font-medium \${tones[tone]} \${className}\`.trim()}
     >
       {children}
     </span>
@@ -367,6 +442,40 @@ export const buildExportArtifacts = (tokens: TokenState) => {
   };
 };
 
+export const editableColorOptions: Array<{ key: EditableColorToken; label: string; description: string }> = [
+  { key: "background", label: "Background", description: "App shell background" },
+  { key: "surface", label: "Surface", description: "Cards and panels" },
+  { key: "panel", label: "Panel", description: "Secondary panel backgrounds" },
+  { key: "border", label: "Border", description: "Outlines and dividers" },
+  { key: "foreground", label: "Foreground", description: "Primary text color" },
+  { key: "muted", label: "Muted", description: "Subtle fills" },
+  { key: "mutedForeground", label: "Muted Text", description: "Secondary text color" },
+  { key: "primary", label: "Primary", description: "Accent button / highlights" },
+  { key: "primaryForeground", label: "Primary Text", description: "Text on primary surfaces" },
+  { key: "badge", label: "Badge", description: "Badge fill color" },
+];
+
+export const getEditableColorValues = (
+  tokens: TokenState,
+  theme: ThemePreset,
+): Record<EditableColorToken, string> => {
+  const { lightVars, darkVars } = buildThemeVars(tokens);
+  const vars = theme === "dark" ? darkVars : lightVars;
+
+  return {
+    background: vars["--color-background"],
+    surface: vars["--color-surface"],
+    panel: vars["--color-panel"],
+    border: vars["--color-border"],
+    foreground: vars["--color-foreground"],
+    muted: vars["--color-muted"],
+    mutedForeground: vars["--color-muted-foreground"],
+    primary: vars["--color-primary"],
+    primaryForeground: vars["--color-primary-foreground"],
+    badge: vars["--color-badge"],
+  };
+};
+
 export const tokenOptionLabels = {
   layout: [
     { value: "sidebar", label: "Sidebar" },
@@ -379,6 +488,7 @@ export const tokenOptionLabels = {
     { value: "cosy", label: "Cosy" },
   ] as Array<{ value: DensityPreset; label: string }>,
   radius: [
+    { value: "none", label: "None" },
     { value: "sm", label: "Small" },
     { value: "md", label: "Medium" },
     { value: "lg", label: "Large" },
