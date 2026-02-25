@@ -19,7 +19,7 @@ type SegmentedProps<T extends string> = {
 
 function SegmentedControl<T extends string>({ label, value, options, onChange }: SegmentedProps<T>) {
   return (
-    <section className="space-y-2">
+    <section className="ps-controls-segmented space-y-2">
       <h3 className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--color-muted-foreground)]">
         {label}
       </h3>
@@ -35,7 +35,7 @@ function SegmentedControl<T extends string>({ label, value, options, onChange }:
               className={[
                 "rounded-[var(--radius-token-sm)] border px-3 py-2 text-sm transition",
                 active
-                  ? "border-transparent bg-[var(--color-primary)] text-[var(--color-primary-foreground)] shadow-[var(--shadow-card)]"
+                  ? "ps-shadow-card border-transparent bg-[var(--color-primary)] text-[var(--color-primary-foreground)]"
                   : "border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-foreground)] hover:bg-[var(--color-muted)]",
               ].join(" ")}
             >
@@ -60,8 +60,8 @@ export function ControlsPanel({
   const activeThemeOverrideCount = Object.keys(tokens.colorOverrides[tokens.theme]).length;
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-start justify-between gap-3">
+    <div id="ps-controls-panel" className="ps-controls-panel space-y-4">
+      <div className="ps-controls-panel__header flex items-start justify-between gap-3">
         <div>
           <h2 className="text-base font-semibold text-[var(--color-foreground)]">Controls</h2>
           <p className="text-xs text-[var(--color-muted-foreground)]">
@@ -77,14 +77,16 @@ export function ControlsPanel({
         </button>
       </div>
 
-      <SegmentedControl
-        label="Layout"
-        value={tokens.layout}
-        options={tokenOptionLabels.layout}
-        onChange={(value) => onChange("layout", value)}
-      />
+      <div id="ps-controls-layout" className="ps-controls-layout">
+        <SegmentedControl
+          label="Layout"
+          value={tokens.layout}
+          options={tokenOptionLabels.layout}
+          onChange={(value) => onChange("layout", value)}
+        />
+      </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div id="ps-controls-density-theme" className="ps-controls-density-theme grid grid-cols-1 gap-4 sm:grid-cols-2">
         <SegmentedControl
           label="Density"
           value={tokens.density}
@@ -99,7 +101,7 @@ export function ControlsPanel({
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div id="ps-controls-radius-shadow" className="ps-controls-radius-shadow grid grid-cols-1 gap-4 sm:grid-cols-2">
         <SegmentedControl
           label="Radius"
           value={tokens.radius}
@@ -114,7 +116,16 @@ export function ControlsPanel({
         />
       </div>
 
-      <section className="space-y-2">
+      <div id="ps-controls-borders" className="ps-controls-borders">
+        <SegmentedControl
+          label="Borders"
+          value={tokens.borders}
+          options={tokenOptionLabels.borders}
+          onChange={(value) => onChange("borders", value)}
+        />
+      </div>
+
+      <section id="ps-controls-accent" className="ps-controls-accent space-y-2">
         <div className="flex items-center justify-between gap-2">
           <h3 className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--color-muted-foreground)]">
             Accent
@@ -123,7 +134,7 @@ export function ControlsPanel({
             {accentOptions.find((option) => option.key === tokens.accent)?.label}
           </span>
         </div>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="ps-accent-grid grid grid-cols-3 gap-2">
           {accentOptions.map((accent) => {
             const active = accent.key === tokens.accent;
 
@@ -133,6 +144,7 @@ export function ControlsPanel({
                 type="button"
                 onClick={() => onChange("accent", accent.key)}
                 className={[
+                  "ps-accent-option",
                   "flex items-center gap-2 rounded-[var(--radius-token-sm)] border px-2 py-2 text-left text-xs",
                   active
                     ? "border-[var(--color-primary)] bg-[var(--color-muted)]"
@@ -152,8 +164,11 @@ export function ControlsPanel({
         </div>
       </section>
 
-      <section className="rounded-[var(--radius-token)] border border-[var(--color-border)] bg-[var(--color-panel)] p-3">
-        <div className="flex items-start justify-between gap-3">
+      <section
+        id="ps-controls-advanced-colors"
+        className="ps-controls-advanced-colors rounded-[var(--radius-token)] border border-[var(--color-border)] bg-[var(--color-panel)] p-3"
+      >
+        <div className="ps-controls-advanced-colors__header flex items-start justify-between gap-3">
           <div>
             <h3 className="text-sm font-semibold text-[var(--color-foreground)]">Advanced Colors</h3>
             <p className="text-xs text-[var(--color-muted-foreground)]">
@@ -169,7 +184,7 @@ export function ControlsPanel({
           </button>
         </div>
 
-        <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-[var(--color-muted-foreground)]">
+        <div className="ps-controls-advanced-colors__meta mt-2 flex flex-wrap items-center gap-2 text-xs text-[var(--color-muted-foreground)]">
           <span className="rounded-[var(--radius-token-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] px-2 py-1">
             Editing: {tokens.theme}
           </span>
@@ -179,12 +194,12 @@ export function ControlsPanel({
         </div>
 
         {showAdvancedColors ? (
-          <div className="mt-3 space-y-3">
-            <div className="grid grid-cols-1 gap-2">
+          <div className="ps-color-editor mt-3 space-y-3">
+            <div className="ps-color-editor__list grid grid-cols-1 gap-2">
               {editableColorOptions.map((item) => (
                 <label
                   key={item.key}
-                  className="flex items-center gap-3 rounded-[var(--radius-token-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] p-2"
+                  className="ps-color-editor__row flex items-center gap-3 rounded-[var(--radius-token-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] p-2"
                 >
                   <input
                     type="color"
@@ -202,7 +217,7 @@ export function ControlsPanel({
               ))}
             </div>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="ps-color-editor__actions flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={() => onResetColorOverrides(tokens.theme)}
@@ -222,7 +237,10 @@ export function ControlsPanel({
         ) : null}
       </section>
 
-      <section className="rounded-[var(--radius-token)] border border-dashed border-[var(--color-border)] bg-[var(--color-panel)] p-3 text-xs text-[var(--color-muted-foreground)]">
+      <section
+        id="ps-controls-note"
+        className="ps-controls-note rounded-[var(--radius-token)] border border-dashed border-[var(--color-border)] bg-[var(--color-panel)] p-3 text-xs text-[var(--color-muted-foreground)]"
+      >
         Current preset starts from <span className="font-semibold text-[var(--color-foreground)]">v0.1 defaults</span>{" "}
         and updates live. No backend, no persistence, no magic.
       </section>

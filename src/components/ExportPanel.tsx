@@ -19,7 +19,10 @@ function ExportBlock({ title, description, code, copiedKey, onCopy, copyKey }: B
   const copied = copiedKey === copyKey;
 
   return (
-    <section className="space-y-2 rounded-[var(--radius-token)] border border-[var(--color-border)] bg-[var(--color-surface)] p-3 shadow-[var(--shadow-card)]">
+    <section
+      id={`ps-export-block-${copyKey}`}
+      className="ps-export-block ps-shadow-card space-y-2 rounded-[var(--radius-token)] border border-[var(--color-border)] bg-[var(--color-surface)] p-3"
+    >
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="text-sm font-semibold text-[var(--color-foreground)]">{title}</h3>
@@ -34,7 +37,7 @@ function ExportBlock({ title, description, code, copiedKey, onCopy, copyKey }: B
         </button>
       </div>
 
-      <pre className="max-h-44 overflow-auto rounded-[var(--radius-token-sm)] border border-[var(--color-border)] bg-black/90 p-3 text-xs leading-5 text-slate-100">
+      <pre className="ps-export-block__code max-h-44 overflow-auto rounded-[var(--radius-token-sm)] border border-[var(--color-border)] bg-black/90 p-3 text-xs leading-5 text-slate-100">
         <code>{code}</code>
       </pre>
     </section>
@@ -63,7 +66,7 @@ export function ExportPanel({ cssVariables, tailwindConfig, componentsBundle }: 
   };
 
   return (
-    <div className="space-y-3">
+    <div id="ps-export-panel" className="ps-export-panel space-y-3">
       <div>
         <h2 className="text-base font-semibold text-[var(--color-foreground)]">Export</h2>
         <p className="text-xs text-[var(--color-muted-foreground)]">
@@ -100,4 +103,3 @@ export function ExportPanel({ cssVariables, tailwindConfig, componentsBundle }: 
     </div>
   );
 }
-

@@ -2,6 +2,7 @@ export type LayoutPreset = "sidebar" | "topnav" | "centered" | "split";
 export type DensityPreset = "compact" | "cosy";
 export type RadiusPreset = "none" | "sm" | "md" | "lg";
 export type ShadowPreset = "none" | "subtle" | "elevated";
+export type BorderPreset = "on" | "off";
 export type ThemePreset = "light" | "dark";
 export type AccentPreset = "sky" | "emerald" | "rose" | "amber" | "violet" | "teal";
 export type EditableColorToken =
@@ -26,6 +27,7 @@ export type TokenState = {
   density: DensityPreset;
   radius: RadiusPreset;
   shadow: ShadowPreset;
+  borders: BorderPreset;
   theme: ThemePreset;
   accent: AccentPreset;
   colorOverrides: ColorOverrides;
@@ -36,6 +38,7 @@ export const defaultTokenState: TokenState = {
   density: "cosy",
   radius: "md",
   shadow: "subtle",
+  borders: "on",
   theme: "light",
   accent: "sky",
   colorOverrides: {
@@ -192,18 +195,23 @@ const shadowScale: Record<ShadowPreset, { card: string; pop: string }> = {
     pop: "none",
   },
   subtle: {
-    card: "0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 20px rgba(15, 23, 42, 0.04)",
-    pop: "0 1px 2px rgba(15, 23, 42, 0.08), 0 12px 24px rgba(15, 23, 42, 0.08)",
+    card: "0 1px 2px rgba(15, 23, 42, 0.08), 0 6px 16px rgba(15, 23, 42, 0.08)",
+    pop: "0 1px 3px rgba(15, 23, 42, 0.10), 0 10px 20px rgba(15, 23, 42, 0.10)",
   },
   elevated: {
-    card: "0 2px 4px rgba(15, 23, 42, 0.08), 0 18px 36px rgba(15, 23, 42, 0.12)",
-    pop: "0 6px 12px rgba(15, 23, 42, 0.1), 0 24px 48px rgba(15, 23, 42, 0.16)",
+    card: "0 2px 6px rgba(15, 23, 42, 0.12), 0 14px 30px rgba(15, 23, 42, 0.14)",
+    pop: "0 4px 10px rgba(15, 23, 42, 0.14), 0 18px 36px rgba(15, 23, 42, 0.18)",
   },
 };
 
 const densityScale: Record<DensityPreset, { panelGap: number; cardPad: number; inputPadY: number }> = {
   compact: { panelGap: 12, cardPad: 12, inputPadY: 8 },
   cosy: { panelGap: 16, cardPad: 16, inputPadY: 10 },
+};
+
+const borderWidthScale: Record<BorderPreset, string> = {
+  on: "1px",
+  off: "0px",
 };
 
 type ThemeVars = Record<string, string>;
@@ -268,6 +276,7 @@ export const buildThemeVars = (tokens: TokenState) => {
   const radius = radiusScale[tokens.radius];
   const shadow = shadowScale[tokens.shadow];
   const density = densityScale[tokens.density];
+  const borderWidth = borderWidthScale[tokens.borders];
 
   const lightVars: ThemeVars = {
     "--color-background": baseLight.background,
@@ -281,6 +290,7 @@ export const buildThemeVars = (tokens: TokenState) => {
     "--color-primary-foreground": accent.light.primaryForeground,
     "--color-badge": accent.light.badge,
     "--color-ring": accent.light.ring,
+    "--border-width-token": borderWidth,
     "--radius-token": radius.token,
     "--radius-token-sm": radius.sm,
     "--shadow-card": shadow.card,
@@ -302,6 +312,7 @@ export const buildThemeVars = (tokens: TokenState) => {
     "--color-primary-foreground": accent.dark.primaryForeground,
     "--color-badge": accent.dark.badge,
     "--color-ring": accent.dark.ring,
+    "--border-width-token": borderWidth,
     "--radius-token": radius.token,
     "--radius-token-sm": radius.sm,
     "--shadow-card": shadow.card,
@@ -311,9 +322,19 @@ export const buildThemeVars = (tokens: TokenState) => {
     "--space-input-py": `${density.inputPadY}px`,
   };
 
+  const lightWithOverrides = applyColorOverrides("light", lightVars, tokens.colorOverrides.light);
+  const darkWithOverrides = applyColorOverrides("dark", darkVars, tokens.colorOverrides.dark);
+
+  // In dark mode, elevated surfaces benefit from a tiny neutral highlight/glow
+  // so depth reads without making the whole UI look neon.
+  if (tokens.shadow === "elevated") {
+    darkWithOverrides["--shadow-card"] = `${darkWithOverrides["--shadow-card"]}, 0 0 0 1px rgba(255,255,255,0.03), 0 0 28px rgba(148, 163, 184, 0.05)`;
+    darkWithOverrides["--shadow-pop"] = `${darkWithOverrides["--shadow-pop"]}, 0 0 0 1px rgba(255,255,255,0.04), 0 0 36px rgba(148, 163, 184, 0.06)`;
+  }
+
   return {
-    lightVars: applyColorOverrides("light", lightVars, tokens.colorOverrides.light),
-    darkVars: applyColorOverrides("dark", darkVars, tokens.colorOverrides.dark),
+    lightVars: lightWithOverrides,
+    darkVars: darkWithOverrides,
   };
 };
 
@@ -334,7 +355,7 @@ export const buildCssVariablesString = (tokens: TokenState) => {
 };
 
 export const buildTailwindConfigString = () => {
-  return `// PatternSmith theme extension snippet\nexport default {\n  theme: {\n    extend: {\n      colors: {\n        background: "var(--color-background)",\n        surface: "var(--color-surface)",\n        panel: "var(--color-panel)",\n        border: "var(--color-border)",\n        foreground: "var(--color-foreground)",\n        muted: "var(--color-muted)",\n        "muted-foreground": "var(--color-muted-foreground)",\n        primary: "var(--color-primary)",\n        "primary-foreground": "var(--color-primary-foreground)",\n        badge: "var(--color-badge)",\n        ring: "var(--color-ring)",\n      },\n      borderRadius: {\n        token: "var(--radius-token)",\n        "token-sm": "var(--radius-token-sm)",\n      },\n      boxShadow: {\n        card: "var(--shadow-card)",\n        pop: "var(--shadow-pop)",\n      },\n      spacing: {\n        "panel-gap": "var(--space-panel-gap)",\n        "card-pad": "var(--space-card-pad)",\n        "input-py": "var(--space-input-py)",\n      },\n    },\n  },\n};`;
+  return `// PatternSmith theme extension snippet\nexport default {\n  theme: {\n    extend: {\n      colors: {\n        background: "var(--color-background)",\n        surface: "var(--color-surface)",\n        panel: "var(--color-panel)",\n        border: "var(--color-border)",\n        foreground: "var(--color-foreground)",\n        muted: "var(--color-muted)",\n        "muted-foreground": "var(--color-muted-foreground)",\n        primary: "var(--color-primary)",\n        "primary-foreground": "var(--color-primary-foreground)",\n        badge: "var(--color-badge)",\n        ring: "var(--color-ring)",\n      },\n      borderWidth: {\n        token: "var(--border-width-token)",\n      },\n      borderRadius: {\n        token: "var(--radius-token)",\n        "token-sm": "var(--radius-token-sm)",\n      },\n      boxShadow: {\n        card: "var(--shadow-card)",\n        pop: "var(--shadow-pop)",\n      },\n      spacing: {\n        "panel-gap": "var(--space-panel-gap)",\n        "card-pad": "var(--space-card-pad)",\n        "input-py": "var(--space-input-py)",\n      },\n    },\n  },\n};`;
 };
 
 const buttonComponentString = `import type { ButtonHTMLAttributes } from "react";
@@ -349,7 +370,7 @@ export function Button({ variant = "primary", className = "", ...props }: Button
 
   const variants = {
     primary: "bg-primary text-primary-foreground shadow-card hover:brightness-95",
-    ghost: "bg-surface text-foreground border border-border hover:bg-muted",
+    ghost: "bg-surface text-foreground border-token border-border hover:bg-muted",
   } as const;
 
   return <button className={\`\${base} \${variants[variant]} \${className}\`.trim()} {...props} />;
@@ -366,7 +387,7 @@ type CardProps = PropsWithChildren<{
 
 export function Card({ title, subtitle, className = "", children }: CardProps) {
   return (
-    <section className={\`rounded-token border border-border bg-surface p-card-pad shadow-card \${className}\`.trim()}>
+    <section className={\`rounded-token border-token border-border bg-surface p-card-pad shadow-card \${className}\`.trim()}>
       {(title || subtitle) && (
         <header className="mb-3">
           {title ? <h3 className="text-sm font-semibold text-foreground">{title}</h3> : null}
@@ -386,7 +407,7 @@ type InputProps = InputHTMLAttributes<HTMLInputElement>;
 export function Input({ className = "", ...props }: InputProps) {
   return (
     <input
-      className={\`w-full rounded-token-sm border border-border bg-surface px-3 py-input-py text-sm text-foreground placeholder:text-muted-foreground shadow-card focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[var(--color-ring)] \${className}\`.trim()}
+      className={\`w-full rounded-token-sm border-token border-border bg-surface px-3 py-input-py text-sm text-foreground placeholder:text-muted-foreground shadow-card focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[var(--color-ring)] \${className}\`.trim()}
       {...props}
     />
   );
@@ -408,7 +429,7 @@ export function Badge({ tone = "accent", className = "", children }: BadgeProps)
 
   return (
     <span
-      className={\`inline-flex items-center rounded-token-sm border border-border px-2.5 py-1 text-xs font-medium \${tones[tone]} \${className}\`.trim()}
+      className={\`inline-flex items-center rounded-token-sm border-token border-border px-2.5 py-1 text-xs font-medium \${tones[tone]} \${className}\`.trim()}
     >
       {children}
     </span>
@@ -498,6 +519,10 @@ export const tokenOptionLabels = {
     { value: "subtle", label: "Subtle" },
     { value: "elevated", label: "Elevated" },
   ] as Array<{ value: ShadowPreset; label: string }>,
+  borders: [
+    { value: "on", label: "On" },
+    { value: "off", label: "Off" },
+  ] as Array<{ value: BorderPreset; label: string }>,
   theme: [
     { value: "light", label: "Light" },
     { value: "dark", label: "Dark" },
@@ -510,6 +535,7 @@ export const formatTokenSummary = (tokens: TokenState) =>
     `density:${tokens.density}`,
     `radius:${tokens.radius}`,
     `shadow:${tokens.shadow}`,
+    `borders:${tokens.borders}`,
     `theme:${tokens.theme}`,
     `accent:${tokens.accent}`,
   ].join(" • ");

@@ -1,4 +1,6 @@
+import type { CSSProperties } from "react";
 import type { TokenState } from "../lib/tokens";
+import { cssVarPreviewStyle } from "../lib/tokens";
 
 type PreviewPanelProps = {
   tokens: TokenState;
@@ -16,10 +18,10 @@ function DashboardContent({ compact }: { compact: boolean }) {
   const headerPad = compact ? "p-3" : "p-4";
 
   return (
-    <div className="min-w-0 space-y-4">
+    <div className="ps-preview-dashboard min-w-0 space-y-4">
       <header
         className={[
-          "rounded-[var(--radius-token)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-card)]",
+          "ps-shadow-card rounded-[var(--radius-token)] border-[length:var(--border-width-token)] border-[color:var(--color-border)] bg-[var(--color-surface)]",
           headerPad,
         ].join(" ")}
       >
@@ -32,7 +34,7 @@ function DashboardContent({ compact }: { compact: boolean }) {
           </div>
           <button
             type="button"
-            className="inline-flex items-center rounded-[var(--radius-token-sm)] bg-[var(--color-primary)] px-3 py-2 text-sm font-medium text-[var(--color-primary-foreground)] shadow-[var(--shadow-pop)] transition hover:brightness-95"
+            className="ps-shadow-pop inline-flex items-center rounded-[var(--radius-token-sm)] bg-[var(--color-primary)] px-3 py-2 text-sm font-medium text-[var(--color-primary-foreground)] transition hover:brightness-95"
           >
             Create report
           </button>
@@ -44,7 +46,7 @@ function DashboardContent({ compact }: { compact: boolean }) {
           <section
             key={card.label}
             className={[
-              "rounded-[var(--radius-token)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-card)]",
+              "ps-shadow-card rounded-[var(--radius-token)] border-[length:var(--border-width-token)] border-[color:var(--color-border)] bg-[var(--color-surface)]",
               cardPadding,
             ].join(" ")}
           >
@@ -52,7 +54,7 @@ function DashboardContent({ compact }: { compact: boolean }) {
               {card.label}
             </p>
             <p className="mt-2 text-2xl font-semibold text-[var(--color-foreground)]">{card.value}</p>
-            <div className="mt-3 inline-flex items-center rounded-[var(--radius-token-sm)] border border-[var(--color-border)] bg-[var(--color-badge)] px-2.5 py-1 text-xs font-medium text-[var(--color-foreground)]">
+            <div className="mt-3 inline-flex items-center rounded-[var(--radius-token-sm)] border-[length:var(--border-width-token)] border-[color:var(--color-border)] bg-[var(--color-badge)] px-2.5 py-1 text-xs font-medium text-[var(--color-foreground)]">
               {card.delta}
             </div>
           </section>
@@ -61,13 +63,13 @@ function DashboardContent({ compact }: { compact: boolean }) {
 
       <section
         className={[
-          "rounded-[var(--radius-token)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-card)]",
+          "ps-shadow-card rounded-[var(--radius-token)] border-[length:var(--border-width-token)] border-[color:var(--color-border)] bg-[var(--color-surface)]",
           cardPadding,
         ].join(" ")}
       >
         <div className="mb-3 flex items-center justify-between gap-3">
           <h3 className="text-sm font-semibold text-[var(--color-foreground)]">Quick action</h3>
-          <span className="inline-flex items-center rounded-[var(--radius-token-sm)] border border-[var(--color-border)] bg-[var(--color-muted)] px-2 py-0.5 text-xs text-[var(--color-muted-foreground)]">
+          <span className="inline-flex items-center rounded-[var(--radius-token-sm)] border-[length:var(--border-width-token)] border-[color:var(--color-border)] bg-[var(--color-muted)] px-2 py-0.5 text-xs text-[var(--color-muted-foreground)]">
             Draft
           </span>
         </div>
@@ -77,7 +79,7 @@ function DashboardContent({ compact }: { compact: boolean }) {
             <span className="mb-1 block text-xs font-medium text-[var(--color-muted-foreground)]">Project name</span>
             <input
               defaultValue="PatternSmith Starter"
-              className="w-full rounded-[var(--radius-token-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 text-sm text-[var(--color-foreground)] outline-none shadow-[var(--shadow-card)] placeholder:text-[var(--color-muted-foreground)]"
+              className="ps-shadow-card w-full rounded-[var(--radius-token-sm)] border-[length:var(--border-width-token)] border-[color:var(--color-border)] bg-[var(--color-surface)] px-3 text-sm text-[var(--color-foreground)] outline-none placeholder:text-[var(--color-muted-foreground)]"
               style={{ paddingTop: "var(--space-input-py)", paddingBottom: "var(--space-input-py)" }}
             />
           </label>
@@ -85,7 +87,7 @@ function DashboardContent({ compact }: { compact: boolean }) {
           <div className="flex items-end">
             <button
               type="button"
-              className="inline-flex h-[42px] items-center justify-center rounded-[var(--radius-token-sm)] border border-[var(--color-border)] bg-[var(--color-muted)] px-4 text-sm font-medium text-[var(--color-foreground)] hover:bg-[var(--color-badge)]"
+              className="inline-flex h-[42px] items-center justify-center rounded-[var(--radius-token-sm)] border-[length:var(--border-width-token)] border-[color:var(--color-border)] bg-[var(--color-muted)] px-4 text-sm font-medium text-[var(--color-foreground)] hover:bg-[var(--color-badge)]"
             >
               Validate
             </button>
@@ -102,7 +104,7 @@ function SidebarLayout({ compact }: { compact: boolean }) {
     <div className="grid min-h-[520px] grid-cols-1 gap-4 xl:grid-cols-[220px_minmax(0,1fr)]">
       <aside
         className={[
-          "rounded-[var(--radius-token)] border border-[var(--color-border)] bg-[var(--color-panel)] shadow-[var(--shadow-card)]",
+          "ps-shadow-card rounded-[var(--radius-token)] border-[length:var(--border-width-token)] border-[color:var(--color-border)] bg-[var(--color-panel)]",
           pad,
         ].join(" ")}
       >
@@ -114,10 +116,10 @@ function SidebarLayout({ compact }: { compact: boolean }) {
             <div
               key={item}
               className={[
-                "rounded-[var(--radius-token-sm)] border px-3 py-2 text-sm",
+                "rounded-[var(--radius-token-sm)] border-[length:var(--border-width-token)] px-3 py-2 text-sm",
                 index === 0
                   ? "border-transparent bg-[var(--color-primary)] text-[var(--color-primary-foreground)]"
-                  : "border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-foreground)]",
+                  : "border-[color:var(--color-border)] bg-[var(--color-surface)] text-[var(--color-foreground)]",
               ].join(" ")}
             >
               {item}
@@ -138,7 +140,7 @@ function TopnavLayout({ compact }: { compact: boolean }) {
     <div className="min-h-[520px] space-y-4">
       <nav
         className={[
-          "flex flex-wrap items-center justify-between gap-3 rounded-[var(--radius-token)] border border-[var(--color-border)] bg-[var(--color-panel)] shadow-[var(--shadow-card)]",
+          "ps-shadow-card flex flex-wrap items-center justify-between gap-3 rounded-[var(--radius-token)] border-[length:var(--border-width-token)] border-[color:var(--color-border)] bg-[var(--color-panel)]",
           pad,
         ].join(" ")}
       >
@@ -148,10 +150,10 @@ function TopnavLayout({ compact }: { compact: boolean }) {
             <span
               key={item}
               className={[
-                "rounded-[var(--radius-token-sm)] border px-3 py-1.5 text-xs",
+                "rounded-[var(--radius-token-sm)] border-[length:var(--border-width-token)] px-3 py-1.5 text-xs",
                 index === 0
                   ? "border-transparent bg-[var(--color-primary)] text-[var(--color-primary-foreground)]"
-                  : "border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-muted-foreground)]",
+                  : "border-[color:var(--color-border)] bg-[var(--color-surface)] text-[var(--color-muted-foreground)]",
               ].join(" ")}
             >
               {item}
@@ -183,7 +185,7 @@ function SplitLayout({ compact }: { compact: boolean }) {
       </div>
       <section
         className={[
-          "rounded-[var(--radius-token)] border border-[var(--color-border)] bg-[var(--color-panel)] shadow-[var(--shadow-card)]",
+          "ps-shadow-card rounded-[var(--radius-token)] border-[length:var(--border-width-token)] border-[color:var(--color-border)] bg-[var(--color-panel)]",
           pad,
         ].join(" ")}
       >
@@ -195,7 +197,7 @@ function SplitLayout({ compact }: { compact: boolean }) {
           {["Spacing scale", "Component map", "Tailwind export"].map((row) => (
             <div
               key={row}
-              className="rounded-[var(--radius-token-sm)] border border-[var(--color-border)] bg-[var(--color-surface)] p-3"
+              className="rounded-[var(--radius-token-sm)] border-[length:var(--border-width-token)] border-[color:var(--color-border)] bg-[var(--color-surface)] p-3"
             >
               <div className="text-sm font-medium text-[var(--color-foreground)]">{row}</div>
               <div className="mt-1 text-xs text-[var(--color-muted-foreground)]">
@@ -212,10 +214,11 @@ function SplitLayout({ compact }: { compact: boolean }) {
 export function PreviewPanel({ tokens }: PreviewPanelProps) {
   const compact = tokens.density === "compact";
   const shellPad = compact ? "p-3" : "p-4";
+  const previewVars = cssVarPreviewStyle(tokens);
 
   return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between gap-2">
+    <div id="ps-preview-panel" className="ps-preview-panel space-y-3">
+      <div className="ps-preview-panel__header flex items-center justify-between gap-2">
         <div>
           <h2 className="text-base font-semibold text-[var(--color-foreground)]">Live Preview</h2>
           <p className="text-xs text-[var(--color-muted-foreground)]">
@@ -225,15 +228,21 @@ export function PreviewPanel({ tokens }: PreviewPanelProps) {
       </div>
 
       <div
+        id="ps-preview-canvas"
         className={[
-          "min-w-0 overflow-hidden rounded-[calc(var(--radius-token)+0.25rem)] border border-[var(--color-border)] bg-[var(--color-background)] shadow-[var(--shadow-pop)]",
+          "ps-preview-canvas",
+          tokens.theme === "dark" ? "dark" : "",
+          "ps-shadow-pop min-w-0 overflow-hidden rounded-[calc(var(--radius-token)+0.25rem)] border-[length:var(--border-width-token)] border-[color:var(--color-border)] bg-[var(--color-background)]",
           shellPad,
         ].join(" ")}
+        style={previewVars as CSSProperties}
       >
-        {tokens.layout === "sidebar" && <SidebarLayout compact={compact} />}
-        {tokens.layout === "topnav" && <TopnavLayout compact={compact} />}
-        {tokens.layout === "centered" && <CenteredLayout compact={compact} />}
-        {tokens.layout === "split" && <SplitLayout compact={compact} />}
+        <div id={`ps-preview-layout-${tokens.layout}`} className={`ps-preview-layout ps-preview-layout--${tokens.layout}`}>
+          {tokens.layout === "sidebar" && <SidebarLayout compact={compact} />}
+          {tokens.layout === "topnav" && <TopnavLayout compact={compact} />}
+          {tokens.layout === "centered" && <CenteredLayout compact={compact} />}
+          {tokens.layout === "split" && <SplitLayout compact={compact} />}
+        </div>
       </div>
     </div>
   );

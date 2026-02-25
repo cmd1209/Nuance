@@ -37,3 +37,11 @@ pre {
     monospace;
 }
 
+/* Explicit shadow helpers make DevTools inspection clearer than arbitrary Tailwind shadow values. */
+.ps-shadow-card {
+  box-shadow: var(--shadow-card);
+}
+
+.ps-shadow-pop {
+  box-shadow: var(--shadow-pop);
+}
