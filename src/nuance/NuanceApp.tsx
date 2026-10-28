@@ -39,8 +39,8 @@ export default function NuanceApp() {
           : "Explore how colors interact through simple compositions. Experiment with different combinations to discover unexpected harmonies and contrasts."}</p>
       </section>
       {editing ? <section className="nuance-workspace" aria-label="Color manipulation">
-        <div className="nuance-stage"><div className="composition-source">{paletteAttribution(composition)}{composition.historical && <Button title="Restore historical colors and proportions; two-color originals receive a labeled third color" onClick={() => { dispatch({ type: "reset" }); closeEditor(); setNotice(composition.historical?.originalColorCount === 2 ? "Original pair restored with a Nuance-generated third color for the editor." : "Original Wada combination restored."); }}>Reset</Button>}</div>
-        <div className="artwork-anchor">
+        <div className="composition-source"><span>{paletteAttribution(composition)}</span>{composition.historical && <Button title="Restore historical colors and proportions; two-color originals receive a labeled third color" onClick={() => { dispatch({ type: "reset" }); closeEditor(); setNotice(composition.historical?.originalColorCount === 2 ? "Original pair restored with a Nuance-generated third color for the editor." : "Original Wada combination restored."); }}>Reset</Button>}</div>
+        <div className="nuance-stage"><div className="artwork-anchor">
           <Artwork composition={composition} selectedColorId={state.selectedColorId}
             onSelect={id => { dispatch({ type: "select-color", colorId: id }); setAdjusting(true); }}
             onAdjust={id => { dispatch({ type: "select-color", colorId: id }); setAdjusting(true); }}
