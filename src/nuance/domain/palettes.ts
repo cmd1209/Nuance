@@ -6,7 +6,7 @@ export const PRESET_HEXES = [
   ["#8A19AC", "#97752E", "#D22F5E"],
   ["#9EAC19", "#612CAD", "#DA861E"],
 ];
-export const initialPalettes = () => PRESET_HEXES.map((colors, i) => createComposition(colors, `Color study ${i + 1}`, `preset-${i + 1}`));
+export const legacyInitialPalettes = () => PRESET_HEXES.map((colors, i) => createComposition(colors, `Color study ${i + 1}`, `preset-${i + 1}`));
 
 function hslToHex(h: number, s: number, l: number) {
   s /= 100; l /= 100;
@@ -31,7 +31,11 @@ export function generatePalettes(previous: Composition[], random = Math.random):
   });
 }
 
-export function nextColor(composition: Composition) {
-  const suggestions = generatePalettes([composition]);
-  return suggestions.flatMap(p => p.colors).find(c => composition.colors.every(existing => distance(c.hex, existing.hex) > 75))?.hex || "#7DA8A0";
+// Keep the original procedural source available without changing the discovery UI.
+export { nextColor } from "./extension";
+import { discoverWada } from "./wada";
+export const initialPalettes = () => discoverWada([], () => 0.4);
+export type PaletteSource = "sanzo-wada" | "procedural";
+export function discoverPalettes(previous: Composition[], random = Math.random, source: PaletteSource = "sanzo-wada"): Composition[] {
+  return source === "sanzo-wada" ? discoverWada(previous, random) : generatePalettes(previous, random);
 }

@@ -1,6 +1,6 @@
 # Nuance — Color exploration
 
-Nuance's first functional Color experience builds on the existing Patternsmith React/Vite/TypeScript/Tailwind app. It implements the existing Figma palette-selection and manipulation screens.
+Nuance's Color experience builds on the existing Patternsmith React/Vite/TypeScript/Tailwind app and preserves its Figma palette-selection and manipulation screens. Palette discovery now draws from 348 Sanzo Wada combinations, with deterministic OKLCH extensions for compositions of up to six colors. See [the Wada integration notes](docs/sanzo-wada-integration.md) for source attribution, provenance, reset behavior, and generation details.
 
 ```bash
 npm install
@@ -9,7 +9,7 @@ npm test
 npm run build
 ```
 
-Choose a palette, click a color to edit its HEX, add up to six colors, remove down to three, or drag the internal boundaries. Boundaries also support arrow keys, Shift+arrows, Home and End. Save downloads artwork-only PNG. Returning to a palette restores its client-side draft. Theme changes leave artwork colors unchanged.
+Choose a historical palette, click a color to see its name/origin and edit its HEX, add harmonizing colors up to six, remove down to three, reset its original colors/proportions, or drag the internal boundaries. Two-color originals stay authentic in discovery and gain a labeled Nuance-generated third color in the editor. Boundaries also support arrow keys, Shift+arrows, Home and End. Save downloads artwork-only PNG. Returning to a palette restores its client-side draft. Theme changes leave artwork colors unchanged.
 
 Composition documents are versioned, serializable JSON with stable IDs. State transitions, palette generation, geometry, serialization and PNG export are separate from UI rendering. **No Supabase, authentication, database or cloud persistence is integrated.** Drafts and preferences reset on page refresh.
 

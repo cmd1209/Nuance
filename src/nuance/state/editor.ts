@@ -1,5 +1,6 @@
 import { cloneComposition, updateColor, type Composition } from "../domain/composition";
 import { addColor, removeColor, resizeSplit } from "../domain/layout";
+import { editorComposition, resetHistoricalComposition } from "../domain/wada";
 import { initialPalettes } from "../domain/palettes";
 
 export interface EditorState {
@@ -19,6 +20,7 @@ export type EditorAction =
   | { type: "color"; colorId: string; hex: string }
   | { type: "add"; hex: string }
   | { type: "remove" }
+  | { type: "reset" }
   | { type: "resize"; splitId: string; ratio: number }
   | { type: "theme" };
 
@@ -34,12 +36,13 @@ export function editorReducer(state: EditorState, action: EditorAction): EditorS
   if (action.type === "select-color") return { ...state, selectedColorId: action.colorId };
   if (action.type === "explore") return { ...state, suggestions: action.suggestions };
   if (action.type === "select-palette") {
-    const draft = state.drafts[action.palette.id] || cloneComposition(action.palette);
+    const draft = state.drafts[action.palette.id] || editorComposition(cloneComposition(action.palette));
     return { ...state, view: "editor", drafts: { ...state.drafts, [action.palette.id]: draft }, activeCompositionId: action.palette.id, selectedColorId: null };
   }
   const composition = activeComposition(state);
   if (!composition || !state.activeCompositionId) return state;
-  const updated = action.type === "color" ? updateColor(composition, action.colorId, action.hex)
+  const updated = action.type === "reset" ? resetHistoricalComposition(composition)
+    : action.type === "color" ? updateColor(composition, action.colorId, action.hex)
     : action.type === "add" ? addColor(composition, action.hex)
     : action.type === "remove" && state.selectedColorId ? removeColor(composition, state.selectedColorId)
     : action.type === "resize" ? resizeSplit(composition, action.splitId, action.ratio) : composition;

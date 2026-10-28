@@ -17,6 +17,7 @@ export function ColorEditor({ color, onChange, onClose }: { color: ColorValue; o
   return <div ref={dialog} className="color-editor" role="dialog" aria-label="Adjust selected color" onKeyDown={e => { if (e.key === "Escape") { e.stopPropagation(); onClose(); } }}>
     <form onSubmit={submit}>
       <div className="color-editor__top"><label htmlFor="color-picker">Color</label><button type="button" className="color-editor__close" aria-label="Close color editor" onClick={onClose}>×</button></div>
+      <p>{color.origin === "generated" ? "Nuance-generated extension" : color.origin === "user" ? `Custom color${color.originalHex ? ` · originally ${color.name} (${color.originalHex})` : ""}` : color.name}</p>
       <input id="color-picker" aria-label="Choose color" type="color" value={color.hex} onChange={e => onChange(e.target.value)} />
       <label htmlFor="hex-input">HEX</label>
       <div className="color-editor__hex-row"><input ref={field} id="hex-input" aria-invalid={invalid} aria-describedby={invalid ? "hex-error" : undefined} value={input} maxLength={7} spellCheck={false} autoComplete="off"

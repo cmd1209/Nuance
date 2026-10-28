@@ -56,7 +56,7 @@ export function Artwork({ composition, selectedColorId, onSelect, onAdjust, onRe
       const color = composition.colors.find(c => c.id === region.colorId)!;
       const rect = paintedRect(region, composition.artwork), selected = selectedColorId === color.id;
       return <button type="button" key={region.id} className={`color-region ${selected ? "is-selected" : ""}`} aria-pressed={selected}
-        aria-label={`Color ${index + 1}: ${color.hex}`} data-color-id={color.id} data-hex={color.hex}
+        aria-label={`Color ${index + 1}: ${color.hex}${color.origin === "generated" ? ", Nuance-generated extension" : color.origin === "user" ? ", custom color" : color.name ? `, ${color.name}` : ""}`} data-color-id={color.id} data-hex={color.hex}
         onClick={() => onSelect(color.id)} onDoubleClick={() => onAdjust(color.id)}
         style={{ left: `${rect.x * 100}%`, top: `${rect.y * 100}%`, width: `${rect.width * 100}%`, height: `${rect.height * 100}%`, background: color.hex, color: contentColor(color.hex) }}>
         <span className="color-region__details"><span>{color.hex}</span><span className="color-region__adjust"

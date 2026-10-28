@@ -1,5 +1,7 @@
 # Nuance Color — Phase 1
 
+The original architecture below is extended by the [Sanzo Wada integration](sanzo-wada-integration.md), which documents current discovery, additive provenance fields, two-color previews, and generation/reset behavior.
+
 ## Composition and persistence boundary
 
 `src/nuance/domain/composition.ts` defines the document shared by the editor, layout engine and PNG exporter:

@@ -1,4 +1,4 @@
-import { MAX_COLORS, MIN_COLORS, newId, normalizeHex, type Composition, type LayoutNode } from "./composition";
+import { MAX_COLORS, MIN_COLORS, newId, normalizeHex, type ColorOrigin, type Composition, type LayoutNode } from "./composition";
 
 export interface Rect { x: number; y: number; width: number; height: number }
 export interface Region extends Rect { id: string; colorId: string }
@@ -55,6 +55,7 @@ export function resizeSplit(composition: Composition, id: string, ratio: number)
   const divider = computeLayout(composition.layout).dividers.find(d => d.id === id);
   if (!divider) return composition;
   const next = Math.min(divider.max, Math.max(divider.min, ratio));
+  if (Math.abs(next - divider.ratio) < 1e-10) return composition;
   const layout = replace(composition.layout, id, node => node.kind === "split" ? { ...node, ratio: next } : node);
   // An ancestor becoming smaller can tighten descendant constraints. Persist those effective
   // ratios too, so a serialized document restores exactly the geometry currently on screen.
@@ -62,11 +63,11 @@ export function resizeSplit(composition: Composition, id: string, ratio: number)
   function normalized(node: LayoutNode): LayoutNode {
     return node.kind === "region" ? node : { ...node, ratio: ratios.get(node.id)!, first: normalized(node.first), second: normalized(node.second) };
   }
-  return { ...composition, updatedAt: new Date().toISOString(),
+  return { ...composition, updatedAt: new Date().toISOString(), layoutModified: true,
     layout: normalized(layout) };
 }
 
-export function addColor(composition: Composition, hex: string): Composition {
+export function addColor(composition: Composition, hex: string, origin: ColorOrigin = "generated"): Composition {
   const normalized = normalizeHex(hex);
   if (composition.colors.length >= MAX_COLORS || !normalized) return composition;
   const regions = computeLayout(composition.layout).regions;
@@ -76,8 +77,9 @@ export function addColor(composition: Composition, hex: string): Composition {
     .sort((a, b) => a.r.width * a.r.height - b.r.width * b.r.height || regions.indexOf(b.r) - regions.indexOf(a.r));
   const target = candidates[0];
   if (!target) return composition;
-  const color = { id: newId(), hex: normalized };
-  return { ...composition, updatedAt: new Date().toISOString(), colors: [...composition.colors, color],
+  const color = { id: newId(), hex: normalized, origin, name: origin === "generated" ? "Nuance-generated extension" : "Custom color" };
+  return { ...composition, updatedAt: new Date().toISOString(), colors: [...composition.colors, color], currentColorCount: composition.colors.length + 1,
+    extensionIndex: (composition.extensionIndex ?? 0) + 1,
     layout: replace(composition.layout, target.r.id, node => ({ id: newId(), kind: "split", axis: target.axis, ratio: 0.5,
       first: node, second: { id: newId(), kind: "region", colorId: color.id } })) };
 }
@@ -90,5 +92,5 @@ export function removeColor(composition: Composition, colorId: string): Composit
     // Promote the sibling subtree into the removed region's parent. Nothing is left unallocated.
     return first && second ? { ...node, first, second } : first || second;
   }
-  return { ...composition, updatedAt: new Date().toISOString(), colors: composition.colors.filter(c => c.id !== colorId), layout: prune(composition.layout)! };
+  return { ...composition, updatedAt: new Date().toISOString(), currentColorCount: composition.colors.length - 1, colors: composition.colors.filter(c => c.id !== colorId), layout: prune(composition.layout)! };
 }

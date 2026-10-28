@@ -1,4 +1,4 @@
-/* Generated from existing Nuance Figma variables; primitives are unchanged. */
+/* Synced from Nuance Figma variables (fWnLFvrPLaTtREPwyHzoLi); aliases retain their theme modes. */
 :root {
   --colors-primary-500: #7d7272;
   --colors-primary-700: #3e3939;
@@ -11,8 +11,9 @@
   --colors-primary-200: #e2e0e0;
   --colors-primary-100: #efeeee;
   --colors-primary-white: #ffffff;
+  --colors-primary-50: #f3f3f3;
   --colors-semantic-background-dark: var(--colors-primary-900);
-  --colors-semantic-background-light: var(--colors-primary-100);
+  --colors-semantic-background-light: var(--colors-primary-50);
   --colors-semantic-surface-dark: var(--colors-primary-600);
   --colors-semantic-surface-light: var(--colors-primary-400);
   --colors-semantic-surface-darker: var(--colors-primary-800);
@@ -172,10 +173,10 @@
   --button-font-family: var(--family-sans);
 }
 [data-theme="light"] {
-  --color-bg-canvas: var(--colors-primary-100);
+  --color-bg-canvas: var(--colors-primary-50);
   --color-bg-surface: var(--colors-primary-white);
   --color-bg-surface-raised: var(--colors-primary-white);
-  --color-bg-surface-hover: var(--colors-primary-100);
+  --color-bg-surface-hover: var(--colors-primary-white);
   --color-bg-surface-selected: var(--colors-primary-200);
   --color-bg-surface-disabled: var(--colors-primary-100);
   --color-text-primary: var(--colors-primary-900);
