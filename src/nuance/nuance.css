@@ -1,121 +1,640 @@
 @import "./tokens.css";
 
-@font-face { font-family: "Clarity City"; src: url("/nuance/fonts/ClarityCity.ttf") format("truetype"); font-style: normal; font-weight: 100 900; font-display: swap; }
-@font-face { font-family: "Roboto"; src: url("/nuance/fonts/Roboto.ttf") format("truetype"); font-style: normal; font-weight: 100 900; font-display: swap; }
+/* ==========================================================================
+   Fonts
+   ========================================================================== */
+
+@font-face {
+    font-family: "Clarity City";
+    src: url("/nuance/fonts/ClarityCity.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: url("/nuance/fonts/Roboto.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+}
+
+/* ==========================================================================
+   Base styles and keyboard focus
+   ========================================================================== */
+
+.nuance-app *,
+.nuance-app *::before,
+.nuance-app *::after {
+    box-sizing: border-box;
+}
+
+.nuance-app button {
+    cursor: pointer;
+}
+
+.nuance-app button:disabled,
+.nuance-app button[aria-disabled="true"] {
+    cursor: default;
+}
+
+.nuance-app :focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 4px;
+}
+
+/* ==========================================================================
+   App shell and page layout
+   ========================================================================== */
 
 .nuance-app {
-  /* Frame dimensions and M3 text styles below are measured source values, not new library tokens. */
-  --content-width: 932px;
-  --instructions-width: 640px;
-  --artwork-width: 500px;
-  --screen-copy: var(--color-text-primary);
-  min-height: 100svh;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--gap-4xl);
-  padding: var(--gap-2xl) var(--gap-xl) var(--gap-4xl);
-  color: var(--color-text-primary);
-  background: var(--color-bg-canvas);
-  font-family: var(--family-sans), sans-serif;
-  color-scheme: dark;
-}
-.nuance-app[data-theme="light"] { color-scheme: light; }
-.nuance-app[data-theme="dark"] { --screen-copy: var(--colors-primary-white); }
-.nuance-app *, .nuance-app *::before, .nuance-app *::after { box-sizing: border-box; }
-.nuance-app button { cursor: pointer; }
-.nuance-app button:disabled, .nuance-app button[aria-disabled="true"] { cursor: default; }
-.nuance-app :focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 4px; }
-.nuance-header { display: flex; justify-content: space-between; align-items: flex-start; width: 100%; max-width: var(--content-width); min-height: 65px; }
-.nuance-wordmark { display: inline-block; color: var(--color-text-secondary); font-size: 49.787px; line-height: 65px; font-weight: 300; letter-spacing: -1.28px; text-decoration: none; }
-.nuance-wordmark span { font-weight: 500; }
-.nuance-header__actions { display: flex; gap: var(--gap-none); }
-.nuance-button { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; border: 0; font-family: var(--button-font-family), sans-serif; font-weight: var(--font-weight-medium); white-space: nowrap; border-radius: var(--button-radius); transition: background-color 120ms ease, color 120ms ease; }
-.nuance-button--sm { height: var(--button-sm-height); padding: var(--button-sm-padding-y) var(--button-sm-padding-x); gap: var(--button-sm-gap); font-size: var(--font-size-14); line-height: var(--line-height-20); }
-.nuance-button--lg { height: var(--button-lg-height); padding: var(--button-lg-padding-y) var(--button-lg-padding-x); gap: var(--button-lg-gap); font-size: var(--font-size-16); line-height: var(--line-height-24); }
-.nuance-button--ghost { background: transparent; color: var(--color-text-primary); }
-.nuance-button--ghost:hover:not(:disabled):not([aria-disabled="true"]) { background: var(--color-bg-surface-hover); }
-.nuance-button--ghost:active:not(:disabled):not([aria-disabled="true"]) { background: var(--color-bg-surface-selected); }
-.nuance-button--ghost:disabled { color: var(--color-text-disabled); }
-.nuance-button--primary { background: var(--color-action-primary); color: var(--color-action-on-primary); }
-.nuance-button--primary:hover:not([aria-disabled="true"]) { background: var(--color-action-primary-hover); }
-.nuance-button--primary:active:not([aria-disabled="true"]) { background: var(--color-action-primary-pressed); }
-.nuance-button.account-placeholder { color: var(--color-text-primary); }
-.nuance-icon { display: inline-block; flex-shrink: 0; background: currentColor; mask: var(--icon-url) center / contain no-repeat; -webkit-mask: var(--icon-url) center / contain no-repeat; }
-.nuance-main { position: relative; display: flex; flex-direction: column; gap: var(--gap-4xl); width: 100%; max-width: var(--content-width); }
-.nuance-intro { width: 100%; max-width: var(--instructions-width); color: var(--screen-copy); font-family: "Roboto", sans-serif; }
-.nuance-intro h1 { margin: 0 0 var(--gap-sm); font-size: 32px; line-height: 40px; font-weight: 400; }
-.nuance-intro p { margin: 0; font-size: var(--font-size-16); line-height: var(--line-height-24); letter-spacing: 0.5px; }
-.nuance-palettes { display: flex; flex-direction: column; align-items: center; gap: var(--gap-lg); }
-.palette-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap-lg); width: 100%; }
-.palette-card { width: 100%; display: flex; flex-direction: column; gap: var(--gap-sm); border: 0; border-radius: var(--radius-sm); background: transparent; padding: var(--padding-md); transition: background-color 120ms ease; }
-.palette-card.is-highlighted, .palette-card:hover, .palette-card:focus-visible { background: var(--color-bg-surface-hover); }
-.palette-card__artwork { display: block; position: relative; width: 100%; aspect-ratio: 276 / 176; }
-.palette-card__color { position: absolute; display: block; border-radius: var(--radius-sm); }
-.nuance-navigation { display: flex; background: var(--color-action-primary-hover); border-radius: var(--radius-full); overflow: clip; }
-.nuance-navigation .nuance-button:focus-visible { outline-offset: -4px; }
-.nuance-navigation .is-future { background: var(--color-action-primary-hover); }
-.nuance-workspace { display: flex; flex-direction: column; gap: var(--gap-lg); }
-.nuance-stage { display: flex; justify-content: center; align-items: center; padding: var(--padding-lg) 0; background: var(--color-bg-surface); }
-.artwork-anchor { position: relative; width: min(100%, var(--artwork-width)); }
-.composition-artwork { position: relative; width: 100%; isolation: isolate; }
-.color-region { position: absolute; border: 0; padding: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 0; }
-.color-region__details { display: flex; flex-direction: column; align-items: center; gap: var(--gap-sm); opacity: 0; font: 400 14px/20px "Roboto", sans-serif; transition: opacity 120ms ease; max-width: 100%; }
-.color-region__adjust { display: flex; align-items: center; gap: var(--gap-xs); font: var(--font-weight-medium) var(--font-size-14)/var(--line-height-20) var(--button-font-family), sans-serif; }
-.color-region:hover .color-region__details, .color-region.is-selected .color-region__details, .color-region:focus-visible .color-region__details { opacity: 1; }
-.composition-artwork.is-resizing .color-region__details { opacity: 0; }
-.color-region:focus-visible { outline-offset: -4px; }
-.resize-divider { position: absolute; z-index: 2; touch-action: none; user-select: none; }
-.resize-divider::after { content: ""; position: absolute; background: transparent; transition: background-color 120ms ease; pointer-events: none; }
-.resize-divider--x { width: 20px; transform: translateX(-50%); cursor: col-resize; }
-.resize-divider--y { height: 20px; transform: translateY(-50%); cursor: row-resize; }
-.resize-divider--x::after { width: 2px; left: calc(50% - 1px); height: 100%; }
-.resize-divider--y::after { height: 2px; top: calc(50% - 1px); width: 100%; }
-.resize-divider:hover::after, .resize-divider.is-dragging::after, .resize-divider:focus-visible::after { background: var(--color-border-focus); }
-.resize-divider:focus-visible { outline-offset: 0; }
-.workspace-toolbar { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--gap-xs); }
-.workspace-toolbar__edit { display: flex; gap: var(--gap-none); flex-wrap: wrap; }
-.nuance-notice { position: absolute; left: 0; top: calc(100% + 12px); margin: 0; font-size: 12px; color: var(--color-text-secondary); }
-.nuance-notice:empty { display: none; }
-.color-editor { position: absolute; z-index: 4; width: 246px; max-width: calc(100% - 24px); right: 12px; top: 12px; padding: var(--padding-lg); border: 1px solid var(--color-border-strong); border-radius: var(--radius-md); background: var(--color-bg-surface-raised); color: var(--color-text-primary); }
-.color-editor form { display: flex; flex-direction: column; gap: var(--gap-sm); }
-.color-editor label { font-size: 12px; font-weight: 500; }
-.color-editor__top { display: flex; justify-content: space-between; align-items: center; }
-.color-editor__close { font: inherit; color: inherit; background: transparent; border: 0; font-size: 24px; line-height: 24px; width: 28px; height: 28px; }
-.color-editor input[type="color"] { width: 100%; height: 44px; padding: 0; border: 0; background: transparent; cursor: pointer; }
-.color-editor__hex-row { display: flex; align-items: center; gap: var(--gap-xs); }
-.color-editor input[type="text"], .color-editor input:not([type]) { width: 100%; min-width: 0; border: 1px solid var(--color-border-default); padding: var(--padding-sm); background: var(--color-bg-surface); border-radius: var(--radius-sm); color: var(--color-text-primary); font: var(--font-weight-regular) var(--font-size-14)/var(--line-height-20) var(--family-sans), sans-serif; }
-.color-editor [aria-invalid="true"] { border-color: var(--color-border-strong); }
-.color-editor p { margin: 0; font-size: 12px; line-height: 16px; }
-@media (max-width: 700px) {
-  .nuance-app { padding: var(--padding-xl) var(--padding-lg) var(--padding-xl); gap: var(--gap-2xl); }
-  .nuance-wordmark { font-size: 40px; line-height: 52px; }
-  .nuance-header { min-height: 52px; }
-  .nuance-main { gap: var(--gap-xl); }
-  .palette-grid { gap: var(--gap-xs); grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .palette-card { padding: var(--padding-xs); }
-  .nuance-navigation { width: 100%; max-width: 478px; }
-  .nuance-navigation .nuance-button { padding-inline: var(--padding-sm); gap: var(--gap-xs); flex: 1 1 0; font-size: 14px; }
-  .nuance-header__actions .nuance-button { padding-inline: var(--padding-sm); }
-  .nuance-intro p { font-size: 15px; }
-  .nuance-stage { padding: var(--padding-lg); }
-  .workspace-toolbar { gap: var(--gap-xs); }
-  .workspace-toolbar .nuance-button { padding-inline: var(--padding-sm); }
-  .color-editor { top: 8px; right: 8px; max-width: calc(100% - 16px); }
-}
-@media (pointer: coarse) {
-  .nuance-button--sm { min-height: 44px; }
-  .resize-divider--x { width: 28px; }
-  .resize-divider--y { height: 28px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .nuance-app *, .nuance-app *::after { transition: none !important; }
+    /* Frame dimensions and M3 text styles below are measured source values, not new library tokens. */
+    --content-width: 932px;
+    --instructions-width: 640px;
+    --artwork-width: 500px;
+    --screen-copy: var(--color-text-primary);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 100svh;
+    gap: var(--gap-4xl);
+    padding: var(--gap-2xl) var(--gap-xl) var(--gap-4xl);
+    background: var(--color-bg-canvas);
+    color: var(--color-text-primary);
+    font-family: var(--family-sans), sans-serif;
+    color-scheme: dark;
 }
 
-/* Labels contribute to card height so wrapped grid rows never overlap them. */
-.palette-card__label { color: var(--color-text-secondary); font: 400 11px/16px var(--family-sans), sans-serif; text-align: left; }
-.composition-source { display: flex; align-items: center; justify-content: space-between; gap: var(--gap-sm); color: var(--color-text-secondary); font-size: var(--font-size-14); line-height: var(--line-height-20); }
-.composition-source > span { min-width: 0; overflow-wrap: anywhere; }
-@media (max-width: 700px) { .palette-card__label { font-size: 9px; line-height: 12px; } }
+.nuance-app[data-theme="light"] {
+    color-scheme: light;
+}
+
+.nuance-app[data-theme="dark"] {
+    --screen-copy: var(--colors-primary-white);
+}
+
+.nuance-main {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-4xl);
+    width: 100%;
+    max-width: var(--content-width);
+}
+
+.nuance-intro {
+    width: 100%;
+    max-width: var(--instructions-width);
+    color: var(--screen-copy);
+    font-family: "Roboto", sans-serif;
+}
+
+.nuance-intro h1 {
+    margin: 0 0 var(--gap-sm);
+    font-size: 32px;
+    line-height: 40px;
+    font-weight: 400;
+}
+
+.nuance-intro p {
+    margin: 0;
+    font-size: var(--font-size-16);
+    line-height: var(--line-height-24);
+    letter-spacing: 0.5px;
+}
+
+.nuance-notice {
+    position: absolute;
+    left: 0;
+    top: calc(100% + 12px);
+    margin: 0;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+.nuance-notice:empty {
+    display: none;
+}
+
+/* ==========================================================================
+   Header and navigation
+   ========================================================================== */
+
+.nuance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    max-width: var(--content-width);
+    min-height: 65px;
+}
+
+.nuance-wordmark {
+    display: inline-block;
+    color: var(--color-text-secondary);
+    font-size: 49.787px;
+    line-height: 65px;
+    font-weight: 300;
+    letter-spacing: -1.28px;
+    text-decoration: none;
+}
+
+.nuance-wordmark span {
+    font-weight: 500;
+}
+
+.nuance-header__actions {
+    display: flex;
+    gap: var(--gap-none);
+}
+
+/* The shared background fills the gaps between rounded child buttons. */
+.nuance-navigation {
+    display: flex;
+    background: var(--color-action-primary-hover);
+    border-radius: var(--radius-full);
+    overflow: clip;
+}
+
+.nuance-navigation .nuance-button:focus-visible {
+    outline-offset: -4px;
+}
+
+.nuance-navigation .is-future {
+    background: var(--color-action-primary-hover);
+}
+
+/* ==========================================================================
+   Palette discovery
+   ========================================================================== */
+
+.nuance-palettes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-lg);
+}
+
+.palette-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--gap-lg);
+    width: 100%;
+}
+
+.palette-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: var(--gap-sm);
+    padding: var(--padding-md);
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    transition: background-color 120ms ease;
+}
+
+.palette-card.is-highlighted,
+.palette-card:hover,
+.palette-card:focus-visible {
+    background: var(--color-bg-surface-hover);
+}
+
+/* Labels stay in flow so wrapped grid rows reserve space for attribution. */
+.palette-card__label {
+    color: var(--color-text-secondary);
+    font: 400 11px/16px var(--family-sans), sans-serif;
+    text-align: left;
+}
+
+.palette-card__artwork {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 276 / 176;
+}
+
+.palette-card__color {
+    position: absolute;
+    display: block;
+    border-radius: var(--radius-sm);
+}
+
+/* ==========================================================================
+   Composition workspace
+   ========================================================================== */
+
+.nuance-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-lg);
+}
+
+.composition-source {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gap-sm);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-14);
+    line-height: var(--line-height-20);
+}
+
+.composition-source > span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.nuance-stage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--padding-lg) 0;
+    background: var(--color-bg-surface);
+}
+
+.artwork-anchor {
+    position: relative;
+    width: min(100%, var(--artwork-width));
+}
+
+.composition-artwork {
+    position: relative;
+    width: 100%;
+    isolation: isolate;
+}
+
+.color-region {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    overflow: hidden;
+}
+
+.color-region__details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-sm);
+    max-width: 100%;
+    font: 400 14px/20px "Roboto", sans-serif;
+    opacity: 0;
+    transition: opacity 120ms ease;
+}
+
+.color-region__adjust {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-xs);
+    font: var(--font-weight-medium) var(--font-size-14)/var(--line-height-20) var(--button-font-family), sans-serif;
+}
+
+.color-region:hover .color-region__details,
+.color-region.is-selected .color-region__details,
+.color-region:focus-visible .color-region__details {
+    opacity: 1;
+}
+
+.composition-artwork.is-resizing .color-region__details {
+    opacity: 0;
+}
+
+.color-region:focus-visible {
+    outline-offset: -4px;
+}
+
+/* ==========================================================================
+   Resizable boundaries
+   ========================================================================== */
+
+.resize-divider {
+    position: absolute;
+    z-index: 2;
+    touch-action: none;
+    user-select: none;
+}
+
+.resize-divider::after {
+    position: absolute;
+    background: transparent;
+    content: "";
+    transition: background-color 120ms ease;
+    pointer-events: none;
+}
+
+.resize-divider--x {
+    width: 20px;
+    transform: translateX(-50%);
+    cursor: col-resize;
+}
+
+.resize-divider--y {
+    height: 20px;
+    transform: translateY(-50%);
+    cursor: row-resize;
+}
+
+.resize-divider--x::after {
+    left: calc(50% - 1px);
+    width: 2px;
+    height: 100%;
+}
+
+.resize-divider--y::after {
+    top: calc(50% - 1px);
+    height: 2px;
+    width: 100%;
+}
+
+.resize-divider:hover::after,
+.resize-divider.is-dragging::after,
+.resize-divider:focus-visible::after {
+    background: var(--color-border-focus);
+}
+
+.resize-divider:focus-visible {
+    outline-offset: 0;
+}
+
+/* ==========================================================================
+   Buttons, icons and toolbar
+   ========================================================================== */
+
+.nuance-button {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: var(--button-radius);
+    font-family: var(--button-font-family), sans-serif;
+    font-weight: var(--font-weight-medium);
+    white-space: nowrap;
+    transition: background-color 120ms ease, color 120ms ease;
+}
+
+.nuance-button--sm {
+    height: var(--button-sm-height);
+    padding: var(--button-sm-padding-y) var(--button-sm-padding-x);
+    gap: var(--button-sm-gap);
+    font-size: var(--font-size-14);
+    line-height: var(--line-height-20);
+}
+
+.nuance-button--lg {
+    height: var(--button-lg-height);
+    padding: var(--button-lg-padding-y) var(--button-lg-padding-x);
+    gap: var(--button-lg-gap);
+    font-size: var(--font-size-16);
+    line-height: var(--line-height-24);
+}
+
+.nuance-button--ghost {
+    background: transparent;
+    color: var(--color-text-primary);
+}
+
+.nuance-button--ghost:hover:not(:disabled):not([aria-disabled="true"]) {
+    background: var(--color-bg-surface-hover);
+}
+
+.nuance-button--ghost:active:not(:disabled):not([aria-disabled="true"]) {
+    background: var(--color-bg-surface-selected);
+}
+
+.nuance-button--ghost:disabled {
+    color: var(--color-text-disabled);
+}
+
+.nuance-button--primary {
+    background: var(--color-action-primary);
+    color: var(--color-action-on-primary);
+}
+
+.nuance-button--primary:hover:not([aria-disabled="true"]) {
+    background: var(--color-action-primary-hover);
+}
+
+.nuance-button--primary:active:not([aria-disabled="true"]) {
+    background: var(--color-action-primary-pressed);
+}
+
+.nuance-button.account-placeholder {
+    color: var(--color-text-primary);
+}
+
+.nuance-icon {
+    display: inline-block;
+    flex-shrink: 0;
+    background: currentColor;
+    mask: var(--icon-url) center / contain no-repeat;
+    -webkit-mask: var(--icon-url) center / contain no-repeat;
+}
+
+.workspace-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--gap-xs);
+}
+
+.workspace-toolbar__edit {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-none);
+}
+
+/* ==========================================================================
+   Color editor popover
+   ========================================================================== */
+
+.color-editor {
+    position: absolute;
+    z-index: 4;
+    right: 12px;
+    top: 12px;
+    width: 246px;
+    max-width: calc(100% - 24px);
+    padding: var(--padding-lg);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-surface-raised);
+    color: var(--color-text-primary);
+}
+
+.color-editor form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+}
+
+.color-editor label {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.color-editor__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.color-editor__close {
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: 0;
+    font: inherit;
+    color: inherit;
+    font-size: 24px;
+    line-height: 24px;
+}
+
+.color-editor input[type="color"] {
+    width: 100%;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+}
+
+.color-editor__hex-row {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-xs);
+}
+
+.color-editor input[type="text"],
+.color-editor input:not([type]) {
+    width: 100%;
+    min-width: 0;
+    padding: var(--padding-sm);
+    border: 1px solid var(--color-border-default);
+    background: var(--color-bg-surface);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-primary);
+    font: var(--font-weight-regular) var(--font-size-14)/var(--line-height-20) var(--family-sans), sans-serif;
+}
+
+.color-editor [aria-invalid="true"] {
+    border-color: var(--color-border-strong);
+}
+
+.color-editor p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+/* ==========================================================================
+   Responsive layout — two palette columns at 700px and below
+   ========================================================================== */
+
+@media (max-width: 700px) {
+    .nuance-app {
+        padding: var(--padding-xl) var(--padding-lg) var(--padding-xl);
+        gap: var(--gap-2xl);
+    }
+
+    .nuance-wordmark {
+        font-size: 40px;
+        line-height: 52px;
+    }
+
+    .nuance-header {
+        min-height: 52px;
+    }
+
+    .nuance-main {
+        gap: var(--gap-xl);
+    }
+
+    .palette-grid {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: var(--gap-xs);
+    }
+
+    .palette-card {
+        padding: var(--padding-xs);
+    }
+
+    .nuance-navigation {
+        width: 100%;
+        max-width: 478px;
+    }
+
+    .nuance-navigation .nuance-button {
+        flex: 1 1 0;
+        padding-inline: var(--padding-sm);
+        gap: var(--gap-xs);
+        font-size: 14px;
+    }
+
+    .nuance-header__actions .nuance-button {
+        padding-inline: var(--padding-sm);
+    }
+
+    .nuance-intro p {
+        font-size: 15px;
+    }
+
+    .nuance-stage {
+        padding: var(--padding-lg);
+    }
+
+    .workspace-toolbar {
+        gap: var(--gap-xs);
+    }
+
+    .workspace-toolbar .nuance-button {
+        padding-inline: var(--padding-sm);
+    }
+
+    .color-editor {
+        top: 8px;
+        right: 8px;
+        max-width: calc(100% - 16px);
+    }
+
+    .palette-card__label {
+        font-size: 9px;
+        line-height: 12px;
+    }
+}
+
+/* ==========================================================================
+   Touch targets
+   ========================================================================== */
+
+@media (pointer: coarse) {
+    .nuance-button--sm {
+        min-height: 44px;
+    }
+
+    .resize-divider--x {
+        width: 28px;
+    }
+
+    .resize-divider--y {
+        height: 28px;
+    }
+}
+
+/* ==========================================================================
+   Reduced motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .nuance-app *,
+    .nuance-app *::after {
+        transition: none !important;
+    }
+}

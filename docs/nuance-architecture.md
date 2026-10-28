@@ -6,6 +6,12 @@ The original architecture below is extended by the [Sanzo Wada integration](sanz
 
 Before modifying any Nuance CSS, read and follow [`CSS_CONVENTIONS.md`](CSS_CONVENTIONS.md). Treat it as the authoritative styling convention for all new and existing source CSS.
 
+- `src/nuance/tokens.css` holds Figma primitives, role aliases, and Light/Dark theme values. Edit shared design decisions here.
+- `src/nuance/nuance.css` holds component styles in labeled sections. Keep each component's base and state rules together; the final sections contain the 700px breakpoint, touch targets, and reduced-motion overrides.
+- `src/index.css` holds Tailwind directives and global document defaults shared with the retained Patternsmith app.
+
+All three source stylesheets use expanded rules and four-space indentation. Component declarations follow the convention's positioning → layout → sizing/spacing → borders/backgrounds → typography → effects → transitions → interaction order. Keep generated production CSS minification in Vite, not in source files.
+
 ## Composition and persistence boundary
 
 `src/nuance/domain/composition.ts` defines the document shared by the editor, layout engine and PNG exporter:
