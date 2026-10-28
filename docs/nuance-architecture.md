@@ -2,6 +2,10 @@
 
 The original architecture below is extended by the [Sanzo Wada integration](sanzo-wada-integration.md), which documents current discovery, additive provenance fields, two-color previews, and generation/reset behavior.
 
+### CSS Conventions
+
+Before modifying any Nuance CSS, read and follow [`CSS_CONVENTIONS.md`](CSS_CONVENTIONS.md). Treat it as the authoritative styling convention for all new and existing source CSS.
+
 ## Composition and persistence boundary
 
 `src/nuance/domain/composition.ts` defines the document shared by the editor, layout engine and PNG exporter:
