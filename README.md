@@ -1,4 +1,25 @@
-# PatternSmith (v0.1 MVP)
+# Nuance — Color exploration
+
+Nuance's first functional Color experience builds on the existing Patternsmith React/Vite/TypeScript/Tailwind app. It implements the existing Figma palette-selection and manipulation screens.
+
+```bash
+npm install
+npm run dev
+npm test
+npm run build
+```
+
+Choose a palette, click a color to edit its HEX, add up to six colors, remove down to three, or drag the internal boundaries. Boundaries also support arrow keys, Shift+arrows, Home and End. Save downloads artwork-only PNG. Returning to a palette restores its client-side draft. Theme changes leave artwork colors unchanged.
+
+Composition documents are versioned, serializable JSON with stable IDs. State transitions, palette generation, geometry, serialization and PNG export are separate from UI rendering. **No Supabase, authentication, database or cloud persistence is integrated.** Drafts and preferences reset on page refresh.
+
+See [the architecture and design notes](docs/nuance-architecture.md) for the future persistence boundary, exact Figma sources, documented design differences, Code Connect prerequisite and validation results.
+
+The original Patternsmith app and infrastructure are preserved in `src/PatternsmithApp.tsx`, `src/components` and `src/lib`.
+
+---
+
+# Original PatternSmith (v0.1 MVP)
 
 PatternSmith is a small local-first UI helper that turns a handful of **UI pattern decisions** (layout, density, radius, shadow, theme, accent) into:
 
