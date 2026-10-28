@@ -19,7 +19,7 @@ export type EditorAction =
   | { type: "select-color"; colorId: string | null }
   | { type: "color"; colorId: string; hex: string }
   | { type: "add"; hex: string }
-  | { type: "remove" }
+  | { type: "remove"; colorId?: string }
   | { type: "reset" }
   | { type: "resize"; splitId: string; ratio: number }
   | { type: "theme" };
@@ -44,7 +44,7 @@ export function editorReducer(state: EditorState, action: EditorAction): EditorS
   const updated = action.type === "reset" ? resetHistoricalComposition(composition)
     : action.type === "color" ? updateColor(composition, action.colorId, action.hex)
     : action.type === "add" ? addColor(composition, action.hex)
-    : action.type === "remove" && state.selectedColorId ? removeColor(composition, state.selectedColorId)
+    : action.type === "remove" ? removeColor(composition, action.colorId ?? state.selectedColorId ?? "")
     : action.type === "resize" ? resizeSplit(composition, action.splitId, action.ratio) : composition;
   const selectedColorId = action.type === "add" && updated !== composition ? updated.colors[updated.colors.length - 1].id
     : state.selectedColorId && !updated.colors.some(c => c.id === state.selectedColorId) ? null : state.selectedColorId;

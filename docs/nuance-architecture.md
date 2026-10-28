@@ -8,7 +8,7 @@ Before modifying any Nuance CSS, read and follow [`CSS_CONVENTIONS.md`](CSS_CONV
 
 - `src/nuance/tokens.css` holds Figma primitives, role aliases, and Light/Dark theme values. Edit shared design decisions here.
 - `src/nuance/nuance.css` holds component styles in labeled sections. Keep each component's base and state rules together; the final sections contain the 700px breakpoint, touch targets, and reduced-motion overrides.
-- `src/index.css` holds Tailwind directives and global document defaults shared with the retained Patternsmith app.
+- `src/index.css` holds Tailwind directives, the Clarity City font-face, and global document defaults shared with the retained Patternsmith app.
 
 All three source stylesheets use expanded rules and four-space indentation. Component declarations follow the convention's positioning → layout → sizing/spacing → borders/backgrounds → typography → effects → transitions → interaction order. Keep generated production CSS minification in Vite, not in source files.
 
@@ -59,13 +59,13 @@ Source: `fWnLFvrPLaTtREPwyHzoLi`, frames `35:1311` (selection) and `40:1796` (ma
 - The 932px content column, 640px instruction width, 300×200 preset cards, 500×300 artwork, spacing, corner radii, toolbar and bottom navigation come from those frames.
 - `tokens.css` exports the existing primitive and semantic variable aliases, including the intentionally reversed Primary button mappings. UI theme and composition colors are separate.
 - The frame's actual left/right proportions differ slightly from the written 50/25/25 requirement. This implementation follows the explicit proportional requirement. No alternate page layout was introduced.
-- Controls and the wordmark use locally bundled Clarity City. Source headings/instructions use Roboto M3 styles, retained for visual fidelity. The source's 32/40 heading, 16/24 copy, 0.5px tracking and 49.787px wordmark are measured source styles; they are not invented replacements for missing tokens. The original M3 variables are not in the local token collections.
+- Clarity City is the only bundled and specified font family, including headings, instructions, color labels, form controls and the wordmark. All text uses the shared `--family-sans` token. The source's 32/40 heading, 16/24 copy, 0.5px tracking and 49.787px wordmark retain their measured sizes and spacing.
 - The 932px and 500px source dimensions do not have exact named layout aliases in the existing collections. They remain documented frame measurements in CSS instead of modifying the design system.
 - The manipulation concept displays `#196AAC` over the beige region. The functional editor shows the actual selected region's HEX instead.
 - The contextual picker concept contains only HEX and Adjust. A compact contextual native color picker/validated HEX form supplies the requested interaction; there is no permanent sidebar.
 - The Figma User control remains visible but disabled. Type, Space and Detail remain visible, keyboard discoverable, and marked unavailable. No authentication or placeholder feature pages were built.
 - Narrow screens retain the same navigation, three-card row and artwork hierarchy. Toolbar actions wrap when needed; touch controls expand to 44px minimum height.
-- All eleven Figma SVG assets are downloaded unmodified into `public/nuance/icons`. CSS masks preserve their geometry and inherit semantic theme colors. Both fonts and their licenses are bundled locally; no Figma asset URLs or remote font requests remain at runtime.
+- All eleven Figma SVG assets are downloaded unmodified into `public/nuance/icons`. CSS masks preserve their geometry and inherit semantic theme colors. Clarity City and its license are bundled locally; no Figma asset URLs or remote font requests remain at runtime.
 
 ## Code Connect readiness
 

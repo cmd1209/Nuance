@@ -1,5 +1,5 @@
 import { useCallback, useReducer, useState } from "react";
-import { MAX_COLORS, MIN_COLORS, paletteAttribution } from "./domain/composition";
+import { MAX_COLORS, paletteAttribution } from "./domain/composition";
 import { discoverPalettes, nextColor } from "./domain/palettes";
 import { activeComposition, createEditorState, editorReducer } from "./state/editor";
 import { downloadCompositionPng } from "./export/png";
@@ -39,20 +39,26 @@ export default function NuanceApp() {
           : "Explore how colors interact through simple compositions. Experiment with different combinations to discover unexpected harmonies and contrasts."}</p>
       </section>
       {editing ? <section className="nuance-workspace" aria-label="Color manipulation">
-        <div className="composition-source"><span>{paletteAttribution(composition)}</span>{composition.historical && <Button title="Restore historical colors and proportions; two-color originals receive a labeled third color" onClick={() => { dispatch({ type: "reset" }); closeEditor(); setNotice(composition.historical?.originalColorCount === 2 ? "Original pair restored with a Nuance-generated third color for the editor." : "Original Wada combination restored."); }}>Reset</Button>}</div>
+        <div className="workspace-toolbar" aria-label="Composition actions">
+          <div className="composition-source">
+            <Button onClick={() => { dispatch({ type: "back" }); closeEditor(); setNotice(""); }} leadingIcon={<Icon name="back" />}>Back</Button>
+            <span className="composition-source__name">{paletteAttribution(composition)}</span>
+          </div>
+          <div className="workspace-toolbar__actions">
+            {composition.historical && <Button title="Restore historical colors and proportions; two-color originals receive a labeled third color" onClick={() => { dispatch({ type: "reset" }); closeEditor(); setNotice(composition.historical?.originalColorCount === 2 ? "Original pair restored with a Nuance-generated third color for the editor." : "Original Wada combination restored."); }}>Reset</Button>}
+            <Button onClick={savePng} disabled={exporting} trailingIcon={<Icon name="download" />}>{exporting ? "Exporting…" : "Save"}</Button>
+          </div>
+        </div>
         <div className="nuance-stage"><div className="artwork-anchor">
           <Artwork composition={composition} selectedColorId={state.selectedColorId}
             onSelect={id => { dispatch({ type: "select-color", colorId: id }); setAdjusting(true); }}
             onAdjust={id => { dispatch({ type: "select-color", colorId: id }); setAdjusting(true); }}
+            onRemove={colorId => { dispatch({ type: "remove", colorId }); closeEditor(); }}
             onResize={(splitId, ratio) => dispatch({ type: "resize", splitId, ratio })} />
+          {composition.colors.length < MAX_COLORS && <Button className="composition-add" aria-label="Add color" title="Add a harmonizing color"
+            onClick={() => { dispatch({ type: "add", hex: nextColor(composition) }); closeEditor(); }}><Icon name="plus" size={20} /></Button>}
           {adjusting && selected && <ColorEditor color={selected} onChange={hex => dispatch({ type: "color", colorId: selected.id, hex })} onClose={closeEditor} />}
         </div></div>
-        <div className="workspace-toolbar" aria-label="Composition actions"><div className="workspace-toolbar__edit">
-          <Button onClick={() => { dispatch({ type: "back" }); closeEditor(); setNotice(""); }} leadingIcon={<Icon name="back" />}>Back to Palettes</Button>
-          <Button disabled={composition.colors.length <= MIN_COLORS || !selected} title={!selected ? "Select a color to remove" : "Remove selected color"}
-            onClick={() => { dispatch({ type: "remove" }); closeEditor(); }} trailingIcon={<Icon name="minus" />}>Remove</Button>
-          <Button disabled={composition.colors.length >= MAX_COLORS} onClick={() => { dispatch({ type: "add", hex: nextColor(composition) }); closeEditor(); }} trailingIcon={<Icon name="plus" />}>Add Color</Button>
-        </div><Button onClick={savePng} disabled={exporting} trailingIcon={<Icon name="download" />}>{exporting ? "Exporting…" : "Save"}</Button></div>
       </section> : <section className="nuance-palettes" aria-label="Palette suggestions">
         <div className="palette-grid">{state.suggestions.map(palette => <PaletteCard key={palette.id} composition={palette}
           highlighted={state.activeCompositionId === palette.id}

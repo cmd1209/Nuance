@@ -229,3 +229,25 @@ test("serialization preserves provenance, supports older documents, and rejects 
     assert.throws(()=>deserializeComposition(JSON.stringify(bad)));
   }
 });
+
+test("per-region removal targets its own color independently of selection and respects the minimum", () => {
+  let state = createEditorState();
+  state = editorReducer(state, { type: "select-palette", palette: state.suggestions[0] });
+  const original = activeComposition(state)!;
+  const selectedId = original.colors[0].id;
+  state = editorReducer(state, { type: "select-color", colorId: selectedId });
+  state = editorReducer(state, { type: "add", hex: nextColor(original) });
+  state = editorReducer(state, { type: "select-color", colorId: selectedId });
+  const before = activeComposition(state)!;
+  const removedId = before.colors[1].id;
+  state = editorReducer(state, { type: "remove", colorId: removedId });
+  const after = activeComposition(state)!;
+  assert.equal(after.colors.length, 3);
+  assert.equal(state.selectedColorId, selectedId);
+  assert.deepEqual(after.colors, before.colors.filter(c => c.id !== removedId));
+  assert.equal(after.historical, before.historical);
+  valid(after);
+  state = editorReducer(state, { type: "remove", colorId: selectedId });
+  assert.equal(activeComposition(state), after);
+  assert.equal(state.selectedColorId, selectedId);
+});

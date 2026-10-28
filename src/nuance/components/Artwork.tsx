@@ -1,24 +1,31 @@
-import { useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent } from "react";
-import { type Composition } from "../domain/composition";
+import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent } from "react";
+import { MIN_COLORS, type Composition } from "../domain/composition";
 import { computeLayout, paintedRect, type Divider } from "../domain/layout";
-import { Icon } from "./Icon";
 
 export interface ArtworkProps {
   composition: Composition;
   selectedColorId: string | null;
   onSelect: (id: string) => void;
   onAdjust: (id: string) => void;
+  onRemove: (id: string) => void;
   onResize: (splitId: string, ratio: number) => void;
 }
 function contentColor(hex: string) {
   const rgb = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255).map(v => v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
   return rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722 > 0.179 ? "var(--colors-primary-900)" : "var(--colors-primary-white)";
 }
-export function Artwork({ composition, selectedColorId, onSelect, onAdjust, onResize }: ArtworkProps) {
+export function Artwork({ composition, selectedColorId, onSelect, onAdjust, onRemove, onResize }: ArtworkProps) {
   const root = useRef<HTMLDivElement>(null);
+  const removalFocusIndex = useRef<number | null>(null);
   const dragging = useRef<{ pointerId: number; divider: Divider; bounds: DOMRect } | null>(null);
   const [dragId, setDragId] = useState<string | null>(null);
   const { regions, dividers } = computeLayout(composition.layout);
+  useEffect(() => {
+    if (removalFocusIndex.current === null) return;
+    const buttons = root.current?.querySelectorAll<HTMLButtonElement>(".color-region__select");
+    if (buttons?.length) buttons[Math.min(removalFocusIndex.current, buttons.length - 1)].focus();
+    removalFocusIndex.current = null;
+  }, [composition.colors]);
   function start(event: PointerEvent<HTMLDivElement>, divider: Divider) {
     if (event.button !== 0) return;
     event.preventDefault(); event.stopPropagation();
@@ -55,13 +62,17 @@ export function Artwork({ composition, selectedColorId, onSelect, onAdjust, onRe
     {regions.map((region, index) => {
       const color = composition.colors.find(c => c.id === region.colorId)!;
       const rect = paintedRect(region, composition.artwork), selected = selectedColorId === color.id;
-      return <button type="button" key={region.id} className={`color-region ${selected ? "is-selected" : ""}`} aria-pressed={selected}
-        aria-label={`Color ${index + 1}: ${color.hex}${color.origin === "generated" ? ", Nuance-generated extension" : color.origin === "user" ? ", custom color" : color.name ? `, ${color.name}` : ""}`} data-color-id={color.id} data-hex={color.hex}
-        onClick={() => onSelect(color.id)} onDoubleClick={() => onAdjust(color.id)}
+      return <div key={region.id} className={`color-region ${selected ? "is-selected" : ""} ${composition.colors.length > MIN_COLORS ? "is-removable" : ""}`} data-color-id={color.id} data-hex={color.hex}
         style={{ left: `${rect.x * 100}%`, top: `${rect.y * 100}%`, width: `${rect.width * 100}%`, height: `${rect.height * 100}%`, background: color.hex, color: contentColor(color.hex) }}>
-        <span className="color-region__details"><span>{color.hex}</span><span className="color-region__adjust"
-          onClick={event => { event.stopPropagation(); onAdjust(color.id); }}><Icon name="adjust" />Adjust</span></span>
-      </button>;
+        <button type="button" className="color-region__select" aria-pressed={selected}
+          aria-label={`Color ${index + 1}: ${color.hex}${color.origin === "generated" ? ", Nuance-generated extension" : color.origin === "user" ? ", custom color" : color.name ? `, ${color.name}` : ""}`}
+          onClick={() => onSelect(color.id)} onDoubleClick={() => onAdjust(color.id)}>
+          <span className="color-region__details"><span>{color.hex}</span></span>
+        </button>
+        {composition.colors.length > MIN_COLORS && <button type="button" className="color-region__remove"
+          aria-label={`Remove color ${index + 1}: ${color.hex}`} title={`Remove ${color.name || color.hex}`}
+          onClick={() => { removalFocusIndex.current = index; onRemove(color.id); }}><span aria-hidden="true">×</span></button>}
+      </div>;
     })}
     {dividers.map((divider, index) => {
       const x = divider.axis === "x";

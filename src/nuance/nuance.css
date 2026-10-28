@@ -1,26 +1,6 @@
 @import "./tokens.css";
 
 /* ==========================================================================
-   Fonts
-   ========================================================================== */
-
-@font-face {
-    font-family: "Clarity City";
-    src: url("/nuance/fonts/ClarityCity.ttf") format("truetype");
-    font-style: normal;
-    font-weight: 100 900;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "Roboto";
-    src: url("/nuance/fonts/Roboto.ttf") format("truetype");
-    font-style: normal;
-    font-weight: 100 900;
-    font-display: swap;
-}
-
-/* ==========================================================================
    Base styles and keyboard focus
    ========================================================================== */
 
@@ -49,7 +29,7 @@
    ========================================================================== */
 
 .nuance-app {
-    /* Frame dimensions and M3 text styles below are measured source values, not new library tokens. */
+    /* Frame dimensions are measured source values, not new library tokens. */
     --content-width: 932px;
     --instructions-width: 640px;
     --artwork-width: 500px;
@@ -89,7 +69,7 @@
     width: 100%;
     max-width: var(--instructions-width);
     color: var(--screen-copy);
-    font-family: "Roboto", sans-serif;
+    font-family: var(--family-sans), sans-serif;
 }
 
 .nuance-intro h1 {
@@ -103,6 +83,7 @@
     margin: 0;
     font-size: var(--font-size-16);
     line-height: var(--line-height-24);
+    font-weight: var(--font-weight-regular);
     letter-spacing: 0.5px;
 }
 
@@ -230,20 +211,34 @@
 .nuance-workspace {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-lg);
+    gap: var(--gap-xs);
 }
 
 .composition-source {
     display: flex;
+    flex: 1 1 auto;
     align-items: center;
-    justify-content: space-between;
+    min-width: 0;
     gap: var(--gap-sm);
     color: var(--color-text-secondary);
     font-size: var(--font-size-14);
+    font-weight: var(--font-weight-regular);
     line-height: var(--line-height-20);
 }
 
-.composition-source > span {
+.composition-source .nuance-button {
+    color: inherit;
+    font: inherit;
+}
+
+.composition-source__divider {
+    flex: 0 0 auto;
+    width: 1px;
+    height: var(--line-height-16);
+    background-color: var(--colors-semantic-text-subtle);
+}
+
+.composition-source__name {
     min-width: 0;
     overflow-wrap: anywhere;
 }
@@ -252,13 +247,32 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: var(--padding-lg) 0;
+    /* Reserve room for the plus beside the artwork, including touch targets. */
+    padding: var(--padding-lg) calc(var(--padding-lg) + var(--size-target-min) + var(--gap-xs)) var(--padding-lg) var(--padding-lg);
     background: var(--color-bg-surface);
 }
 
 .artwork-anchor {
     position: relative;
     width: min(100%, var(--artwork-width));
+}
+
+.composition-add {
+    position: absolute;
+    bottom: 0;
+    left: calc(100% + var(--gap-xs));
+    width: var(--size-control-sm);
+    height: var(--size-control-sm);
+}
+
+.nuance-button.composition-add {
+    padding: 0;
+}
+
+.composition-add > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .composition-artwork {
@@ -276,6 +290,57 @@
     border: 0;
     border-radius: 0;
     overflow: hidden;
+    container-type: size;
+}
+
+.color-region__select {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+}
+
+.color-region.is-removable .color-region__select {
+    padding-top: var(--size-control-sm);
+}
+
+.color-region__remove {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--size-control-sm);
+    height: var(--size-control-sm);
+    max-width: 100%;
+    max-height: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: var(--font-size-24);
+    line-height: 1;
+    opacity: 0;
+    transition: opacity 120ms ease;
+    pointer-events: none;
+}
+
+.color-region:hover .color-region__remove,
+.color-region__select:focus-visible + .color-region__remove,
+.color-region__remove:focus-visible {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .color-region__details {
@@ -284,21 +349,14 @@
     align-items: center;
     gap: var(--gap-sm);
     max-width: 100%;
-    font: 400 14px/20px "Roboto", sans-serif;
+    font: 400 14px/20px var(--family-sans), sans-serif;
     opacity: 0;
     transition: opacity 120ms ease;
 }
 
-.color-region__adjust {
-    display: flex;
-    align-items: center;
-    gap: var(--gap-xs);
-    font: var(--font-weight-medium) var(--font-size-14)/var(--line-height-20) var(--button-font-family), sans-serif;
-}
-
 .color-region:hover .color-region__details,
 .color-region.is-selected .color-region__details,
-.color-region:focus-visible .color-region__details {
+.color-region:focus-within .color-region__details {
     opacity: 1;
 }
 
@@ -306,8 +364,16 @@
     opacity: 0;
 }
 
-.color-region:focus-visible {
+.color-region__select:focus-visible,
+.color-region__remove:focus-visible {
     outline-offset: -4px;
+}
+
+/* Small regions still open the picker; omit labels that would collide with ×. */
+@container (max-height: 96px) {
+    .color-region.is-removable .color-region__details {
+        display: none;
+    }
 }
 
 /* ==========================================================================
@@ -440,14 +506,15 @@
 
 .workspace-toolbar {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
-    align-items: flex-start;
-    gap: var(--gap-xs);
+    align-items: center;
+    gap: var(--gap-sm);
 }
 
-.workspace-toolbar__edit {
+.workspace-toolbar__actions {
     display: flex;
-    flex-wrap: wrap;
+    margin-left: auto;
     gap: var(--gap-none);
 }
 
@@ -586,14 +653,6 @@
         font-size: 15px;
     }
 
-    .nuance-stage {
-        padding: var(--padding-lg);
-    }
-
-    .workspace-toolbar {
-        gap: var(--gap-xs);
-    }
-
     .workspace-toolbar .nuance-button {
         padding-inline: var(--padding-sm);
     }
@@ -617,6 +676,16 @@
 @media (pointer: coarse) {
     .nuance-button--sm {
         min-height: 44px;
+    }
+
+    .composition-add,
+    .color-region__remove {
+        width: var(--size-target-min);
+        height: var(--size-target-min);
+    }
+
+    .color-region.is-removable .color-region__select {
+        padding-top: var(--size-target-min);
     }
 
     .resize-divider--x {
