@@ -65,6 +65,10 @@
     max-width: var(--content-width);
 }
 
+.nuance-app--editor .nuance-main {
+    flex: 1 0 auto;
+}
+
 .nuance-intro {
     width: 100%;
     max-width: var(--instructions-width);
@@ -187,7 +191,7 @@
 /* Labels stay in flow so wrapped grid rows reserve space for attribution. */
 .palette-card__label {
     color: var(--color-text-secondary);
-    font: 400 11px/16px var(--family-sans), sans-serif;
+    font: 400 12px/16px var(--family-sans), sans-serif;
     text-align: left;
 }
 
@@ -211,6 +215,7 @@
 .nuance-workspace {
     display: flex;
     flex-direction: column;
+    flex: 1 0 auto;
     gap: var(--gap-xs);
 }
 
@@ -245,9 +250,9 @@
 
 .nuance-stage {
     display: flex;
+    flex: 1 0 auto;
     justify-content: center;
     align-items: center;
-    /* Reserve room for the plus beside the artwork, including touch targets. */
     padding: var(--padding-lg);
     background: var(--color-bg-surface);
 }
