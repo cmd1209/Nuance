@@ -33,7 +33,6 @@
     --content-width: 932px;
     --instructions-width: 640px;
     --artwork-width: 500px;
-    --screen-copy: var(--color-text-primary);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -52,10 +51,6 @@
     color-scheme: light;
 }
 
-.nuance-app[data-theme="dark"] {
-    --screen-copy: var(--colors-primary-white);
-}
-
 .nuance-main {
     position: relative;
     display: flex;
@@ -72,7 +67,7 @@
 .nuance-intro {
     width: 100%;
     max-width: var(--instructions-width);
-    color: var(--screen-copy);
+    color: var(--color-text-primary);
     font-family: var(--family-sans), sans-serif;
 }
 
@@ -118,17 +113,18 @@
 }
 
 .nuance-wordmark {
-    display: inline-block;
-    color: var(--color-text-secondary);
-    font-size: 49.787px;
-    line-height: 65px;
-    font-weight: 300;
-    letter-spacing: -1.28px;
+    display: inline-flex;
+    align-items: center;
+    width: 152px;
+    min-width: 0;
+    height: 65px;
     text-decoration: none;
 }
 
-.nuance-wordmark span {
-    font-weight: 500;
+.nuance-wordmark img {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
 .nuance-header__actions {
@@ -619,8 +615,8 @@
     }
 
     .nuance-wordmark {
-        font-size: 40px;
-        line-height: 52px;
+        width: 144px;
+        height: 52px;
     }
 
     .nuance-header {

@@ -26,7 +26,9 @@ export default function NuanceApp() {
   }
   return <div className={`nuance-app ${editing ? "nuance-app--editor" : "nuance-app--palettes"}`} data-theme={state.preferences.theme}>
     <header className="nuance-header">
-      <a className="nuance-wordmark" href="#" aria-label="Nuance — back to palettes" onClick={e => { e.preventDefault(); dispatch({ type: "back" }); closeEditor(); }}><span>N</span>uance</a>
+      <a className="nuance-wordmark" href="#" aria-label="Nuance — back to palettes" onClick={e => { e.preventDefault(); dispatch({ type: "back" }); closeEditor(); }}>
+        <img src={`/nuance/assets/nuance-logo__${state.preferences.theme === "dark" ? "light" : "dark"}.svg`} alt="" width={350} height={81} />
+      </a>
       <div className="nuance-header__actions">
         <Button disabled className="account-placeholder" title="Accounts are not available in this phase" leadingIcon={<Icon name="user" />}>User</Button>
         <Button onClick={() => dispatch({ type: "theme" })} aria-label={`Switch to ${state.preferences.theme === "dark" ? "light" : "dark"} theme`} leadingIcon={<Icon name="moon" />}>{state.preferences.theme === "dark" ? "Dark" : "Light"}</Button>

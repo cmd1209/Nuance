@@ -203,8 +203,8 @@
     --color-bg-surface-disabled: var(--colors-primary-100);
 
     /* Text */
-    --color-text-primary: var(--colors-primary-900);
-    --color-text-secondary: var(--colors-primary-700);
+    --color-text-primary: var(--colors-primary-700);
+    --color-text-secondary: var(--colors-primary-800);
     --color-text-tertiary: var(--colors-primary-600);
     --color-text-disabled: var(--colors-primary-400);
     --color-text-inverse: var(--colors-primary-white);
@@ -219,7 +219,7 @@
     --color-action-primary: var(--colors-primary-100);
     --color-action-primary-hover: var(--colors-primary-200);
     --color-action-primary-pressed: var(--colors-primary-300);
-    --color-action-on-primary: var(--colors-primary-900);
+    --color-action-on-primary: var(--color-text-primary);
     --color-action-secondary: var(--colors-primary-100);
     --color-action-secondary-hover: var(--colors-primary-200);
     --color-action-on-secondary: var(--colors-primary-900);
@@ -247,9 +247,9 @@
     --color-bg-surface-disabled: var(--colors-primary-800);
 
     /* Text */
-    --color-text-primary: var(--colors-primary-100);
-    --color-text-secondary: var(--colors-primary-200);
-    --color-text-tertiary: var(--colors-primary-300);
+    --color-text-primary: var(--colors-primary-200);
+    --color-text-secondary: var(--colors-primary-300);
+    --color-text-tertiary: var(--colors-primary-400);
     --color-text-disabled: var(--colors-primary-600);
     --color-text-inverse: var(--colors-primary-900);
 
@@ -263,7 +263,7 @@
     --color-action-primary: var(--colors-primary-700);
     --color-action-primary-hover: var(--colors-primary-800);
     --color-action-primary-pressed: var(--colors-primary-900);
-    --color-action-on-primary: var(--colors-primary-white);
+    --color-action-on-primary: var(--color-text-primary);
     --color-action-secondary: var(--colors-primary-700);
     --color-action-secondary-hover: var(--colors-primary-600);
     --color-action-on-secondary: var(--colors-primary-100);
