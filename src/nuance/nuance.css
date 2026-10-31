@@ -248,25 +248,27 @@
     justify-content: center;
     align-items: center;
     /* Reserve room for the plus beside the artwork, including touch targets. */
-    padding: var(--padding-lg) calc(var(--padding-lg) + var(--size-target-min) + var(--gap-xs)) var(--padding-lg) var(--padding-lg);
+    padding: var(--padding-lg);
     background: var(--color-bg-surface);
 }
 
 .artwork-anchor {
     position: relative;
     width: min(100%, var(--artwork-width));
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: var(--gap-sm);
 }
 
 .composition-add {
-    position: absolute;
-    bottom: 0;
-    left: calc(100% + var(--gap-xs));
     width: var(--size-control-sm);
     height: var(--size-control-sm);
 }
 
 .nuance-button.composition-add {
     padding: 0;
+    margin-inline: auto
 }
 
 .composition-add > span {

@@ -42,7 +42,6 @@ export default function NuanceApp() {
         <div className="workspace-toolbar" aria-label="Composition actions">
           <div className="composition-source">
             <Button onClick={() => { dispatch({ type: "back" }); closeEditor(); setNotice(""); }} leadingIcon={<Icon name="back" />}>Back</Button>
-            <span className="composition-source__name">{paletteAttribution(composition)}</span>
           </div>
           <div className="workspace-toolbar__actions">
             {composition.historical && <Button title="Restore historical colors and proportions; two-color originals receive a labeled third color" onClick={() => { dispatch({ type: "reset" }); closeEditor(); setNotice(composition.historical?.originalColorCount === 2 ? "Original pair restored with a Nuance-generated third color for the editor." : "Original Wada combination restored."); }}>Reset</Button>}
@@ -50,13 +49,16 @@ export default function NuanceApp() {
           </div>
         </div>
         <div className="nuance-stage"><div className="artwork-anchor">
+          <p className="composition-source__name">{paletteAttribution(composition)}</p>
           <Artwork composition={composition} selectedColorId={state.selectedColorId}
             onSelect={id => { dispatch({ type: "select-color", colorId: id }); setAdjusting(true); }}
             onAdjust={id => { dispatch({ type: "select-color", colorId: id }); setAdjusting(true); }}
             onRemove={colorId => { dispatch({ type: "remove", colorId }); closeEditor(); }}
             onResize={(splitId, ratio) => dispatch({ type: "resize", splitId, ratio })} />
-          {composition.colors.length < MAX_COLORS && <Button className="composition-add" aria-label="Add color" title="Add a harmonizing color"
-            onClick={() => { dispatch({ type: "add", hex: nextColor(composition) }); closeEditor(); }}><Icon name="plus" size={20} /></Button>}
+          <Button className="composition-add" disabled={composition.colors.length >= MAX_COLORS}
+            aria-label={composition.colors.length >= MAX_COLORS ? "Add color — maximum of six colors reached" : "Add color"}
+            title={composition.colors.length >= MAX_COLORS ? "Maximum of six colors reached" : "Add a harmonizing color"}
+            onClick={() => { dispatch({ type: "add", hex: nextColor(composition) }); closeEditor(); }}><Icon name="plus" size={20} /></Button>
           {adjusting && selected && <ColorEditor color={selected} onChange={hex => dispatch({ type: "color", colorId: selected.id, hex })} onClose={closeEditor} />}
         </div></div>
       </section> : <section className="nuance-palettes" aria-label="Palette suggestions">
