@@ -30,9 +30,9 @@
 
 .nuance-app {
     /* Frame dimensions are measured source values, not new library tokens. */
-    --content-width: 932px;
-    --instructions-width: 640px;
-    --artwork-width: 500px;
+    --content-width: 1140px;
+    --instructions-width: 780px;
+    --artwork-width: 640px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -219,10 +219,14 @@
     transition: background-color 120ms ease;
 }
 
-.palette-card.is-highlighted,
-.palette-card:hover,
 .palette-card:focus-visible {
     background: var(--color-bg-surface-hover);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .palette-card:hover {
+        background: var(--color-bg-surface-hover);
+    }
 }
 
 /* Labels stay in flow so the slider reserves space for attribution. */
@@ -289,7 +293,6 @@
 
 .nuance-stage {
     display: flex;
-    flex: 1 0 auto;
     justify-content: center;
     align-items: center;
     padding: var(--padding-xl) var(--padding-lg);

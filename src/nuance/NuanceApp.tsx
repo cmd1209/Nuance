@@ -41,16 +41,8 @@ export default function NuanceApp() {
           : "Explore how colors interact through simple compositions. Experiment with different combinations to discover unexpected harmonies and contrasts."}</p>
       </section>
       {editing ? <section className="nuance-workspace" aria-label="Color manipulation">
-        <div className="workspace-toolbar" aria-label="Composition actions">
-          <div className="composition-source">
-            <Button onClick={() => { dispatch({ type: "back" }); closeEditor(); setNotice(""); }} leadingIcon={<Icon name="back" />}>Back</Button>
-          </div>
-          <div className="workspace-toolbar__actions">
-            {composition.historical && <Button title="Restore historical colors and proportions; two-color originals receive a labeled third color" onClick={() => { dispatch({ type: "reset" }); closeEditor(); setNotice(composition.historical?.originalColorCount === 2 ? "Original pair restored with a Nuance-generated third color for the editor." : "Original Wada combination restored."); }}>Reset</Button>}
-            <Button onClick={savePng} disabled={exporting} trailingIcon={<Icon name="download" />}>{exporting ? "Exporting…" : "Save"}</Button>
-          </div>
-        </div>
-        <div className="nuance-stage"><div className="artwork-anchor">
+        <div className="nuance-stage">
+          <div className="artwork-anchor">
           <p className="composition-source__name">{paletteAttribution(composition)}</p>
           <Artwork composition={composition} selectedColorId={state.selectedColorId}
             onSelect={id => { dispatch({ type: "select-color", colorId: id }); setAdjusting(true); }}
@@ -63,6 +55,15 @@ export default function NuanceApp() {
             onClick={() => { dispatch({ type: "add", hex: nextColor(composition) }); closeEditor(); }}><Icon name="plus" size={20} /></Button>
           {adjusting && selected && <ColorEditor color={selected} onChange={hex => dispatch({ type: "color", colorId: selected.id, hex })} onClose={closeEditor} />}
         </div></div>
+        <div className="workspace-toolbar" aria-label="Composition actions">
+          <div className="composition-source">
+            <Button onClick={() => { dispatch({ type: "back" }); closeEditor(); setNotice(""); }} leadingIcon={<Icon name="back" />}>Back</Button>
+          </div>
+          <div className="workspace-toolbar__actions">
+            {composition.historical && <Button title="Restore historical colors and proportions; two-color originals receive a labeled third color" onClick={() => { dispatch({ type: "reset" }); closeEditor(); setNotice(composition.historical?.originalColorCount === 2 ? "Original pair restored with a Nuance-generated third color for the editor." : "Original Wada combination restored."); }}>Reset</Button>}
+            <Button onClick={savePng} disabled={exporting} trailingIcon={<Icon name="download" />}>{exporting ? "Exporting…" : "Save"}</Button>
+          </div>
+        </div>
       </section> : <section className="nuance-palettes" aria-label="Palette suggestions">
         <PaletteSlider palettes={state.suggestions} activeId={state.activeCompositionId}
           onSelect={palette => { dispatch({ type: "select-palette", palette }); closeEditor(); setNotice(""); }} />
