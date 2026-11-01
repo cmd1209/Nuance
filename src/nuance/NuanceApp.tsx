@@ -1,10 +1,10 @@
 import { useCallback, useReducer, useState } from "react";
 import { MAX_COLORS, paletteAttribution } from "./domain/composition";
-import { discoverPalettes, nextColor } from "./domain/palettes";
+import { nextColor } from "./domain/palettes";
 import { activeComposition, createEditorState, editorReducer } from "./state/editor";
 import { downloadCompositionPng } from "./export/png";
 import { Artwork } from "./components/Artwork";
-import { PaletteCard } from "./components/PaletteCard";
+import { PaletteSlider } from "./components/PaletteSlider";
 import { ColorEditor } from "./components/ColorEditor";
 import { Navigation } from "./components/Navigation";
 import { Button } from "./components/Button";
@@ -64,10 +64,8 @@ export default function NuanceApp() {
           {adjusting && selected && <ColorEditor color={selected} onChange={hex => dispatch({ type: "color", colorId: selected.id, hex })} onClose={closeEditor} />}
         </div></div>
       </section> : <section className="nuance-palettes" aria-label="Palette suggestions">
-        <div className="palette-grid">{state.suggestions.map(palette => <PaletteCard key={palette.id} composition={palette}
-          highlighted={state.activeCompositionId === palette.id}
-          onSelect={() => { dispatch({ type: "select-palette", palette }); closeEditor(); setNotice(""); }} />)}</div>
-        <Button onClick={() => { dispatch({ type: "explore", suggestions: discoverPalettes(state.suggestions) }); setNotice("Three new palette suggestions."); }} trailingIcon={<Icon name="plus" />}>Explore More</Button>
+        <PaletteSlider palettes={state.suggestions} activeId={state.activeCompositionId}
+          onSelect={palette => { dispatch({ type: "select-palette", palette }); closeEditor(); setNotice(""); }} />
       </section>}
       <p className="nuance-notice" role="status">{notice}</p>
     </main>

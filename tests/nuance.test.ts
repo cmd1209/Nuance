@@ -8,6 +8,22 @@ import { activeComposition, createEditorState, editorReducer } from "../src/nuan
 import { drawComposition } from "../src/nuance/export/png";
 
 const fixture = () => createComposition(PRESET_HEXES[0], "Test composition");
+
+test("palette browser includes every historical composition in numbered order and restores the last palette draft", () => {
+  let state = createEditorState();
+  assert.equal(state.suggestions.length, 348);
+  assert.deepEqual(state.suggestions.map(palette => palette.historical?.combinationNumber), Array.from({ length: 348 }, (_, index) => index + 1));
+  assert.equal(new Set(state.suggestions.map(palette => palette.id)).size, 348);
+  const palette = state.suggestions[347];
+  state = editorReducer(state, { type: "select-palette", palette });
+  const draftId = activeComposition(state)!.id;
+  state = editorReducer(state, { type: "back" });
+  assert.equal(state.suggestions.length, 348);
+  assert.equal(state.activeCompositionId, palette.id);
+  state = editorReducer(state, { type: "select-palette", palette });
+  assert.equal(activeComposition(state)!.id, draftId);
+});
+
 function valid(composition: ReturnType<typeof fixture>) {
   assert.deepEqual(deserializeComposition(serializeComposition(composition)), composition);
   const { regions } = computeLayout(composition.layout);

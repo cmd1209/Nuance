@@ -1,7 +1,6 @@
 import { cloneComposition, updateColor, type Composition } from "../domain/composition";
 import { addColor, removeColor, resizeSplit } from "../domain/layout";
-import { editorComposition, resetHistoricalComposition } from "../domain/wada";
-import { initialPalettes } from "../domain/palettes";
+import { editorComposition, historicalComposition, resetHistoricalComposition, WADA_PALETTES } from "../domain/wada";
 
 export interface EditorState {
   preferences: { theme: "light" | "dark" };
@@ -25,7 +24,7 @@ export type EditorAction =
   | { type: "theme" };
 
 export function createEditorState(): EditorState {
-  return { preferences: { theme: "dark" }, view: "palettes", suggestions: initialPalettes(), drafts: {}, activeCompositionId: null, selectedColorId: null };
+  return { preferences: { theme: "dark" }, view: "palettes", suggestions: WADA_PALETTES.map(historicalComposition), drafts: {}, activeCompositionId: null, selectedColorId: null };
 }
 export const activeComposition = (state: EditorState) => state.activeCompositionId ? state.drafts[state.activeCompositionId] : undefined;
 
