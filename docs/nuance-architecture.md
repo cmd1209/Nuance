@@ -1,5 +1,7 @@
 # Nuance Color — Phase 1
 
+Account support now extends this original phase-one design. See [accounts](accounts.md) for the current Supabase setup, password sign-in/recovery flow, private library, schema, and validation. Historical Figma measurements and phase-one observations below describe the initial implementation.
+
 The original architecture below is extended by the [Sanzo Wada integration](sanzo-wada-integration.md), which documents current discovery, additive provenance fields, two-color previews, and generation/reset behavior.
 
 ### CSS Conventions
@@ -35,11 +37,11 @@ A layout node is either a region referring to a stable color ID or a binary spli
 
 `state/editor.ts` owns the editor transitions independently of the view. `NuanceApp` hosts that state with React's reducer. Preferences live separately in `state.preferences`; transient input text, the open color popover and download feedback stay in UI state. Drafts are currently indexed by source palette ID; each stored document has its own independent ID. Returning to the same palette restores its draft. Explore More replaces only suggestions and retains drafts. Changing the theme cannot mutate a composition.
 
-### Adding Supabase later
+### Supabase accounts
 
-Add persistence outside the editor: load a JSON document, validate it with `deserializeComposition`, then put it in the document state. Observe document changes and pass `serializeComposition(document)` to a future save function. The adapter can persist preferences separately. Auth identifies the owner at that boundary; it does not enter the layout or rendering code. Session restoration can load active document IDs and preferences there as well.
+Persistence lives outside the editor in `account/repository.ts`. Saving validates a serialized composition and upserts it under `(owner_id, id)`; loading validates stored JSON with `deserializeComposition`. `open-saved` restores the document without cloning its ID, while `clear-account` removes in-memory drafts on sign-out or account change. Auth does not enter layout or rendering code.
 
-There is deliberately no adapter interface, Supabase dependency, auth UI, database schema, localStorage write, or cloud request yet. Drafts and preferences last for the current page session only; refreshing resets them. PNG download is an independent export action, not a save-to-library operation. The same composition document can later be referenced by Type, Space and Detail without coupling their future UI to this Color screen.
+`account/useAccount.ts` restores Supabase browser sessions, loads the profile/library, and guards against stale responses from a previous account. `AccountDialog` provides email/password sign-in and sign-up, confirmation notices, password reset/recovery, display-name editing, sign-out, and saved composition previews. Saving to the account is explicit and separate from downloading PNG. Unsaved drafts and theme preferences last for the current page session; configured Supabase sessions and saved documents persist. See [account setup](accounts.md) for the required project migration, email templates, and callback URLs.
 
 ## Geometry and rendering
 

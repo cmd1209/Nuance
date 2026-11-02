@@ -13,6 +13,8 @@ export interface EditorState {
 }
 export type EditorAction =
   | { type: "select-palette"; palette: Composition }
+  | { type: "open-saved"; composition: Composition }
+  | { type: "clear-account" }
   | { type: "explore"; suggestions: Composition[] }
   | { type: "back" }
   | { type: "select-color"; colorId: string | null }
@@ -30,6 +32,12 @@ export const activeComposition = (state: EditorState) => state.activeComposition
 
 /** UI-independent transitions. A future persistence adapter observes documents here, not DOM. */
 export function editorReducer(state: EditorState, action: EditorAction): EditorState {
+  if (action.type === "clear-account") return { ...state, view: "palettes", drafts: {}, activeCompositionId: null, selectedColorId: null };
+  if (action.type === "open-saved") {
+    const key = `saved:${action.composition.id}`;
+    return { ...state, view: "editor", activeCompositionId: key, selectedColorId: null,
+      drafts: { ...state.drafts, [key]: action.composition } };
+  }
   if (action.type === "theme") return { ...state, preferences: { ...state.preferences, theme: state.preferences.theme === "dark" ? "light" : "dark" } };
   if (action.type === "back") return { ...state, view: "palettes", selectedColorId: null };
   if (action.type === "select-color") return { ...state, selectedColorId: action.colorId };

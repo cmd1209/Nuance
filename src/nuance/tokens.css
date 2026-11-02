@@ -260,9 +260,9 @@
     --color-border-focus: var(--colors-primary-200);
 
     /* Actions */
-    --color-action-primary: var(--colors-primary-700);
-    --color-action-primary-hover: var(--colors-primary-800);
-    --color-action-primary-pressed: var(--colors-primary-900);
+    --color-action-primary: var(--colors-primary-600);
+    --color-action-primary-hover: var(--colors-primary-700);
+    --color-action-primary-pressed: var(--colors-primary-800);
     --color-action-on-primary: var(--color-text-primary);
     --color-action-secondary: var(--colors-primary-700);
     --color-action-secondary-hover: var(--colors-primary-600);

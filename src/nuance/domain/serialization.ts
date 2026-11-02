@@ -2,7 +2,7 @@ import { MAX_COLORS, normalizeHex, type ColorValue, type Composition, type Layou
 import { computeLayout, MIN_EXTENT } from "./layout";
 import { WADA_PALETTES } from "./wada";
 
-/** JSON is the only storage contract. No auth, storage SDK or persistence implementation is needed yet. */
+/** Validate plain JSON at the storage boundary, independently of auth and the storage SDK. */
 export function serializeComposition(composition: Composition): string {
   return JSON.stringify(composition);
 }

@@ -1,4 +1,7 @@
-import { useCallback, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
+import { useAccount, accountError } from "./account/useAccount";
+import { authReturn } from "./account/client";
+import { AccountDialog } from "./components/AccountDialog";
 import { MAX_COLORS, paletteAttribution } from "./domain/composition";
 import { nextColor } from "./domain/palettes";
 import { activeComposition, createEditorState, editorReducer } from "./state/editor";
@@ -13,10 +16,29 @@ import "./nuance.css";
 
 export default function NuanceApp() {
   const [state, dispatch] = useReducer(editorReducer, undefined, createEditorState);
+  const account = useAccount();
+  const [accountOpen, setAccountOpen] = useState(!!authReturn.kind || authReturn.hasError), [saving, setSaving] = useState(false);
+  useEffect(() => { if (account.recovery !== "none") setAccountOpen(true); }, [account.recovery]);
   const [adjusting, setAdjusting] = useState(false), [exporting, setExporting] = useState(false), [notice, setNotice] = useState("");
+  const previousOwner = useRef<string | null>(null);
+  useEffect(() => {
+    const next = account.user?.id ?? null;
+    if (previousOwner.current && previousOwner.current !== next) {
+      dispatch({ type: "clear-account" }); setAdjusting(false); setNotice("");
+    }
+    previousOwner.current = next;
+  }, [account.user?.id]);
   const composition = activeComposition(state), editing = state.view === "editor" && !!composition;
   const selected = composition?.colors.find(c => c.id === state.selectedColorId);
   const closeEditor = useCallback(() => setAdjusting(false), []);
+  async function saveToAccount() {
+    if (!composition || saving) return;
+    if (!account.user) { setAccountOpen(true); return; }
+    setSaving(true); setNotice("");
+    try { await account.save(composition); setNotice("Composition saved to your account."); }
+    catch (error) { setNotice(accountError(error)); }
+    finally { setSaving(false); }
+  }
   async function savePng() {
     if (!composition || exporting) return;
     setExporting(true); setNotice("");
@@ -30,7 +52,8 @@ export default function NuanceApp() {
         <img src={`/nuance/assets/nuance-logo__${state.preferences.theme === "dark" ? "light" : "dark"}.svg`} alt="" width={350} height={81} />
       </a>
       <div className="nuance-header__actions">
-        <Button disabled className="account-placeholder" title="Accounts are not available in this phase" leadingIcon={<Icon name="user" />}>User</Button>
+        <Button className="account-button" disabled={account.authLoading} aria-label={account.user ? "Open your account and saved compositions" : "Sign in"}
+          onClick={() => setAccountOpen(true)} leadingIcon={<Icon name="user" />}><span className="account-button__name">{account.authLoading ? "Loading…" : account.user ? account.profile?.display_name || "Account" : "Sign in"}</span></Button>
         <Button onClick={() => dispatch({ type: "theme" })} aria-label={`Switch to ${state.preferences.theme === "dark" ? "light" : "dark"} theme`} leadingIcon={<Icon name="moon" />}>{state.preferences.theme === "dark" ? "Dark" : "Light"}</Button>
       </div>
     </header>
@@ -61,7 +84,8 @@ export default function NuanceApp() {
           </div>
           <div className="workspace-toolbar__actions">
             {composition.historical && <Button title="Restore historical colors and proportions; two-color originals receive a labeled third color" onClick={() => { dispatch({ type: "reset" }); closeEditor(); setNotice(composition.historical?.originalColorCount === 2 ? "Original pair restored with a Nuance-generated third color for the editor." : "Original Wada combination restored."); }}>Reset</Button>}
-            <Button onClick={savePng} disabled={exporting} trailingIcon={<Icon name="download" />}>{exporting ? "Exporting…" : "Save"}</Button>
+            <Button onClick={saveToAccount} disabled={saving || account.authLoading}>{saving ? "Saving…" : "Save"}</Button>
+            <Button onClick={savePng} disabled={exporting} trailingIcon={<Icon name="download" />}>{exporting ? "Downloading…" : "PNG"}</Button>
           </div>
         </div>
       </section> : <section className="nuance-palettes" aria-label="Palette suggestions">
@@ -71,5 +95,8 @@ export default function NuanceApp() {
       <p className="nuance-notice" role="status">{notice}</p>
     </main>
     <Navigation />
+    {accountOpen && <AccountDialog account={account} onClose={() => { account.dismissRecovery(); setAccountOpen(false); }} onOpen={composition => {
+      dispatch({ type: "open-saved", composition }); closeEditor(); setNotice("");
+    }} />}
   </div>;
 }

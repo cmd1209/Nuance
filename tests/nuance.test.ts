@@ -6,8 +6,50 @@ import { discoverPalettes, generatePalettes, initialPalettes, legacyInitialPalet
 import { deserializeComposition, serializeComposition } from "../src/nuance/domain/serialization";
 import { activeComposition, createEditorState, editorReducer } from "../src/nuance/state/editor";
 import { drawComposition } from "../src/nuance/export/png";
+import { readSavedComposition } from "../src/nuance/account/repository";
+import { authReturnUrl, readAuthReturn, validatePassword, MIN_PASSWORD_LENGTH } from "../src/nuance/account/emailAuth";
 
 const fixture = () => createComposition(PRESET_HEXES[0], "Test composition");
+
+test("password creation enforces minimum length and matching confirmation without trimming passwords", () => {
+  const password = "a".repeat(MIN_PASSWORD_LENGTH);
+  assert.doesNotThrow(() => validatePassword(password, password));
+  assert.throws(() => validatePassword(password.slice(1), password.slice(1)), /at least/);
+  assert.throws(() => validatePassword(password, password + "x"), /do not match/);
+  assert.throws(() => validatePassword(` ${password}`, password), /do not match/);
+  assert.doesNotThrow(() => validatePassword(` ${password} `, ` ${password} `));
+});
+
+test("auth return URLs keep the app origin and path without propagating tokens or unrelated redirects", () => {
+  assert.equal(authReturnUrl("recovery", "https://nuance.example/app/?next=https://other.example#access_token=private"), "https://nuance.example/app/?account=recovery");
+  assert.equal(authReturnUrl("confirm", "http://localhost:5173/"), "http://localhost:5173/?account=confirm");
+});
+
+test("auth callback parsing distinguishes recovery, confirmation, and expired links", () => {
+  assert.deepEqual(readAuthReturn("https://nuance.example/?account=recovery#access_token=test&type=recovery"), { kind: "recovery", hasError: false });
+  assert.deepEqual(readAuthReturn("https://nuance.example/#type=recovery"), { kind: "recovery", hasError: false });
+  assert.deepEqual(readAuthReturn("https://nuance.example/?account=recovery#error=access_denied&error_code=otp_expired"), { kind: "recovery", hasError: true });
+  assert.deepEqual(readAuthReturn("https://nuance.example/?account=confirm"), { kind: "confirm", hasError: false });
+  assert.deepEqual(readAuthReturn("https://nuance.example/"), { kind: null, hasError: false });
+});
+
+test("saved compositions validate cloud documents and reopen without cloning or losing edits", () => {
+  const start = fixture();
+  const original = updateColor(start, start.colors[0].id, "#654321");
+  const saved = readSavedComposition({ id: original.id, document: original, updated_at: new Date().toISOString() });
+  let state = editorReducer(createEditorState(), { type: "open-saved", composition: saved.composition });
+  assert.deepEqual(activeComposition(state), original);
+  const colorId = original.colors[0].id;
+  state = editorReducer(state, { type: "color", colorId, hex: "#123456" });
+  assert.equal(activeComposition(state)!.id, original.id);
+  assert.equal(activeComposition(state)!.colors[0].hex, "#123456");
+  state = editorReducer(state, { type: "clear-account" });
+  assert.equal(state.view, "palettes");
+  assert.deepEqual(state.drafts, {});
+  assert.equal(activeComposition(state), undefined);
+  assert.throws(() => readSavedComposition({ id: "wrong", document: original, updated_at: new Date().toISOString() }));
+  assert.throws(() => readSavedComposition({ id: original.id, document: { ...original, layout: null }, updated_at: new Date().toISOString() }));
+});
 
 test("palette browser includes every historical composition in numbered order and restores the last palette draft", () => {
   let state = createEditorState();
