@@ -61,13 +61,15 @@ export function Artwork({ composition, selectedColorId, onSelect, onAdjust, onRe
     aria-label="Editable color composition" style={{ aspectRatio: `${composition.artwork.width} / ${composition.artwork.height}` }}>
     {regions.map((region, index) => {
       const color = composition.colors.find(c => c.id === region.colorId)!;
+      const rgb = `RGB ${[1, 3, 5].map(offset => parseInt(color.hex.slice(offset, offset + 2), 16)).join(", ")}`;
       const rect = paintedRect(region, composition.artwork), selected = selectedColorId === color.id;
       return <div key={region.id} className={`color-region ${selected ? "is-selected" : ""} ${composition.colors.length > MIN_COLORS ? "is-removable" : ""}`} data-color-id={color.id} data-hex={color.hex}
         style={{ left: `${rect.x * 100}%`, top: `${rect.y * 100}%`, width: `${rect.width * 100}%`, height: `${rect.height * 100}%`, background: color.hex, color: contentColor(color.hex) }}>
         <button type="button" className="color-region__select" aria-pressed={selected}
-          aria-label={`Color ${index + 1}: ${color.hex}${color.origin === "generated" ? ", Nuance-generated extension" : color.origin === "user" ? ", custom color" : color.name ? `, ${color.name}` : ""}`}
+          aria-label={`Color ${index + 1}: ${color.hex}, ${rgb}${color.origin === "generated" ? ", Nuance-generated extension" : color.origin === "user" ? ", custom color" : color.name ? `, ${color.name}` : ""}`}
+          title={`${color.hex} · ${rgb}`}
           onClick={() => onSelect(color.id)} onDoubleClick={() => onAdjust(color.id)}>
-          <span className="color-region__details"><span>{color.hex}</span></span>
+          <span className="color-region__details"><span>{color.hex}</span><span className="color-region__rgb">{rgb}</span></span>
         </button>
         {composition.colors.length > MIN_COLORS && <button type="button" className="color-region__remove"
           aria-label={`Remove color ${index + 1}: ${color.hex}`} title={`Remove ${color.name || color.hex}`}

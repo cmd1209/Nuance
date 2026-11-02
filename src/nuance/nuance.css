@@ -80,7 +80,6 @@
     font-size: var(--body-md-font-size);
     line-height: var(--body-md-line-height);
     font-weight: var(--font-weight-regular);
-    letter-spacing: 0.5px;
 }
 
 .nuance-notice {
@@ -401,6 +400,14 @@
     font: 400 var(--body-sm-font-size)/var(--body-sm-line-height) var(--family-sans), sans-serif;
     opacity: 0;
     transition: opacity 120ms ease;
+}
+
+.color-region__rgb {
+    max-width: 100%;
+    padding-inline: var(--padding-xs);
+    font-size: var(--caption-font-size);
+    line-height: var(--caption-line-height);
+    overflow-wrap: anywhere;
 }
 
 .color-region:hover .color-region__details,
