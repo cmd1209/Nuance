@@ -5,7 +5,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "ghost" | "primary";
   leadingIcon?: ReactNode;
   trailingIcon?: ReactNode;
-  children: ReactNode;
+  children?: ReactNode;
 }
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   { size = "SM", variant = "ghost", leadingIcon, trailingIcon, className = "", children, ...props }, ref,
