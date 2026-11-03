@@ -212,7 +212,7 @@
     flex-direction: column;
     width: 100%;
     gap: var(--gap-sm);
-    padding: var(--padding-md);
+    padding: var(--padding-sm);
     border: 0;
     border-radius: var(--radius-sm);
     background: transparent;
@@ -596,7 +596,7 @@
     width: min(480px, calc(100% - var(--padding-lg) * 2));
     max-height: calc(100svh - var(--padding-lg) * 2);
     margin: auto;
-    padding: var(--padding-xl);
+    padding: var(--padding-lg);
     overflow-y: auto;
     border-radius: var(--radius-md);
     background: var(--color-bg-surface);
@@ -844,7 +844,7 @@
 }
 
 .nuance-button.account-dialog__delete {
-    padding-inline: var(--padding-md);
+    padding: var(--padding-sm);
     color: var(--color-text-secondary);
 }
 

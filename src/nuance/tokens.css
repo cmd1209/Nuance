@@ -182,7 +182,7 @@
     --button-lg-icon: var(--size-icon-md);
     --button-sm-height: var(--size-control-sm);
     --button-sm-padding-x: var(--padding-md);
-    --button-sm-padding-y: var(--dimension-6);
+    --button-sm-padding-y: var(--padding-md);
     --button-sm-gap: var(--gap-xs);
     --button-sm-icon: var(--size-icon-sm);
     --button-radius: var(--radius-sm);

@@ -221,7 +221,7 @@ export function AccountDialog({ account, onClose, onOpen }: { account: Account; 
             {account.saved.map(item => <div key={item.id} className="account-dialog__saved-item">
               <PaletteCard composition={item.composition} disabled={busy} onSelect={() => { onOpen(item.composition); onClose(); }} />
               <Button className="account-dialog__delete" data-delete-composition={item.id} aria-label={`Delete ${paletteAttribution(item.composition)}`} title="Delete composition"
-                disabled={busy} onClick={() => removeComposition(item.id)} leadingIcon={<Trash2 size={16} aria-hidden="true" />}>Delete</Button>
+                disabled={busy} onClick={() => removeComposition(item.id)} leadingIcon={<Trash2 size={16} aria-hidden="true" />}></Button>
             </div>)}
           </div> : <p>Your saved compositions will appear here. Open a palette and choose “Save”. You can keep up to four.</p>)}
         </section>
