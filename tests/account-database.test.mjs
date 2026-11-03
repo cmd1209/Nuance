@@ -43,6 +43,14 @@ test("account migration enforces ownership in PostgreSQL", async t => {
       assert.equal(saved.rows[0].document.name, "Updated save");
     });
 
+    await t.test("quota migration preserves existing work and initializes its counter", async () => {
+      await db.exec("reset role");
+      await db.exec(await readFile("supabase/migrations/202611030001_composition_limit_and_delete.sql", "utf8"));
+      const counts = await db.query("select saved_composition_count from public.profiles where id = $1", [alice]);
+      assert.equal(counts.rows[0].saved_composition_count, 1);
+      assert.equal((await db.query("select id from public.compositions")).rows.length, 1);
+    });
+
     await t.test("another account cannot read, overwrite, or impersonate the owner", async () => {
       await asUser(bob);
       assert.equal((await db.query("select * from public.profiles")).rows.length, 0);
@@ -52,7 +60,8 @@ test("account migration enforces ownership in PostgreSQL", async t => {
       await assert.rejects(db.query("insert into public.profiles (id) values ($1)", [alice]), /row-level security/);
       await assert.rejects(db.query("insert into public.compositions (owner_id, id, document) values ($1, $2, $3)",
         [alice, composition, JSON.stringify({ id: composition, schemaVersion: 1 })]), /row-level security/);
-      await assert.rejects(db.query("delete from public.compositions"), /permission denied/);
+      assert.equal((await db.query("delete from public.compositions returning id")).rows.length, 0);
+      await assert.rejects(db.query("delete from public.profiles"), /permission denied/);
     });
 
     await t.test("owners cannot transfer records or store inconsistent documents", async () => {
@@ -63,11 +72,73 @@ test("account migration enforces ownership in PostgreSQL", async t => {
       await assert.rejects(db.query("update public.profiles set display_name = $1", ["x".repeat(81)]), /check constraint/);
     });
 
+    async function insertComposition(owner, id = crypto.randomUUID()) {
+      await db.query("insert into public.compositions (owner_id, id, document) values ($1, $2, $3)",
+        [owner, id, JSON.stringify({ id, schemaVersion: 1 })]);
+      return id;
+    }
+
+    await t.test("the fifth save is denied, updates at capacity work, and deleting frees one slot", async () => {
+      await asUser(alice);
+      for (let index = 0; index < 3; index++) await insertComposition(alice);
+      await assert.rejects(insertComposition(alice), /up to four compositions/);
+      assert.equal((await db.query("select id from public.compositions")).rows.length, 4);
+      await db.query(`insert into public.compositions (owner_id, id, document) values ($1, $2, $3)
+        on conflict (owner_id, id) do update set owner_id = excluded.owner_id, id = excluded.id, document = excluded.document`,
+        [alice, composition, JSON.stringify({ id: composition, schemaVersion: 1, name: "Updated at capacity" })]);
+      assert.equal((await db.query("select saved_composition_count from public.profiles")).rows[0].saved_composition_count, 4);
+      await db.query("delete from public.compositions where id = $1", [composition]);
+      assert.equal((await db.query("select saved_composition_count from public.profiles")).rows[0].saved_composition_count, 3);
+      await insertComposition(alice);
+      await assert.rejects(insertComposition(alice), /up to four compositions/);
+    });
+
+    await t.test("clients cannot falsify the quota counter and profile upserts preserve it", async () => {
+      await asUser(alice);
+      await assert.rejects(db.query("update public.profiles set saved_composition_count = 0"), /permission denied/);
+      await assert.rejects(db.query("insert into public.profiles (id, saved_composition_count) values ($1, 0)", [alice]), /permission denied/);
+      await db.query(`insert into public.profiles (id, display_name) values ($1, 'Alice updated')
+        on conflict (id) do update set id = excluded.id, display_name = excluded.display_name`, [alice]);
+      assert.equal((await db.query("select saved_composition_count from public.profiles")).rows[0].saved_composition_count, 4);
+    });
+
+    await t.test("quotas are per account and an owner can delete all their own compositions", async () => {
+      await asUser(bob);
+      for (let index = 0; index < 4; index++) await insertComposition(bob);
+      await assert.rejects(insertComposition(bob), /up to four compositions/);
+      assert.equal((await db.query("delete from public.compositions returning id")).rows.length, 4);
+      assert.equal((await db.query("select saved_composition_count from public.profiles")).rows[0].saved_composition_count, 0);
+      await asUser(alice);
+      assert.equal((await db.query("select id from public.compositions")).rows.length, 4);
+    });
+
     await t.test("signed-out requests cannot access account tables", async () => {
       await db.exec("reset role; set role anon");
       for (const table of ["profiles", "compositions"]) {
         await assert.rejects(db.query(`select * from public.${table}`), /permission denied/);
+        await assert.rejects(db.query(`delete from public.${table}`), /permission denied/);
       }
     });
+  } finally { await db.close(); }
+});
+
+test("quota migration refuses excess existing saves without deleting data", async () => {
+  const db = new PGlite();
+  const owner = "11111111-1111-4111-8111-111111111111";
+  try {
+    await db.exec(`create role anon; create role authenticated; create schema auth;
+      create table auth.users (id uuid primary key);
+      create function auth.uid() returns uuid language sql stable as $$ select null::uuid $$;
+      insert into auth.users values ('${owner}');`);
+    await db.exec(await readFile("supabase/migrations/202611020001_accounts.sql", "utf8"));
+    for (let index = 0; index < 5; index++) {
+      const id = crypto.randomUUID();
+      await db.query("insert into public.compositions (owner_id, id, document) values ($1, $2, $3)",
+        [owner, id, JSON.stringify({ id, schemaVersion: 1 })]);
+    }
+    await assert.rejects(db.exec(await readFile("supabase/migrations/202611030001_composition_limit_and_delete.sql", "utf8")), /more than four compositions/);
+    await db.exec("rollback");
+    assert.equal((await db.query("select id from public.compositions")).rows.length, 5);
+    assert.equal((await db.query("select column_name from information_schema.columns where table_name = 'profiles' and column_name = 'saved_composition_count'")).rows.length, 0);
   } finally { await db.close(); }
 });

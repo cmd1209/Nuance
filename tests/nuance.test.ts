@@ -2,14 +2,22 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createComposition, normalizeHex, updateColor } from "../src/nuance/domain/composition";
 import { addColor, computeLayout, MIN_EXTENT, paintedRect, removeColor, resizeSplit } from "../src/nuance/domain/layout";
-import { discoverPalettes, generatePalettes, initialPalettes, legacyInitialPalettes, nextColor, PRESET_HEXES } from "../src/nuance/domain/palettes";
+import { discoverPalettes, generatePalettes, initialPalettes, legacyInitialPalettes, nextColor, PRESET_HEXES, shuffledPalettes } from "../src/nuance/domain/palettes";
 import { deserializeComposition, serializeComposition } from "../src/nuance/domain/serialization";
 import { activeComposition, createEditorState, editorReducer } from "../src/nuance/state/editor";
 import { drawComposition } from "../src/nuance/export/png";
 import { readSavedComposition } from "../src/nuance/account/repository";
 import { authReturnUrl, readAuthReturn, validatePassword, MIN_PASSWORD_LENGTH } from "../src/nuance/account/emailAuth";
+import { canSaveComposition, MAX_SAVED_COMPOSITIONS } from "../src/nuance/account/compositionLimit";
 
 const fixture = () => createComposition(PRESET_HEXES[0], "Test composition");
+
+test("four saved compositions blocks new documents while allowing edits and a replacement after deletion", () => {
+  const saved = Array.from({ length: MAX_SAVED_COMPOSITIONS }, (_, index) => ({ id: `saved-${index}` }));
+  assert.equal(canSaveComposition(saved, "new"), false);
+  assert.equal(canSaveComposition(saved, "saved-0"), true);
+  assert.equal(canSaveComposition(saved.slice(1), "new"), true);
+});
 
 test("password creation enforces minimum length and matching confirmation without trimming passwords", () => {
   const password = "a".repeat(MIN_PASSWORD_LENGTH);
@@ -51,10 +59,11 @@ test("saved compositions validate cloud documents and reopen without cloning or 
   assert.throws(() => readSavedComposition({ id: original.id, document: { ...original, layout: null }, updated_at: new Date().toISOString() }));
 });
 
-test("palette browser includes every historical composition in numbered order and restores the last palette draft", () => {
+test("palette browser includes every historical composition and keeps its order while editing", () => {
   let state = createEditorState();
+  const order = state.suggestions;
   assert.equal(state.suggestions.length, 348);
-  assert.deepEqual(state.suggestions.map(palette => palette.historical?.combinationNumber), Array.from({ length: 348 }, (_, index) => index + 1));
+  assert.deepEqual(state.suggestions.map(palette => palette.historical!.combinationNumber).sort((a, b) => a - b), Array.from({ length: 348 }, (_, index) => index + 1));
   assert.equal(new Set(state.suggestions.map(palette => palette.id)).size, 348);
   const palette = state.suggestions[347];
   state = editorReducer(state, { type: "select-palette", palette });
@@ -64,6 +73,23 @@ test("palette browser includes every historical composition in numbered order an
   assert.equal(state.activeCompositionId, palette.id);
   state = editorReducer(state, { type: "select-palette", palette });
   assert.equal(activeComposition(state)!.id, draftId);
+  state = editorReducer(state, { type: "theme" });
+  assert.equal(state.suggestions, order);
+});
+
+test("palette shuffling changes order without duplicating or altering historical palettes", () => {
+  const first = shuffledPalettes(() => 0);
+  const second = shuffledPalettes(() => 0.5);
+  assert.notDeepEqual(first.map(palette => palette.id), second.map(palette => palette.id));
+  assert.notDeepEqual(first.map(palette => palette.id), WADA_PALETTES.map(reference => reference.paletteId));
+  for (const palettes of [first, second]) {
+    assert.equal(new Set(palettes.map(palette => palette.id)).size, WADA_PALETTES.length);
+    for (const palette of palettes) {
+      const reference = WADA_PALETTES.find(reference => reference.paletteId === palette.id)!;
+      assert.equal(palette.historical, reference);
+      assert.deepEqual(palette.colors.map(color => color.hex), reference.colors.map(color => normalizeHex(color.hex)));
+    }
+  }
 });
 
 function valid(composition: ReturnType<typeof fixture>) {
@@ -290,7 +316,7 @@ test("serialization preserves provenance, supports older documents, and rejects 
 
 test("per-region removal targets its own color independently of selection and respects the minimum", () => {
   let state = createEditorState();
-  state = editorReducer(state, { type: "select-palette", palette: state.suggestions[0] });
+  state = editorReducer(state, { type: "select-palette", palette: state.suggestions.find(palette => palette.colors.length === 3)! });
   const original = activeComposition(state)!;
   const selectedId = original.colors[0].id;
   state = editorReducer(state, { type: "select-color", colorId: selectedId });

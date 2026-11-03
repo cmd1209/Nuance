@@ -1,8 +1,8 @@
 import { paletteAttribution, type Composition } from "../domain/composition";
 import { computeLayout, paintedRect } from "../domain/layout";
 
-export function PaletteCard({ composition, onSelect }: { composition: Composition; onSelect: () => void }) {
-  return <button type="button" className="palette-card" onClick={onSelect}
+export function PaletteCard({ composition, onSelect, disabled = false }: { composition: Composition; onSelect: () => void; disabled?: boolean }) {
+  return <button type="button" className="palette-card" onClick={onSelect} disabled={disabled}
     aria-label={`Edit ${composition.name}: ${composition.colors.map(c => c.hex).join(", ")}`}>
     <span className="palette-card__label">{paletteAttribution(composition)}</span>
     <span className="palette-card__artwork" aria-hidden="true">

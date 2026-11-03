@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { useAccount, accountError } from "./account/useAccount";
 import { authReturn } from "./account/client";
+import { canSaveComposition, MAX_SAVED_COMPOSITIONS } from "./account/compositionLimit";
 import { AccountDialog } from "./components/AccountDialog";
 import { MAX_COLORS, paletteAttribution } from "./domain/composition";
 import { nextColor } from "./domain/palettes";
@@ -30,6 +31,7 @@ export default function NuanceApp() {
   }, [account.user?.id]);
   const composition = activeComposition(state), editing = state.view === "editor" && !!composition;
   const selected = composition?.colors.find(c => c.id === state.selectedColorId);
+  const libraryFull = !!(account.user && composition && !account.dataLoading && !canSaveComposition(account.saved, composition.id));
   const closeEditor = useCallback(() => setAdjusting(false), []);
   async function saveToAccount() {
     if (!composition || saving) return;
@@ -84,7 +86,10 @@ export default function NuanceApp() {
           </div>
           <div className="workspace-toolbar__actions">
             {composition.historical && <Button title="Restore historical colors and proportions; two-color originals receive a labeled third color" onClick={() => { dispatch({ type: "reset" }); closeEditor(); setNotice(composition.historical?.originalColorCount === 2 ? "Original pair restored with a Nuance-generated third color for the editor." : "Original Wada combination restored."); }}>Reset</Button>}
-            <Button onClick={saveToAccount} disabled={saving || account.authLoading}>{saving ? "Saving…" : "Save"}</Button>
+            <Button onClick={saveToAccount} disabled={saving || account.authLoading || !!account.user && account.dataLoading || libraryFull}
+              title={libraryFull ? "Delete a saved composition in your account to make room. Existing saves can still be updated." : undefined}>
+              {saving ? "Saving…" : libraryFull ? `Limit reached (${MAX_SAVED_COMPOSITIONS}/${MAX_SAVED_COMPOSITIONS})` : "Save"}
+            </Button>
             <Button onClick={savePng} disabled={exporting} trailingIcon={<Icon name="download" />}>{exporting ? "Downloading…" : "PNG"}</Button>
           </div>
         </div>

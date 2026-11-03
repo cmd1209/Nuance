@@ -3,7 +3,8 @@ import type { User } from "@supabase/supabase-js";
 import type { Composition } from "../domain/composition";
 import { authReturn, supabase } from "./client";
 import { authReturnUrl, validatePassword } from "./emailAuth";
-import { loadCompositions, loadProfile, saveComposition, saveProfile, type Profile, type SavedComposition } from "./repository";
+import { deleteComposition, loadCompositions, loadProfile, saveComposition, saveProfile, type Profile, type SavedComposition } from "./repository";
+import { canSaveComposition } from "./compositionLimit";
 
 export function accountError(error: unknown): string {
   return error instanceof Error ? error.message : typeof error === "object" && error !== null && "message" in error ? String(error.message) : "Something went wrong. Please try again.";
@@ -125,10 +126,18 @@ export function useAccount() {
   }
   async function save(composition: Composition) {
     if (!supabase || !userId || owner.current !== userId) throw new Error("Please sign in to save your composition.");
+    if (data?.owner === userId && !canSaveComposition(data.saved, composition.id)) throw new Error("You can save up to four compositions. Delete one before saving another.");
     const saved = await saveComposition(supabase, userId, composition);
     if (owner.current !== userId) throw new Error("Your account changed. Please sign in and save again.");
     setData(previous => ({ owner: userId, profile: previous?.owner === userId ? previous.profile : { id: userId, display_name: "" },
       saved: [saved, ...(previous?.owner === userId ? previous.saved.filter(item => item.id !== saved.id) : [])] }));
+    await refresh();
+  }
+  async function remove(id: string) {
+    if (!supabase || !userId || owner.current !== userId) throw new Error("Please sign in to delete a composition.");
+    await deleteComposition(supabase, userId, id);
+    if (owner.current !== userId) throw new Error("Your account changed. Please sign in again.");
+    setData(previous => previous?.owner === userId ? { ...previous, saved: previous.saved.filter(item => item.id !== id) } : previous);
     await refresh();
   }
   async function signOut() {
@@ -139,7 +148,7 @@ export function useAccount() {
 
   return { configured: !!supabase, user, authLoading, dataLoading, error, authError, recovery, refresh,
     profile: data && data.owner === userId ? data.profile : null, saved: data && data.owner === userId ? data.saved : [],
-    signIn, signUp, resendConfirmation, requestPasswordReset, updatePassword, dismissRecovery, updateProfile, save, signOut };
+    signIn, signUp, resendConfirmation, requestPasswordReset, updatePassword, dismissRecovery, updateProfile, save, remove, signOut };
 }
 
 function recoveryOwner() {

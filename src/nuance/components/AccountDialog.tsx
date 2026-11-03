@@ -1,8 +1,10 @@
 import { useEffect, useId, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
-import { LogOut, X } from "lucide-react";
+import { ArrowLeft, LogOut, Trash2, UserRound, X } from "lucide-react";
 import { accountError, type Account } from "../account/useAccount";
 import { MIN_PASSWORD_LENGTH, validatePassword, type EmailAuthMode } from "../account/emailAuth";
-import type { Composition } from "../domain/composition";
+import { paletteAttribution, type Composition } from "../domain/composition";
+import { MAX_SAVED_COMPOSITIONS } from "../account/compositionLimit";
+import { DESIGN_CATEGORIES } from "../domain/categories";
 import { Button } from "./Button";
 import { PaletteCard } from "./PaletteCard";
 import { PasswordField } from "./PasswordField";
@@ -11,7 +13,7 @@ export function AccountDialog({ account, onClose, onOpen }: { account: Account; 
   const dialog = useRef<HTMLDialogElement>(null);
   const prefix = useId();
   const [mode, setMode] = useState<EmailAuthMode>("signin");
-  const [section, setSection] = useState<"profile" | "compositions">("profile");
+  const [section, setSection] = useState<"profile" | "colors">("colors");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmation, setConfirmation] = useState("");
@@ -27,7 +29,7 @@ export function AccountDialog({ account, onClose, onOpen }: { account: Account; 
   const forgot = mode === "forgot";
   const recovering = account.recovery !== "none";
   const coolingDown = (signup || forgot) && resendIn > 0;
-  const title = recovering ? "Reset password" : account.user ? "Your profile" : sent ? "Check your email" : forgot ? "Forgot password?" : signup ? "Create account" : "Sign in";
+  const title = recovering ? "Reset password" : account.user ? `Hi, ${account.profile?.display_name.trim() || "there"}` : sent ? "Check your email" : forgot ? "Forgot password?" : signup ? "Create account" : "Sign in";
   const displayName = account.profile?.display_name || "Your account";
   const initials = (account.profile?.display_name || account.user?.email || "N").trim().split(/\s+/).slice(0, 2).map(part => part[0]).join("").toUpperCase();
 
@@ -51,7 +53,7 @@ export function AccountDialog({ account, onClose, onOpen }: { account: Account; 
   }, [mode, sent, account.user?.id, account.recovery, prefix]);
   useEffect(() => { setName(account.profile?.display_name ?? ""); }, [account.profile?.id, account.profile?.display_name]);
   useEffect(() => {
-    setError(""); setMessage(""); setSignInFailed(false); setSent(false); setPassword(""); setConfirmation(""); setMode("signin"); setSection("profile");
+    setError(""); setMessage(""); setSignInFailed(false); setSent(false); setPassword(""); setConfirmation(""); setMode("signin"); setSection("colors");
   }, [account.user?.id]);
   useEffect(() => {
     if (!resendIn) return;
@@ -99,17 +101,38 @@ export function AccountDialog({ account, onClose, onOpen }: { account: Account; 
     event.preventDefault();
     void run(async () => { await account.updateProfile(name); setMessage("Profile updated."); });
   }
+  function removeComposition(id: string) {
+    const index = account.saved.findIndex(item => item.id === id);
+    void run(async () => {
+      await account.remove(id);
+      setMessage("Composition deleted.");
+      window.requestAnimationFrame(() => {
+        if (dialog.current?.querySelector('[data-section="colors"]')?.getAttribute("aria-selected") !== "true") return;
+        const buttons = dialog.current.querySelectorAll<HTMLButtonElement>("[data-delete-composition]");
+        const target = buttons[Math.min(index, buttons.length - 1)] ?? dialog.current.querySelector<HTMLElement>('[role="tabpanel"][tabindex="0"]');
+        target?.focus();
+      });
+    });
+  }
   function navigateSections(event: KeyboardEvent<HTMLDivElement>) {
     if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
     event.preventDefault();
-    const next = event.key === "Home" ? "profile" : event.key === "End" ? "compositions" : section === "profile" ? "compositions" : "profile";
+    // Only Colors is enabled; disabled categories are skipped by keyboard navigation.
+    dialog.current?.querySelector<HTMLButtonElement>('[data-section="colors"]')?.focus();
+  }
+  function showSection(next: "profile" | "colors") {
     setSection(next); setError(""); setMessage("");
-    dialog.current?.querySelector<HTMLButtonElement>(`[data-section="${next}"]`)?.focus();
+    window.requestAnimationFrame(() => {
+      dialog.current?.querySelector<HTMLElement>(next === "profile" ? '[data-back-library]' : '[data-open-profile]')?.focus();
+    });
   }
 
   return <dialog ref={dialog} className="account-dialog" aria-labelledby={`${prefix}-title`} onCancel={event => { event.preventDefault(); onClose(); }}>
     <div className="account-dialog__heading">
-      <h2 id={`${prefix}-title`}>{title}</h2>
+      <div className="account-dialog__greeting">
+        {account.user && !recovering && section === "colors" && <Button className="account-dialog__profile" data-open-profile aria-label="Open profile" title="Profile" onClick={() => showSection("profile")}><UserRound size={20} aria-hidden="true" /></Button>}
+        <h2 id={`${prefix}-title`}>{title}</h2>
+      </div>
       <Button className="account-dialog__close" aria-label="Close account" onClick={onClose}><X size={20} aria-hidden="true" /></Button>
     </div>
     {!account.configured ? <p>Account sign-in is being set up. You can keep exploring and download your compositions.</p>
@@ -162,16 +185,17 @@ export function AccountDialog({ account, onClose, onOpen }: { account: Account; 
           <Button disabled={busy} onClick={() => switchMode(forgot || signup ? "signin" : "signup")}>{forgot ? "Back to sign in" : signup ? "Sign in" : "Create account"}</Button>
         </div>}
       </> : <>
-        <div className="account-dialog__identity">
-          <span className="account-dialog__avatar" aria-hidden="true">{initials}</span>
-          <div><p className="account-dialog__name">{displayName}</p><p className="account-dialog__hint">{account.user.email}</p></div>
-        </div>
-        <div className="account-dialog__tabs" role="tablist" aria-label="Account sections" onKeyDown={navigateSections}>
-          {(["profile", "compositions"] as const).map(value => <button key={value} type="button" role="tab" className="account-dialog__tab" data-section={value}
-            id={`${prefix}-tab-${value}`} aria-selected={section === value} aria-controls={`${prefix}-panel-${value}`} tabIndex={section === value ? 0 : -1}
-            onClick={() => { setSection(value); setError(""); setMessage(""); }}>{value === "profile" ? "Profile" : "Compositions"}</button>)}
-        </div>
-        <div id={`${prefix}-panel-profile`} role="tabpanel" aria-labelledby={`${prefix}-tab-profile`} hidden={section !== "profile"}>
+        {section === "colors" && <div className="account-dialog__tabs" role="tablist" aria-label="Saved libraries" onKeyDown={navigateSections}>
+          {DESIGN_CATEGORIES.map(({ id, label, enabled }) => <button key={id} type="button" role="tab" className="account-dialog__tab" data-section={id}
+            id={`${prefix}-tab-${id}`} aria-selected={enabled} aria-controls={enabled ? `${prefix}-panel-colors` : undefined} tabIndex={enabled ? 0 : -1}
+            disabled={!enabled} title={enabled ? undefined : `${label} — coming soon`}>{label}</button>)}
+        </div>}
+        <section aria-label="Profile" hidden={section !== "profile"}>
+          <Button data-back-library leadingIcon={<ArrowLeft size={16} aria-hidden="true" />} onClick={() => showSection("colors")}>Back to library</Button>
+          <div className="account-dialog__identity">
+            <span className="account-dialog__avatar" aria-hidden="true">{initials}</span>
+            <div><p className="account-dialog__name">{displayName}</p><p className="account-dialog__hint">{account.user.email}</p></div>
+          </div>
           <form className="account-dialog__form" onSubmit={submitProfile}>
             <label htmlFor={`${prefix}-name`}>Display name</label>
             <input id={`${prefix}-name`} autoComplete="nickname" maxLength={80} value={name} disabled={busy || account.dataLoading || !!account.error} onChange={event => setName(event.target.value)} />
@@ -187,16 +211,21 @@ export function AccountDialog({ account, onClose, onOpen }: { account: Account; 
             <p className="account-dialog__hint">Use a secure email link to set or reset your password.</p>
             <Button disabled={busy || resendIn > 0} onClick={() => { void run(() => sendResetLink(account.user?.email || "")); }}>{resendIn > 0 ? `Send again in ${resendIn}s` : "Reset password"}</Button>
           </div>
-        </div>
-        <section id={`${prefix}-panel-compositions`} role="tabpanel" aria-labelledby={`${prefix}-tab-compositions`} className="account-dialog__library" aria-busy={account.dataLoading} hidden={section !== "compositions"} tabIndex={0}>
-          {account.dataLoading ? <p role="status">Loading compositions…</p> : !account.error && (account.saved.length ? <div className="account-dialog__saved">
-            {account.saved.map(item => <PaletteCard key={item.id} composition={item.composition} onSelect={() => { onOpen(item.composition); onClose(); }} />)}
-          </div> : <p>Your saved compositions will appear here. Open a palette and choose “Save to account”.</p>)}
+          <div className="account-dialog__footer">
+            <Button disabled={busy} leadingIcon={<LogOut size={16} aria-hidden="true" />} onClick={() => { void run(account.signOut); }}>Sign out</Button>
+          </div>
+        </section>
+        <section id={`${prefix}-panel-colors`} role="tabpanel" aria-labelledby={`${prefix}-tab-colors`} className="account-dialog__library" aria-busy={account.dataLoading} hidden={section !== "colors"} tabIndex={0}>
+          <p className="account-dialog__hint">{account.saved.length} / {MAX_SAVED_COMPOSITIONS} saved</p>
+          {account.dataLoading && !account.saved.length ? <p role="status">Loading compositions…</p> : !account.error && (account.saved.length ? <div className="account-dialog__saved">
+            {account.saved.map(item => <div key={item.id} className="account-dialog__saved-item">
+              <PaletteCard composition={item.composition} disabled={busy} onSelect={() => { onOpen(item.composition); onClose(); }} />
+              <Button className="account-dialog__delete" data-delete-composition={item.id} aria-label={`Delete ${paletteAttribution(item.composition)}`} title="Delete composition"
+                disabled={busy} onClick={() => removeComposition(item.id)} leadingIcon={<Trash2 size={16} aria-hidden="true" />}>Delete</Button>
+            </div>)}
+          </div> : <p>Your saved compositions will appear here. Open a palette and choose “Save”. You can keep up to four.</p>)}
         </section>
         {account.error && <div className="account-dialog__form"><p role="alert">{account.error}</p><Button disabled={busy} onClick={() => { void account.refresh(); }}>Try again</Button></div>}
-        <div className="account-dialog__footer">
-          <Button disabled={busy} leadingIcon={<LogOut size={16} aria-hidden="true" />} onClick={() => { void run(account.signOut); }}>Sign out</Button>
-        </div>
       </>}
     {error && <p role="alert">{error}</p>}
     {account.authError && <p role="alert">{account.authError}</p>}

@@ -44,3 +44,8 @@ export async function saveComposition(client: SupabaseClient, owner: string, com
   if (error) throw error;
   return readSavedComposition(data);
 }
+
+export async function deleteComposition(client: SupabaseClient, owner: string, id: string): Promise<void> {
+  const { error } = await client.from("compositions").delete().eq("owner_id", owner).eq("id", id).select("id").single();
+  if (error) throw error;
+}
