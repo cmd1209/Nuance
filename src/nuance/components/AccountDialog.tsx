@@ -216,7 +216,6 @@ export function AccountDialog({ account, onClose, onOpen }: { account: Account; 
           </div>
         </section>
         <section id={`${prefix}-panel-colors`} role="tabpanel" aria-labelledby={`${prefix}-tab-colors`} className="account-dialog__library" aria-busy={account.dataLoading} hidden={section !== "colors"} tabIndex={0}>
-          <p className="account-dialog__hint">{account.saved.length} / {MAX_SAVED_COMPOSITIONS} saved</p>
           {account.dataLoading && !account.saved.length ? <p role="status">Loading compositions…</p> : !account.error && (account.saved.length ? <div className="account-dialog__saved">
             {account.saved.map(item => <div key={item.id} className="account-dialog__saved-item">
               <PaletteCard composition={item.composition} disabled={busy} onSelect={() => { onOpen(item.composition); onClose(); }} />
@@ -224,6 +223,7 @@ export function AccountDialog({ account, onClose, onOpen }: { account: Account; 
                 disabled={busy} onClick={() => removeComposition(item.id)} leadingIcon={<Trash2 size={16} aria-hidden="true" />}></Button>
             </div>)}
           </div> : <p>Your saved compositions will appear here. Open a palette and choose “Save”. You can keep up to four.</p>)}
+          <p className="account-dialog__hint">{account.saved.length} / {MAX_SAVED_COMPOSITIONS} saved</p>
         </section>
         {account.error && <div className="account-dialog__form"><p role="alert">{account.error}</p><Button disabled={busy} onClick={() => { void account.refresh(); }}>Try again</Button></div>}
       </>}
