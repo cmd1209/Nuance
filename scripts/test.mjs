@@ -8,7 +8,9 @@ import { spawnSync } from "node:child_process";
 const directory = await mkdtemp(join(tmpdir(), "nuance-tests-"));
 try {
   const outfile = join(directory, "nuance.test.mjs");
-  await build({ entryPoints: ["tests/nuance.test.ts"], outfile, bundle: true, platform: "node", format: "esm" });
+  await build({ entryPoints: ["tests/nuance.test.ts"], outfile, bundle: true, platform: "node", format: "esm",
+    // Component rendering runs without browser credentials or an authentication session.
+    define: { "import.meta.env": "{}", "window.location.href": JSON.stringify("http://localhost/") } });
   const result = spawnSync(process.execPath, ["--test", outfile, "tests/account-database.test.mjs"], { stdio: "inherit" });
   process.exitCode = result.status ?? 1;
 } finally { await rm(directory, { recursive: true, force: true }); }

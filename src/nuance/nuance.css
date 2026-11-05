@@ -633,13 +633,6 @@
     align-items: center;
     min-width: 0;
     gap: var(--gap-sm);
-    transform: translate(calc(-1 *var(--gap-sm)), calc(-1 *var(--gap-sm)));
-}
-
-.account-dialog__profile {
-    flex-shrink: 0;
-    width: var(--size-target-min);
-    padding: 0;
 }
 
 .account-dialog h2 {
@@ -701,40 +694,7 @@
     font-weight: var(--font-weight-medium);
 }
 
-.account-dialog__tabs {
-    display: flex;
-    overflow-x: auto;
-    border-bottom: 1px solid var(--color-border-default);
-}
-
-.account-dialog__tab {
-    flex: 1 0 auto;
-    min-height: var(--size-target-min);
-    padding: var(--padding-sm);
-    border: 0;
-    border-bottom: 2px solid transparent;
-    background: transparent;
-    color: var(--color-text-secondary);
-    font: var(--label-md-font-weight) var(--label-md-font-size)/var(--label-md-line-height) var(--family-sans), sans-serif;
-}
-
-.account-dialog__tab:disabled {
-    color: var(--color-text-disabled);
-    cursor: default;
-}
-
-.account-dialog__tab:focus-visible {
-    outline: 2px solid var(--color-border-focus);
-    outline-offset: -4px;
-}
-
-.account-dialog__tab[aria-selected="true"] {
-    border-bottom-color: var(--color-text-primary);
-    color: var(--color-text-primary);
-}
-
-.account-dialog__form,
-.account-dialog__library {
+.account-dialog__form {
     display: flex;
     flex-direction: column;
     gap: var(--gap-sm);
@@ -828,24 +788,6 @@
     height: var(--size-target-min);
     padding: 0;
     transform: translate(var(--gap-sm), calc(-1 *var(--gap-sm)));
-}
-
-.account-dialog__saved {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--gap-sm);
-}
-
-.account-dialog__saved-item {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    min-width: 0;
-}
-
-.nuance-button.account-dialog__delete {
-    padding: var(--padding-sm);
-    color: var(--color-text-secondary);
 }
 
 /* ==========================================================================
@@ -1038,5 +980,101 @@
     .nuance-app *,
     .nuance-app *::after {
         transition: none !important;
+    }
+}
+
+/* Section navigation and saved libraries share the app's existing theme tokens. */
+.nuance-intro__heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--gap-md) var(--gap-xl);
+    margin-bottom: var(--gap-sm);
+}
+
+.nuance-intro__heading h1 {
+    margin: 0;
+}
+
+.section-navigation {
+    display: inline-flex;
+    gap: var(--gap-xs);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-full);
+    overflow: clip;
+}
+
+.section-navigation button {
+    padding: var(--padding-sm) var(--padding-lg);
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-text-tertiary);
+    font: var(--label-md-font-weight) var(--label-sm-font-size)/var(--label-sm-line-height) var(--family-sans), sans-serif;
+}
+
+.section-navigation button[aria-selected="true"] {
+    background: var(--color-bg-surface-selected);
+    color: var(--color-text-primary);
+}
+
+.nuance-main > [hidden] {
+    display: none;
+}
+
+.saved-gallery,
+.saved-compositions,
+.saved-gallery__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--gap-lg);
+}
+
+.saved-gallery__empty {
+    align-items: flex-start;
+}
+
+.saved-compositions p {
+    margin: 0;
+    font-size: var(--body-sm-font-size);
+    line-height: var(--body-sm-line-height);
+}
+
+.saved-compositions p:empty {
+    display: none;
+}
+
+.saved-gallery__count {
+    color: var(--color-text-tertiary);
+}
+
+.saved-gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gap-xl);
+}
+
+.saved-gallery__item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    min-width: 0;
+}
+
+.saved-gallery__item .palette-card__label {
+    overflow-wrap: anywhere;
+    min-height: var(--caption-line-height);
+}
+
+.saved-compositions__delete {
+    min-height: var(--size-target-min);
+    min-width: var(--size-target-min);
+    color: var(--color-text-tertiary);
+}
+
+@media (max-width: 700px) {
+    .saved-gallery__grid {
+        grid-template-columns: minmax(0, 1fr);
     }
 }

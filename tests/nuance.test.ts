@@ -335,3 +335,151 @@ test("per-region removal targets its own color independently of selection and re
   assert.equal(activeComposition(state), after);
   assert.equal(state.selectedColorId, selectedId);
 });
+
+test("Explore and Saved retain their editor origin, drafts, suggestions, and theme", () => {
+  let state = createEditorState();
+  assert.equal(state.sectionView, "explore");
+  const suggestions = state.suggestions;
+  const palette = suggestions[0];
+  state = editorReducer(state, { type: "select-palette", palette });
+  state = editorReducer(state, { type: "color", colorId: activeComposition(state)!.colors[0].id, hex: "#123456" });
+  const draft = activeComposition(state)!;
+  state = editorReducer(state, { type: "back" });
+  assert.equal(state.sectionView, "explore");
+  state = editorReducer(state, { type: "section", view: "saved" });
+  state = editorReducer(state, { type: "theme" });
+  state = editorReducer(state, { type: "open-saved", composition: deserializeComposition(serializeComposition(draft)) });
+  assert.deepEqual(activeComposition(state), draft);
+  const snapshot = serializeComposition(draft);
+  state = editorReducer(state, { type: "resize", splitId: draft.layout.id, ratio: 0.64 });
+  state = editorReducer(state, { type: "color", colorId: draft.colors[0].id, hex: "#ABCDEF" });
+  const edited = activeComposition(state)!;
+  assert.equal(edited.id, draft.id);
+  assert.equal(serializeComposition(draft), snapshot);
+  assert.deepEqual(edited.historical, draft.historical);
+  state = editorReducer(state, { type: "back" });
+  assert.equal(state.view, "palettes");
+  assert.equal(state.sectionView, "saved");
+  assert.equal(state.selectedColorId, null);
+  assert.equal(state.suggestions, suggestions);
+  assert.equal(state.preferences.theme, "light");
+  state = editorReducer(state, { type: "section", view: "explore" });
+  state = editorReducer(state, { type: "select-palette", palette });
+  assert.deepEqual(activeComposition(state), draft);
+  assert.equal(state.sectionView, "explore");
+  state = editorReducer(state, { type: "clear-account" });
+  assert.equal(state.sectionView, "explore");
+  assert.deepEqual(state.drafts, {});
+  assert.equal(state.preferences.theme, "light");
+});
+
+
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server.browser";
+import { SectionNavigation } from "../src/nuance/components/SectionNavigation";
+import { SavedCompositions } from "../src/nuance/components/SavedCompositions";
+import { AccountDialog } from "../src/nuance/components/AccountDialog";
+import type { Account } from "../src/nuance/account/useAccount";
+
+function accountFixture(overrides: Partial<Account> = {}): Account {
+  return { configured: true, user: { id: "owner", email: "owner@example.com" }, authLoading: false, dataLoading: false,
+    error: "", authError: "", recovery: "none", profile: { id: "owner", display_name: "Owner" }, saved: [], ...overrides } as Account;
+}
+const noop = () => {};
+function savedMarkup(account: Account) {
+  return renderToStaticMarkup(createElement(SavedCompositions, { account, onOpen: noop, onExplore: noop, onSignIn: noop }));
+}
+
+test("Saved renders actual records, accurate previews, accessible actions, and a derived count", () => {
+  let composition = editorComposition(historicalComposition(WADA_PALETTES[0]));
+  composition = resizeSplit(composition, composition.layout.id, 0.67);
+  composition = updateColor(composition, composition.colors[0].id, "#123456");
+  const second = fixture();
+  const saved = [composition, second].map(item => ({ id: item.id, updatedAt: new Date().toISOString(), composition: item }));
+  const markup = savedMarkup(accountFixture({ saved }));
+  assert.equal((markup.match(/<article/g) ?? []).length, 2);
+  assert.equal((markup.match(/data-delete-composition=/g) ?? []).length, 2);
+  assert.match(markup, /2 \/ 4 saved/);
+  assert.ok(markup.includes(paletteAttribution(composition)));
+  assert.ok(markup.includes(`Delete ${paletteAttribution(composition)}`));
+  assert.ok(markup.includes(`Edit ${composition.name}`));
+  assert.ok(markup.includes('background:#123456'));
+  const rect = paintedRect(computeLayout(composition.layout).regions[0], composition.artwork);
+  assert.ok(markup.includes(`width:${rect.width * 100}%`));
+  assert.ok(markup.includes(`aspect-ratio:${composition.artwork.width} / ${composition.artwork.height}`));
+  const afterDeletion = savedMarkup(accountFixture({ saved: saved.slice(1) }));
+  assert.match(afterDeletion, /1 \/ 4 saved/);
+  assert.equal((afterDeletion.match(/<article/g) ?? []).length, 1);
+});
+
+test("Saved distinguishes empty, signed-out, loading, and error states without placeholder cards", () => {
+  const empty = savedMarkup(accountFixture());
+  assert.match(empty, /No saved colors yet/); assert.match(empty, /Explore palettes/); assert.match(empty, /0 \/ 4 saved/);
+  assert.ok(!empty.includes('<article'));
+  const guest = savedMarkup(accountFixture({ user: null }));
+  assert.match(guest, /Sign in to see/); assert.ok(!guest.includes('No saved colors yet'));
+  const loading = savedMarkup(accountFixture({ dataLoading: true }));
+  assert.match(loading, /Loading compositions/); assert.ok(!loading.includes('No saved colors yet'));
+  const failed = savedMarkup(accountFixture({ error: "Could not load compositions." }));
+  assert.match(failed, /role="alert"/); assert.match(failed, /Try again/); assert.ok(!failed.includes('No saved colors yet'));
+});
+
+test("Profile renders account controls without saved compositions or category tabs", () => {
+  const markup = renderToStaticMarkup(createElement(AccountDialog, { account: accountFixture(), onClose: noop }));
+  for (const label of ["Display name", "owner@example.com", "Reset password", "Sign out", "Save changes"]) assert.ok(markup.includes(label));
+  assert.ok(!markup.includes('role="tab'));
+  assert.ok(!markup.includes('palette-card'));
+  assert.ok(!markup.includes('Back to library'));
+});
+
+test("section navigation exposes selected state and supports arrows, Home, and End", () => {
+  const markup = renderToStaticMarkup(createElement(SectionNavigation, { value: "saved", onChange: noop, prefix: "color", label: "Color views" }));
+  assert.match(markup, /role="tablist"/);
+  assert.match(markup, /aria-selected="true" aria-controls="color-saved-panel" tabindex="0"/);
+  assert.match(markup, /aria-selected="false" tabindex="-1"/);
+  for (const [value, key, expected] of [["explore", "ArrowRight", "saved"], ["saved", "ArrowLeft", "explore"], ["saved", "Home", "explore"], ["explore", "End", "saved"]] as const) {
+    let selected = "", focused = "", prevented = false;
+    const navigation = SectionNavigation({ value, onChange: next => { selected = next; }, prefix: "color", label: "Color views" });
+    navigation.props.onKeyDown({ key, preventDefault() { prevented = true; }, currentTarget: { querySelector(selector: string) { return { focus() { focused = selector; } }; } } });
+    assert.equal(selected, expected); assert.equal(prevented, true); assert.equal(focused, `[data-view="${expected}"]`);
+  }
+});
+
+
+test("Edit resumes the exact draft after browsing both libraries and Back retains its origin", () => {
+  let state = createEditorState();
+  assert.equal(editorReducer(state, { type: "resume-editor" }), state);
+  const palette = state.suggestions[0];
+  state = editorReducer(state, { type: "select-palette", palette });
+  state = editorReducer(state, { type: "color", colorId: activeComposition(state)!.colors[0].id, hex: "#123456" });
+  const draft = activeComposition(state)!;
+  state = editorReducer(state, { type: "section", view: "saved" });
+  state = editorReducer(state, { type: "resume-editor" });
+  assert.equal(state.view, "editor"); assert.equal(activeComposition(state), draft);
+  state = editorReducer(state, { type: "back" });
+  assert.equal(state.sectionView, "explore");
+  state = editorReducer(state, { type: "open-saved", composition: draft });
+  state = editorReducer(state, { type: "resize", splitId: draft.layout.id, ratio: 0.65 });
+  const editedSave = activeComposition(state)!;
+  state = editorReducer(state, { type: "section", view: "explore" });
+  state = editorReducer(state, { type: "resume-editor" });
+  assert.equal(activeComposition(state), editedSave);
+  state = editorReducer(state, { type: "back" });
+  assert.equal(state.sectionView, "saved");
+  state = editorReducer(state, { type: "clear-account" });
+  assert.equal(editorReducer(state, { type: "resume-editor" }), state);
+});
+
+test("Edit appears only with an open draft and participates in keyboard navigation", () => {
+  const base = { onChange: noop, prefix: "color", label: "Color views" };
+  const initial = renderToStaticMarkup(createElement(SectionNavigation, { ...base, value: "explore" }));
+  assert.ok(!initial.includes('data-view="edit"'));
+  const editing = renderToStaticMarkup(createElement(SectionNavigation, { ...base, value: "edit", hasDraft: true }));
+  assert.match(editing, /data-view="edit" aria-selected="true" aria-controls="color-edit-panel" tabindex="0"/);
+  for (const [value, key, expected] of [["saved", "ArrowRight", "edit"], ["edit", "ArrowRight", "explore"], ["explore", "ArrowLeft", "edit"], ["edit", "ArrowLeft", "saved"], ["explore", "End", "edit"], ["edit", "Home", "explore"]] as const) {
+    let selected = "", focused = "";
+    const navigation = SectionNavigation({ ...base, value, hasDraft: true, onChange: next => { selected = next; } });
+    navigation.props.onKeyDown({ key, preventDefault() {}, currentTarget: { querySelector(selector: string) { return { focus() { focused = selector; } }; } } });
+    assert.equal(selected, expected); assert.equal(focused, `[data-view="${expected}"]`);
+  }
+});

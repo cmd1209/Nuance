@@ -4,10 +4,11 @@ import type { Composition } from "../domain/composition";
 import { Button } from "./Button";
 import { PaletteCard } from "./PaletteCard";
 
-export function PaletteSlider({ palettes, activeId, onSelect }: {
+export function PaletteSlider({ palettes, activeId, onSelect, onPositionChange }: {
   palettes: Composition[];
   activeId: string | null;
   onSelect: (palette: Composition) => void;
+  onPositionChange?: (paletteId: string) => void;
 }) {
   const viewport = useRef<HTMLDivElement>(null);
   const id = useId();
@@ -33,6 +34,8 @@ export function PaletteSlider({ palettes, activeId, onSelect }: {
       const maximum = element.scrollWidth - element.clientWidth;
       const currentStep = element.clientWidth + parseFloat(getComputedStyle(element).columnGap);
       firstVisible.current = Math.round(element.scrollLeft / currentStep) * pageSize;
+      const first = palettes[firstVisible.current];
+      if (first) onPositionChange?.(first.id);
       setBounds({ previous: element.scrollLeft > 1, next: element.scrollLeft < maximum - 1, overflowing: maximum > 1 });
     };
     // Recalculate bounds as the viewport changes, even within the same breakpoint.
@@ -44,7 +47,7 @@ export function PaletteSlider({ palettes, activeId, onSelect }: {
       observer.disconnect();
       element.removeEventListener("scroll", update);
     };
-  }, [palettes, pageSize]);
+  }, [palettes, pageSize, onPositionChange]);
 
   function move(direction: -1 | 1) {
     const element = viewport.current!;
