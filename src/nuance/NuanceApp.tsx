@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
+import { HeartPlus, RotateCcw } from "lucide-react";
 import { useAccount, accountError } from "./account/useAccount";
 import { authReturn } from "./account/client";
 import { canSaveComposition, MAX_SAVED_COMPOSITIONS } from "./account/compositionLimit";
@@ -9,7 +10,6 @@ import { SectionNavigation } from "./components/SectionNavigation";
 import { MAX_COLORS, paletteAttribution } from "./domain/composition";
 import { nextColor } from "./domain/palettes";
 import { activeComposition, createEditorState, editorReducer } from "./state/editor";
-import { downloadCompositionPng } from "./export/png";
 import { Artwork } from "./components/Artwork";
 import { PaletteSlider } from "./components/PaletteSlider";
 import { ColorEditor } from "./components/ColorEditor";
@@ -23,7 +23,7 @@ export default function NuanceApp() {
   const account = useAccount();
   const [accountOpen, setAccountOpen] = useState(!!authReturn.kind || authReturn.hasError), [saving, setSaving] = useState(false);
   useEffect(() => { if (account.recovery !== "none") setAccountOpen(true); }, [account.recovery]);
-  const [adjusting, setAdjusting] = useState(false), [exporting, setExporting] = useState(false), [notice, setNotice] = useState("");
+  const [adjusting, setAdjusting] = useState(false), [notice, setNotice] = useState("");
   const previousOwner = useRef<string | null>(null);
   useEffect(() => {
     const next = account.user?.id ?? null;
@@ -69,13 +69,6 @@ export default function NuanceApp() {
     catch (error) { setNotice(accountError(error)); }
     finally { setSaving(false); }
   }
-  async function savePng() {
-    if (!composition || exporting) return;
-    setExporting(true); setNotice("");
-    try { await downloadCompositionPng(composition); setNotice("Composition downloaded as PNG."); }
-    catch (error) { setNotice(error instanceof Error ? error.message : "Could not download the composition."); }
-    finally { setExporting(false); }
-  }
   return <div className={`nuance-app ${editing ? "nuance-app--editor" : "nuance-app--palettes"}`} data-theme={state.preferences.theme}>
     <header className="nuance-header">
       <a className="nuance-wordmark" href="#" aria-label="Nuance — back to palettes" onClick={e => { e.preventDefault(); dispatch({ type: "back" }); closeEditor(); }}>
@@ -101,29 +94,29 @@ export default function NuanceApp() {
       {editing ? <section id="color-edit-panel" role="tabpanel" aria-labelledby="color-edit-tab" className="nuance-workspace">
         <div className="nuance-stage">
           <div className="artwork-anchor">
-          <p className="composition-source__name">{paletteAttribution(composition)}</p>
-          <Artwork composition={composition} selectedColorId={state.selectedColorId}
-            onSelect={id => { dispatch({ type: "select-color", colorId: id }); setAdjusting(true); }}
-            onAdjust={id => { dispatch({ type: "select-color", colorId: id }); setAdjusting(true); }}
-            onRemove={colorId => { dispatch({ type: "remove", colorId }); closeEditor(); }}
-            onResize={(splitId, ratio) => dispatch({ type: "resize", splitId, ratio })} />
-          <Button className="composition-add" disabled={composition.colors.length >= MAX_COLORS}
-            aria-label={composition.colors.length >= MAX_COLORS ? "Add color — maximum of six colors reached" : "Add color"}
-            title={composition.colors.length >= MAX_COLORS ? "Maximum of six colors reached" : "Add a harmonizing color"}
-            onClick={() => { dispatch({ type: "add", hex: nextColor(composition) }); closeEditor(); }}><Icon name="plus" size={20} /></Button>
-          {adjusting && selected && <ColorEditor color={selected} onChange={hex => dispatch({ type: "color", colorId: selected.id, hex })} onClose={closeEditor} />}
-        </div></div>
-        <div className="workspace-toolbar" aria-label="Composition actions">
-          <div className="composition-source">
-            <Button onClick={() => { dispatch({ type: "back" }); closeEditor(); setNotice(""); }} leadingIcon={<Icon name="back" />}>Back</Button>
+            <p className="composition-source__name">{paletteAttribution(composition)}</p>
+            <Artwork composition={composition} selectedColorId={state.selectedColorId}
+              onSelect={id => { dispatch({ type: "select-color", colorId: id }); setAdjusting(true); }}
+              onAdjust={id => { dispatch({ type: "select-color", colorId: id }); setAdjusting(true); }}
+              onRemove={colorId => { dispatch({ type: "remove", colorId }); closeEditor(); }}
+              onResize={(splitId, ratio) => dispatch({ type: "resize", splitId, ratio })} />
+            {adjusting && selected && <ColorEditor color={selected} onChange={hex => dispatch({ type: "color", colorId: selected.id, hex })} onClose={closeEditor} />}
           </div>
-          <div className="workspace-toolbar__actions">
-            {composition.historical && <Button title="Restore historical colors and proportions; two-color originals receive a labeled third color" onClick={() => { dispatch({ type: "reset" }); closeEditor(); setNotice(composition.historical?.originalColorCount === 2 ? "Original pair restored with a Nuance-generated third color for the editor." : "Original Wada combination restored."); }}>Reset</Button>}
-            <Button onClick={saveToAccount} disabled={saving || account.authLoading || !!account.user && account.dataLoading || libraryFull}
-              title={libraryFull ? "Delete a composition in Saved to make room. Existing saves can still be updated." : undefined}>
-              {saving ? "Saving…" : libraryFull ? `Limit reached (${MAX_SAVED_COMPOSITIONS}/${MAX_SAVED_COMPOSITIONS})` : "Save"}
-            </Button>
-            <Button onClick={savePng} disabled={exporting} trailingIcon={<Icon name="download" />}>{exporting ? "Downloading…" : "PNG"}</Button>
+          <div className="composition-actions" role="group" aria-label="Composition actions">
+            {composition.historical && <Button className="composition-action" aria-label="Reset composition"
+              title="Reset composition to its original colors and proportions"
+              onClick={() => { dispatch({ type: "reset" }); closeEditor(); setNotice(composition.historical?.originalColorCount === 2 ? "Original pair restored with a Nuance-generated third color for the editor." : "Original Wada combination restored."); }}
+              leadingIcon={<RotateCcw size={20} aria-hidden="true" />} />}
+            <Button className="composition-action composition-add" disabled={composition.colors.length >= MAX_COLORS}
+              aria-label={composition.colors.length >= MAX_COLORS ? "Add color — maximum of six colors reached" : "Add color"}
+              title={composition.colors.length >= MAX_COLORS ? "Maximum of six colors reached" : "Add a harmonizing color"}
+              onClick={() => { dispatch({ type: "add", hex: nextColor(composition) }); closeEditor(); }}><Icon name="plus" size={20} /></Button>
+            <Button className="composition-action" onClick={saveToAccount}
+              disabled={saving || account.authLoading || !!account.user && account.dataLoading || libraryFull}
+              aria-label={saving ? "Saving composition…" : libraryFull ? `Save composition — limit reached (${MAX_SAVED_COMPOSITIONS}/${MAX_SAVED_COMPOSITIONS})` : "Save composition"}
+              aria-busy={saving}
+              title={libraryFull ? "Delete a composition in Saved to make room. Existing saves can still be updated." : saving ? "Saving composition…" : "Save composition"}
+              leadingIcon={<HeartPlus size={20} aria-hidden="true" />} />
           </div>
         </div>
       </section> : <>

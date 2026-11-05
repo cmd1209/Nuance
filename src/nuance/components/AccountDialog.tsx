@@ -104,7 +104,7 @@ export function AccountDialog({ account, onClose }: { account: Account; onClose:
       </div>
       <Button className="account-dialog__close" aria-label="Close account" onClick={onClose}><X size={20} aria-hidden="true" /></Button>
     </div>
-    {!account.configured ? <p>Account sign-in is being set up. You can keep exploring and download your compositions.</p>
+    {!account.configured ? <p>Account sign-in is being set up. You can keep exploring colors.</p>
       : account.authLoading ? <p role="status">Loading your account…</p>
       : recovering ? account.recovery === "pending" ? <p role="status">Checking your reset link…</p>
       : account.recovery === "expired" ? <form className="account-dialog__form" onSubmit={event => { event.preventDefault(); void run(sendResetLink); }}>

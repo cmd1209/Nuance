@@ -56,7 +56,7 @@
     display: flex;
     flex-direction: column;
     flex: 1 0 auto;
-    gap: var(--gap-xl);
+    gap: var(--gap-2xl);
     width: 100%;
     max-width: var(--content-width);
 }
@@ -66,10 +66,13 @@
     max-width: var(--instructions-width);
     color: var(--color-text-primary);
     font-family: var(--family-sans), sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-lg);
 }
 
 .nuance-intro h1 {
-    margin: 0 0 var(--gap-sm);
+    margin: 0;
     font-size: var(--heading-lg-font-size);
     line-height: var(--heading-lg-line-height);
     font-weight: 400;
@@ -159,7 +162,7 @@
 
 .palette-slider {
     --palette-columns: 3;
-    --palette-gap: var(--gap-lg);
+    --palette-gap: var(--gap-xl);
     width: 100%;
     min-width: 0;
 }
@@ -212,20 +215,19 @@
     flex-direction: column;
     width: 100%;
     gap: var(--gap-sm);
-    padding: var(--padding-sm);
+    padding: 0;
     border: 0;
     border-radius: var(--radius-sm);
     background: transparent;
-    transition: background-color 120ms ease;
 }
 
-.palette-card:focus-visible {
-    background: var(--color-bg-surface-hover);
+.palette-card:focus-visible .palette-card__artwork {
+    opacity: 0.5;
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .palette-card:hover {
-        background: var(--color-bg-surface-hover);
+    .palette-card:hover .palette-card__artwork {
+        opacity: 0.5;
     }
 }
 
@@ -241,6 +243,7 @@
     display: block;
     width: 100%;
     aspect-ratio: 276 / 176;
+    transition: opacity 120ms ease;
 }
 
 .palette-card__color {
@@ -260,30 +263,6 @@
     gap: var(--gap-xs);
 }
 
-.composition-source {
-    display: flex;
-    flex: 1 1 auto;
-    align-items: center;
-    min-width: 0;
-    gap: var(--gap-sm);
-    color: var(--color-text-secondary);
-    font-size: var(--label-md-font-size);
-    font-weight: var(--font-weight-regular);
-    line-height: var(--label-md-line-height);
-}
-
-.composition-source .nuance-button {
-    color: inherit;
-    font: inherit;
-}
-
-.composition-source__divider {
-    flex: 0 0 auto;
-    width: 1px;
-    height: var(--line-height-16);
-    background-color: var(--colors-semantic-text-subtle);
-}
-
 .composition-source__name {
     min-width: 0;
     font-size: var(--caption-font-size);
@@ -293,10 +272,12 @@
 
 .nuance-stage {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: var(--padding-xl) var(--padding-lg);
-    background: var(--color-bg-surface);
+    gap: var(--gap-xs);
+    border-radius: var(--radius-xl);
+    background:linear-gradient(to top, var(--color-bg-surface) 0%, var(--color-bg-canvas) 90%);
 }
 
 .artwork-anchor {
@@ -308,17 +289,20 @@
     gap: var(--gap-sm);
 }
 
-.composition-add {
+.composition-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap-sm);
+}
+
+.nuance-button.composition-action {
     width: var(--size-control-sm);
     height: var(--size-control-sm);
-}
-
-.nuance-button.composition-add {
     padding: 0;
-    margin-inline: auto
 }
 
-.composition-add > span {
+.composition-action > span {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -580,21 +564,6 @@
     background: currentColor;
     mask: var(--icon-url) center / contain no-repeat;
     -webkit-mask: var(--icon-url) center / contain no-repeat;
-}
-
-.workspace-toolbar {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: var(--gap-sm);
-}
-
-.workspace-toolbar__actions {
-    display: flex;
-    flex-wrap: wrap;
-    margin-left: auto;
-    gap: var(--gap-none);
 }
 
 /* ==========================================================================
@@ -914,12 +883,9 @@
 
     .palette-slider {
         --palette-columns: 1;
-        --palette-gap: var(--gap-xs);
+        --palette-gap: var(--gap-xl);
     }
 
-    .palette-card {
-        padding: var(--padding-xs);
-    }
 
     .nuance-navigation {
         width: 100%;
@@ -941,10 +907,6 @@
         padding-inline: var(--padding-sm);
     }
 
-    .workspace-toolbar .nuance-button {
-        padding-inline: var(--padding-sm);
-    }
-
     .color-editor {
         top: 8px;
         right: 8px;
@@ -962,7 +924,7 @@
         min-height: 44px;
     }
 
-    .composition-add,
+    .nuance-button.composition-action,
     .color-region__remove {
         width: var(--size-target-min);
         height: var(--size-target-min);
@@ -998,11 +960,6 @@
     flex-wrap: wrap;
     align-items: center;
     gap: var(--gap-md) var(--gap-xl);
-    margin-bottom: var(--gap-sm);
-}
-
-.nuance-intro__heading h1 {
-    margin: 0;
 }
 
 .section-navigation {
@@ -1025,6 +982,10 @@
 .section-navigation button[aria-selected="true"] {
     background: var(--color-bg-surface-selected);
     color: var(--color-text-primary);
+}
+
+.section-navigation button:focus-visible {
+    outline-offset: -4px;
 }
 
 .nuance-main > [hidden] {
@@ -1078,11 +1039,10 @@
 
 .palette-card__header {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     gap: var(--gap-sm);
     width: 100%;
-    padding-inline: var(--padding-sm);
 }
 
 .saved-compositions__delete {
@@ -1091,9 +1051,6 @@
 }
 
 @media (max-width: 700px) {
-    .palette-card__header {
-        padding-inline: var(--padding-xs);
-    }
 
     .saved-gallery__grid {
         grid-template-columns: minmax(0, 1fr);
