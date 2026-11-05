@@ -44,9 +44,12 @@ export function SavedCompositions({ account, onOpen, onExplore, onSignIn }: {
         {(!account.dataLoading && !account.error || account.saved.length > 0) && <SavedGallery items={account.saved} maximum={MAX_SAVED_COMPOSITIONS}
           empty={<div className="saved-gallery__empty"><p>No saved colors yet. Explore a palette and save a composition to see it here.</p><Button onClick={onExplore}>Explore palettes</Button></div>}
           renderItem={item => <>
-            <PaletteCard composition={item.composition} artwork={item.composition.artwork} showName disabled={busy} onSelect={() => onOpen(item.composition)} />
-            <Button className="saved-compositions__delete" data-delete-composition={item.id} aria-label={`Delete ${paletteAttribution(item.composition)}`}
-              title="Delete composition" disabled={busy || account.dataLoading} onClick={() => { void remove(item.composition); }} leadingIcon={<Trash2 size={16} aria-hidden="true" />} />
+            <header className="palette-card__header">
+              <span className="palette-card__label composition-source__name">{paletteAttribution(item.composition)}</span>
+              <Button size="XS" className="saved-compositions__delete" data-delete-composition={item.id} aria-label={`Delete ${paletteAttribution(item.composition)}`}
+                title="Delete composition" disabled={busy || account.dataLoading} onClick={() => { void remove(item.composition); }} leadingIcon={<Trash2 size={16} aria-hidden="true" />} />
+            </header>
+            <PaletteCard composition={item.composition} artwork={item.composition.artwork} disabled={busy} onSelect={() => onOpen(item.composition)} />
           </>} />}
       </>}
     {error && <p role="alert">{error}</p>}

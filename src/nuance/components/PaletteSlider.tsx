@@ -70,7 +70,7 @@ export function PaletteSlider({ palettes, activeId, onSelect, onPositionChange }
   return <div className="palette-slider" role="region" aria-roledescription="carousel" aria-label="Color palettes">
     <div ref={viewport} id={id} className="palette-slider__viewport" role="group" tabIndex={0} aria-label="Scroll palettes with left and right arrow keys" onKeyDown={navigate}>
       {pages.map((page, index) => <div key={page[0].id} className="palette-slider__page" role="group" aria-roledescription="slide" aria-label={`Palettes ${index * pageSize + 1} to ${Math.min((index + 1) * pageSize, palettes.length)} of ${palettes.length}`}>
-        {page.map(palette => <PaletteCard key={palette.id} composition={palette} onSelect={() => onSelect(palette)} />)}
+        {page.map(palette => <PaletteCard key={palette.id} composition={palette} showName onSelect={() => onSelect(palette)} />)}
       </div>)}
     </div>
     {bounds.overflowing && <div className="palette-slider__navigation" role="group" aria-label="Palette navigation">

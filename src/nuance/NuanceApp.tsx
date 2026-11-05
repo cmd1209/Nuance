@@ -4,6 +4,7 @@ import { authReturn } from "./account/client";
 import { canSaveComposition, MAX_SAVED_COMPOSITIONS } from "./account/compositionLimit";
 import { AccountDialog } from "./components/AccountDialog";
 import { SavedCompositions } from "./components/SavedCompositions";
+import { SwitchCompositionDialog } from "./components/SwitchCompositionDialog";
 import { SectionNavigation } from "./components/SectionNavigation";
 import { MAX_COLORS, paletteAttribution } from "./domain/composition";
 import { nextColor } from "./domain/palettes";
@@ -35,6 +36,10 @@ export default function NuanceApp() {
   const explorePosition = useRef<string | null>(null);
   const rememberExplorePosition = useCallback((id: string) => { explorePosition.current = id; }, []);
   const editorTrigger = useRef<HTMLElement | null>(null);
+  const selectionTrigger = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    if (state.activeCompositionId) editorTrigger.current = selectionTrigger.current;
+  }, [state.activeCompositionId, state.editorOrigin]);
   const wasEditing = useRef(false);
   const composition = activeComposition(state), editing = state.view === "editor" && !!composition;
   useEffect(() => {
@@ -51,7 +56,7 @@ export default function NuanceApp() {
     }
   }, [editing]);
   function rememberEditorTrigger() {
-    editorTrigger.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    selectionTrigger.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   }
   const selected = composition?.colors.find(c => c.id === state.selectedColorId);
   const libraryFull = !!(account.user && composition && !account.dataLoading && !canSaveComposition(account.saved, composition.id));
@@ -60,7 +65,7 @@ export default function NuanceApp() {
     if (!composition || saving) return;
     if (!account.user) { setAccountOpen(true); return; }
     setSaving(true); setNotice("");
-    try { await account.save(composition); setNotice("Composition saved to your account."); }
+    try { await account.save(composition); dispatch({ type: "save-succeeded", composition }); setNotice("Composition saved to your account."); }
     catch (error) { setNotice(accountError(error)); }
     finally { setSaving(false); }
   }
@@ -137,6 +142,8 @@ export default function NuanceApp() {
       <p className="nuance-notice" role="status">{notice}</p>
     </main>
     <Navigation />
+    {state.pendingSelection && <SwitchCompositionDialog onCancel={() => dispatch({ type: "cancel-switch" })}
+      onDiscard={() => { dispatch({ type: "discard-and-switch" }); closeEditor(); setNotice(""); }} />}
     {accountOpen && <AccountDialog account={account} onClose={() => { account.dismissRecovery(); setAccountOpen(false); }} />}
   </div>;
 }

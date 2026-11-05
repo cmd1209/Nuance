@@ -4,7 +4,7 @@ import { createComposition, normalizeHex, updateColor } from "../src/nuance/doma
 import { addColor, computeLayout, MIN_EXTENT, paintedRect, removeColor, resizeSplit } from "../src/nuance/domain/layout";
 import { discoverPalettes, generatePalettes, initialPalettes, legacyInitialPalettes, nextColor, PRESET_HEXES, shuffledPalettes } from "../src/nuance/domain/palettes";
 import { deserializeComposition, serializeComposition } from "../src/nuance/domain/serialization";
-import { activeComposition, createEditorState, editorReducer } from "../src/nuance/state/editor";
+import { activeComposition, createEditorState, editorReducer, hasUnsavedChanges } from "../src/nuance/state/editor";
 import { drawComposition } from "../src/nuance/export/png";
 import { readSavedComposition } from "../src/nuance/account/repository";
 import { authReturnUrl, readAuthReturn, validatePassword, MIN_PASSWORD_LENGTH } from "../src/nuance/account/emailAuth";
@@ -365,7 +365,7 @@ test("Explore and Saved retain their editor origin, drafts, suggestions, and the
   assert.equal(state.preferences.theme, "light");
   state = editorReducer(state, { type: "section", view: "explore" });
   state = editorReducer(state, { type: "select-palette", palette });
-  assert.deepEqual(activeComposition(state), draft);
+  assert.deepEqual(activeComposition(state), edited);
   assert.equal(state.sectionView, "explore");
   state = editorReducer(state, { type: "clear-account" });
   assert.equal(state.sectionView, "explore");
@@ -482,4 +482,152 @@ test("Edit appears only with an open draft and participates in keyboard navigati
     navigation.props.onKeyDown({ key, preventDefault() {}, currentTarget: { querySelector(selector: string) { return { focus() { focused = selector; } }; } } });
     assert.equal(selected, expected); assert.equal(focused, `[data-view="${expected}"]`);
   }
+});
+
+
+import { compositionContent } from "../src/nuance/state/compositionChanges";
+import { SwitchCompositionDialog } from "../src/nuance/components/SwitchCompositionDialog";
+
+test("navigation preserves complete working content without ever selecting a default palette", () => {
+  let state = createEditorState();
+  assert.equal(activeComposition(state), undefined);
+  state = editorReducer(state, { type: "resume-editor" });
+  assert.equal(state.view, "palettes");
+  state = editorReducer(state, { type: "select-palette", palette: state.suggestions[17] });
+  assert.equal(hasUnsavedChanges(state), false);
+  state = editorReducer(state, { type: "color", colorId: activeComposition(state)!.colors[0].id, hex: "#010203" });
+  state = editorReducer(state, { type: "add", hex: "#112233" });
+  state = editorReducer(state, { type: "resize", splitId: activeComposition(state)!.layout.id, ratio: 0.63 });
+  const working = activeComposition(state)!;
+  assert.equal(hasUnsavedChanges(state), true);
+  for (const view of ["explore", "saved", "explore", "saved"] as const) {
+    state = editorReducer(state, { type: "section", view });
+    assert.equal(activeComposition(state), working);
+    assert.equal(state.pendingSelection, null);
+    state = editorReducer(state, { type: "resume-editor" });
+    assert.equal(state.view, "editor");
+    assert.equal(activeComposition(state), working);
+    assert.equal(hasUnsavedChanges(state), true);
+  }
+});
+
+test("replacing dirty work requires confirmation for selections from either library", () => {
+  for (const kind of ["palette", "saved"] as const) {
+    let state = createEditorState();
+    const [first, second] = state.suggestions;
+    state = editorReducer(state, { type: "select-palette", palette: first });
+    const clean = activeComposition(state)!;
+    state = editorReducer(state, { type: "color", colorId: clean.colors[0].id, hex: "#123456" });
+    const modified = activeComposition(state)!;
+    state = editorReducer(state, { type: "section", view: kind === "palette" ? "explore" : "saved" });
+    const target = kind === "palette" ? second : fixture();
+    const selection = kind === "palette" ? { type: "select-palette" as const, palette: target }
+      : { type: "open-saved" as const, composition: target };
+    state = editorReducer(state, selection);
+    assert.equal(state.pendingSelection?.composition, target);
+    assert.equal(activeComposition(state), modified);
+    state = editorReducer(state, { type: "cancel-switch" });
+    assert.equal(state.pendingSelection, null);
+    assert.equal(state.view, "editor");
+    assert.equal(activeComposition(state), modified);
+    assert.equal(hasUnsavedChanges(state), true);
+    state = editorReducer(state, selection);
+    state = editorReducer(state, { type: "discard-and-switch" });
+    assert.equal(state.pendingSelection, null);
+    assert.equal(state.view, "editor");
+    assert.equal(hasUnsavedChanges(state), false);
+    assert.notEqual(activeComposition(state)!.id, modified.id);
+    assert.equal(state.drafts[first.id], clean);
+    if (kind === "saved") assert.equal(activeComposition(state), target);
+    else assert.deepEqual(activeComposition(state)!.historical, target.historical);
+  }
+});
+
+test("clean sessions switch immediately and successful saves establish a new baseline", () => {
+  let state = createEditorState();
+  const [first, second] = state.suggestions;
+  state = editorReducer(state, { type: "select-palette", palette: first });
+  state = editorReducer(state, { type: "select-palette", palette: second });
+  assert.equal(state.pendingSelection, null);
+  assert.deepEqual(activeComposition(state)!.historical, second.historical);
+  state = editorReducer(state, { type: "color", colorId: activeComposition(state)!.colors[0].id, hex: "#123456" });
+  const submitted = activeComposition(state)!;
+  state = editorReducer(state, { type: "save-succeeded", composition: submitted });
+  assert.equal(hasUnsavedChanges(state), false);
+  state = editorReducer(state, { type: "section", view: "saved" });
+  state = editorReducer(state, { type: "resume-editor" });
+  assert.equal(activeComposition(state), submitted);
+  assert.equal(hasUnsavedChanges(state), false);
+  state = editorReducer(state, { type: "select-palette", palette: first });
+  assert.equal(state.pendingSelection, null);
+});
+
+test("dirty detection ignores timestamps, navigation, selection, and restored geometry or colors", () => {
+  let state = editorReducer(createEditorState(), { type: "open-saved", composition: fixture() });
+  const original = activeComposition(state)!;
+  state = editorReducer(state, { type: "theme" });
+  state = editorReducer(state, { type: "select-color", colorId: original.colors[0].id });
+  state = editorReducer(state, { type: "section", view: "explore" });
+  state = editorReducer(state, { type: "resume-editor" });
+  assert.equal(hasUnsavedChanges(state), false);
+  assert.equal(compositionContent(original), compositionContent({ ...original, updatedAt: "2099-01-01T00:00:00.000Z" }));
+  state = editorReducer(state, { type: "color", colorId: original.colors[0].id, hex: "#123456" });
+  assert.equal(hasUnsavedChanges(state), true);
+  state = editorReducer(state, { type: "color", colorId: original.colors[0].id, hex: original.colors[0].hex });
+  assert.equal(hasUnsavedChanges(state), false);
+  state = editorReducer(state, { type: "resize", splitId: original.layout.id, ratio: 0.67 });
+  assert.equal(hasUnsavedChanges(state), true);
+  state = editorReducer(state, { type: "resize", splitId: original.layout.id, ratio: 0.5 });
+  assert.equal(hasUnsavedChanges(state), false);
+  const historical = historicalComposition(WADA_PALETTES.find(p => p.originalColorCount === 3)!);
+  state = editorReducer(createEditorState(), { type: "select-palette", palette: historical });
+  state = editorReducer(state, { type: "resize", splitId: activeComposition(state)!.layout.id, ratio: 0.67 });
+  state = editorReducer(state, { type: "reset" });
+  assert.equal(hasUnsavedChanges(state), false);
+});
+
+test("saved composition edits retain identity and never mutate the saved snapshot", () => {
+  const persisted = fixture();
+  const snapshot = serializeComposition(persisted);
+  let state = editorReducer(createEditorState(), { type: "open-saved", composition: persisted });
+  state = editorReducer(state, { type: "color", colorId: persisted.colors[0].id, hex: "#123456" });
+  const modified = activeComposition(state)!;
+  assert.equal(modified.id, persisted.id);
+  assert.equal(serializeComposition(persisted), snapshot);
+  state = editorReducer(state, { type: "section", view: "saved" });
+  state = editorReducer(state, { type: "open-saved", composition: persisted });
+  assert.equal(state.pendingSelection, null);
+  assert.equal(activeComposition(state), modified);
+  assert.equal(hasUnsavedChanges(state), true);
+  state = editorReducer(state, { type: "save-succeeded", composition: modified });
+  assert.equal(activeComposition(state)!.id, persisted.id);
+  assert.equal(hasUnsavedChanges(state), false);
+  assert.equal(serializeComposition(persisted), snapshot);
+});
+
+test("save completion cleans only the submitted snapshot and preserves later edits", () => {
+  let state = editorReducer(createEditorState(), { type: "open-saved", composition: fixture() });
+  const original = activeComposition(state)!;
+  state = editorReducer(state, { type: "color", colorId: original.colors[0].id, hex: "#123456" });
+  const submitted = activeComposition(state)!;
+  state = editorReducer(state, { type: "color", colorId: original.colors[0].id, hex: "#ABCDEF" });
+  const later = activeComposition(state)!;
+  state = editorReducer(state, { type: "section", view: "explore" });
+  state = editorReducer(state, { type: "save-succeeded", composition: submitted });
+  assert.equal(state.view, "palettes");
+  assert.equal(activeComposition(state), later);
+  assert.equal(hasUnsavedChanges(state), true);
+  state = editorReducer(state, { type: "select-palette", palette: state.suggestions[0] });
+  state = editorReducer(state, { type: "discard-and-switch" });
+  assert.equal(state.drafts[`saved:${original.id}`], submitted);
+});
+
+test("switch confirmation uses the existing modal styling and explicit cancel/discard actions", () => {
+  const markup = renderToStaticMarkup(createElement(SwitchCompositionDialog, { onCancel: noop, onDiscard: noop }));
+  assert.match(markup, /class="account-dialog"/);
+  assert.match(markup, /aria-labelledby=/);
+  assert.match(markup, /aria-describedby=/);
+  assert.match(markup, /Your current composition has unsaved changes. Switch palettes and discard these changes\?/);
+  assert.match(markup, />Cancel</);
+  assert.match(markup, />Discard &amp; Switch</);
 });

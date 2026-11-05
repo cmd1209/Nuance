@@ -185,6 +185,10 @@
     --button-sm-padding-y: var(--padding-md);
     --button-sm-gap: var(--gap-xs);
     --button-sm-icon: var(--size-icon-sm);
+    --button-xs-height: var(--size-control-sm);
+    --button-xs-padding-x: var(--padding-sm);
+    --button-xs-padding-y: var(--padding-sm);
+    --button-xs-gap: var(--gap-2xs);
     --button-radius: var(--radius-sm);
     --button-font-family: var(--family-sans);
 }
