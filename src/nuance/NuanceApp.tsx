@@ -81,57 +81,59 @@ export default function NuanceApp() {
       </div>
     </header>
     <main ref={main} className="nuance-main">
-      <section className="nuance-intro" aria-labelledby="color-heading">
-        <div className="nuance-intro__heading">
-          <h1 id="color-heading" tabIndex={-1}>Color</h1>
-          <SectionNavigation prefix="color" label="Color views" value={editing ? "edit" : state.sectionView} hasDraft={!!composition}
-            onChange={view => { dispatch(view === "edit" ? { type: "resume-editor" } : { type: "section", view }); closeEditor(); setNotice(""); }} />
-        </div>
-        <p>{editing ? "Build your own color hierarchy with up to six colors. Add or remove colors, then drag the borders to adjust their proportions and explore how each color shapes the composition."
-          : state.sectionView === "saved" ? "Your saved color compositions, ready to revisit and refine. Select a palette to continue editing or explore new combinations to add to your collection."
-          : "Explore how colors interact through simple compositions. Experiment with different combinations to discover unexpected harmonies and contrasts."}</p>
-      </section>
-      {editing ? <section id="color-edit-panel" role="tabpanel" aria-labelledby="color-edit-tab" className="nuance-workspace">
-        <div className="nuance-stage">
-          <div className="artwork-anchor">
-            <p className="composition-source__name">{paletteAttribution(composition)}</p>
-            <Artwork composition={composition} selectedColorId={state.selectedColorId}
-              onSelect={id => { dispatch({ type: "select-color", colorId: id }); setAdjusting(true); }}
-              onAdjust={id => { dispatch({ type: "select-color", colorId: id }); setAdjusting(true); }}
-              onRemove={colorId => { dispatch({ type: "remove", colorId }); closeEditor(); }}
-              onResize={(splitId, ratio) => dispatch({ type: "resize", splitId, ratio })} />
-            {adjusting && selected && <ColorEditor color={selected} onChange={hex => dispatch({ type: "color", colorId: selected.id, hex })} onClose={closeEditor} />}
+      <div className="nuance-intro__heading">
+        <h1 id="color-heading" tabIndex={-1}>Color</h1>
+        <SectionNavigation prefix="color" label="Color views" value={editing ? "edit" : state.sectionView} hasDraft={!!composition}
+          onChange={view => { dispatch(view === "edit" ? { type: "resume-editor" } : { type: "section", view }); closeEditor(); setNotice(""); }} />
+      </div>
+      <div className="nuance-content">
+        <section className="nuance-intro" aria-labelledby="color-heading">
+          <p>{editing ? "Build your own color hierarchy with up to six colors. Add or remove colors, then drag the borders to adjust their proportions and explore how each color shapes the composition."
+            : state.sectionView === "saved" ? "Your saved color compositions, ready to revisit and refine. Select a palette to continue editing or explore new combinations to add to your collection."
+            : "Explore how colors interact through simple compositions. Experiment with different combinations to discover unexpected harmonies and contrasts."}</p>
+        </section>
+        {editing ? <section id="color-edit-panel" role="tabpanel" aria-labelledby="color-edit-tab" className="nuance-workspace">
+          <div className="nuance-stage">
+            <div className="artwork-anchor">
+              <p className="composition-source__name">{paletteAttribution(composition)}</p>
+              <Artwork composition={composition} selectedColorId={state.selectedColorId}
+                onSelect={id => { dispatch({ type: "select-color", colorId: id }); setAdjusting(true); }}
+                onAdjust={id => { dispatch({ type: "select-color", colorId: id }); setAdjusting(true); }}
+                onRemove={colorId => { dispatch({ type: "remove", colorId }); closeEditor(); }}
+                onResize={(splitId, ratio) => dispatch({ type: "resize", splitId, ratio })} />
+              {adjusting && selected && <ColorEditor color={selected} onChange={hex => dispatch({ type: "color", colorId: selected.id, hex })} onClose={closeEditor} />}
+            </div>
+            <div className="composition-actions" role="group" aria-label="Composition actions">
+              {composition.historical && <Button className="composition-action" aria-label="Reset composition"
+                title="Reset composition to its original colors and proportions"
+                onClick={() => { dispatch({ type: "reset" }); closeEditor(); setNotice(composition.historical?.originalColorCount === 2 ? "Original pair restored with a Nuance-generated third color for the editor." : "Original Wada combination restored."); }}
+                leadingIcon={<RotateCcw size={20} aria-hidden="true" />} />}
+              <Button className="composition-action composition-add" disabled={composition.colors.length >= MAX_COLORS}
+                aria-label={composition.colors.length >= MAX_COLORS ? "Add color — maximum of six colors reached" : "Add color"}
+                title={composition.colors.length >= MAX_COLORS ? "Maximum of six colors reached" : "Add a harmonizing color"}
+                onClick={() => { dispatch({ type: "add", hex: nextColor(composition) }); closeEditor(); }}><Icon name="plus" size={20} /></Button>
+              <Button className="composition-action" onClick={saveToAccount}
+                disabled={saving || account.authLoading || !!account.user && account.dataLoading || libraryFull}
+                aria-label={saving ? "Saving composition…" : libraryFull ? `Save composition — limit reached (${MAX_SAVED_COMPOSITIONS}/${MAX_SAVED_COMPOSITIONS})` : "Save composition"}
+                aria-busy={saving}
+                title={libraryFull ? "Delete a composition in Saved to make room. Existing saves can still be updated." : saving ? "Saving composition…" : "Save composition"}
+                leadingIcon={<HeartPlus size={20} aria-hidden="true" />} />
+            </div>
           </div>
-          <div className="composition-actions" role="group" aria-label="Composition actions">
-            {composition.historical && <Button className="composition-action" aria-label="Reset composition"
-              title="Reset composition to its original colors and proportions"
-              onClick={() => { dispatch({ type: "reset" }); closeEditor(); setNotice(composition.historical?.originalColorCount === 2 ? "Original pair restored with a Nuance-generated third color for the editor." : "Original Wada combination restored."); }}
-              leadingIcon={<RotateCcw size={20} aria-hidden="true" />} />}
-            <Button className="composition-action composition-add" disabled={composition.colors.length >= MAX_COLORS}
-              aria-label={composition.colors.length >= MAX_COLORS ? "Add color — maximum of six colors reached" : "Add color"}
-              title={composition.colors.length >= MAX_COLORS ? "Maximum of six colors reached" : "Add a harmonizing color"}
-              onClick={() => { dispatch({ type: "add", hex: nextColor(composition) }); closeEditor(); }}><Icon name="plus" size={20} /></Button>
-            <Button className="composition-action" onClick={saveToAccount}
-              disabled={saving || account.authLoading || !!account.user && account.dataLoading || libraryFull}
-              aria-label={saving ? "Saving composition…" : libraryFull ? `Save composition — limit reached (${MAX_SAVED_COMPOSITIONS}/${MAX_SAVED_COMPOSITIONS})` : "Save composition"}
-              aria-busy={saving}
-              title={libraryFull ? "Delete a composition in Saved to make room. Existing saves can still be updated." : saving ? "Saving composition…" : "Save composition"}
-              leadingIcon={<HeartPlus size={20} aria-hidden="true" />} />
-          </div>
-        </div>
-      </section> : <>
-      <section id="color-explore-panel" role="tabpanel" aria-labelledby="color-explore-tab" hidden={state.sectionView !== "explore"} className="nuance-palettes">
-        {state.sectionView === "explore" &&
-        <PaletteSlider palettes={state.suggestions} activeId={explorePosition.current ?? state.activeCompositionId} onPositionChange={rememberExplorePosition}
-          onSelect={palette => { rememberEditorTrigger(); dispatch({ type: "select-palette", palette }); closeEditor(); setNotice(""); }} />}
-      </section>
-      <section id="color-saved-panel" role="tabpanel" aria-labelledby="color-saved-tab" hidden={state.sectionView !== "saved"}>
-        {state.sectionView === "saved" && <SavedCompositions key={account.user?.id ?? "guest"} account={account}
-          onOpen={composition => { rememberEditorTrigger(); dispatch({ type: "open-saved", composition }); closeEditor(); setNotice(""); }}
-          onExplore={() => { dispatch({ type: "section", view: "explore" }); document.getElementById("color-explore-tab")?.focus(); }}
-          onSignIn={() => setAccountOpen(true)} />}
-      </section>
-      </>}
+        </section> : <>
+        <section id="color-explore-panel" role="tabpanel" aria-labelledby="color-explore-tab" hidden={state.sectionView !== "explore"} className="nuance-palettes">
+          {state.sectionView === "explore" &&
+          <PaletteSlider palettes={state.suggestions} activeId={explorePosition.current ?? state.activeCompositionId} onPositionChange={rememberExplorePosition}
+            onSelect={palette => { rememberEditorTrigger(); dispatch({ type: "select-palette", palette }); closeEditor(); setNotice(""); }} />}
+        </section>
+        <section id="color-saved-panel" role="tabpanel" aria-labelledby="color-saved-tab" hidden={state.sectionView !== "saved"}>
+          {state.sectionView === "saved" && <SavedCompositions key={account.user?.id ?? "guest"} account={account}
+            onOpen={composition => { rememberEditorTrigger(); dispatch({ type: "open-saved", composition }); closeEditor(); setNotice(""); }}
+            onExplore={() => { dispatch({ type: "section", view: "explore" }); document.getElementById("color-explore-tab")?.focus(); }}
+            onSignIn={() => setAccountOpen(true)} />}
+        </section>
+        </>}
+      </div>
       <p className="nuance-notice" role="status">{notice}</p>
     </main>
     <Navigation />
