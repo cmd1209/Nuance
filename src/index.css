@@ -14,6 +14,17 @@
     color-scheme: light;
 }
 
+/* Keep the browser canvas and native controls aligned with the app theme. */
+:root:has(.nuance-app[data-theme="dark"]) {
+    color-scheme: dark;
+    background: var(--colors-semantic-background-dark);
+}
+
+:root:has(.nuance-app[data-theme="light"]) {
+    color-scheme: light;
+    background: var(--colors-semantic-background-light);
+}
+
 html,
 body,
 #root {

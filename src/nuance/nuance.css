@@ -33,8 +33,7 @@
     --content-width: 1140px;
     --instructions-width: 780px;
     --artwork-width: 640px;
-    --navigation-height: var(--size-control-lg);
-    --navigation-clearance: calc(var(--navigation-height) + var(--gap-xl) + var(--gap-2xl) + env(safe-area-inset-bottom, 0px));
+    --navigation-offset: calc(var(--gap-xl) + env(safe-area-inset-bottom, 0px));
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -42,7 +41,7 @@
     justify-content: flex-start;
     min-height: 100svh;
     gap: var(--gap-4xl);
-    padding: var(--gap-2xl) var(--gap-xl) var(--navigation-clearance);
+    padding: var(--gap-2xl) var(--gap-xl) var(--navigation-offset);
     background: var(--color-bg-canvas);
     color: var(--color-text-primary);
     font-family: var(--family-sans), sans-serif;
@@ -144,12 +143,11 @@
 
 /* The shared background fills the gaps between rounded child buttons. */
 .nuance-navigation {
-    position: fixed;
+    position: sticky;
     z-index: 5;
-    bottom: calc(var(--gap-xl) + env(safe-area-inset-bottom, 0px));
-    left: 50%;
-    transform: translateX(-50%);
-    max-width: calc(100% - var(--padding-xl) * 2);
+    bottom: var(--navigation-offset);
+    max-width: 100%;
+    flex-shrink: 0;
     display: flex;
     background: var(--color-action-primary-hover);
     border-radius: var(--radius-full);
@@ -880,8 +878,7 @@
 
 @media (max-width: 700px) {
     .nuance-app {
-        --navigation-height: calc(var(--size-icon-md) + var(--gap-xs) + var(--label-md-line-height) + var(--button-lg-padding-y) * 2);
-        padding: var(--padding-xl) var(--padding-lg) var(--navigation-clearance);
+        padding: var(--padding-xl) var(--padding-lg) var(--navigation-offset);
         gap: var(--gap-2xl);
     }
 
@@ -905,7 +902,7 @@
 
 
     .nuance-navigation {
-        width: calc(100% - var(--padding-lg) * 2);
+        width: 100%;
         max-width: 478px;
     }
 
