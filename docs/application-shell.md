@@ -1,15 +1,15 @@
 # Nuance application shell
 
-This is the current layout contract for Colors and future Types, Spaces, Details, and Designs sections. Domain algorithms, composition schemas, and Supabase persistence are independent of it. Follow [CSS conventions](CSS_CONVENTIONS.md) when changing styles.
+This is the current layout contract for all five destinations: Colors, Types, Spaces, Details, and Designs. See [section navigation and state](sections.md) for their Phase 2 foundations. Domain algorithms, composition schemas, and Supabase persistence are independent of it. Follow [CSS conventions](CSS_CONVENTIONS.md) when changing styles.
 
 ## Structure and ownership
 
 ```text
-NuanceApp — account and persistent Color editor state
+NuanceApp — application navigation/theme, account, and persistent Color editor state
 └── AppShell — document theme and shared shell
     ├── AppHeader — logo, profile, theme controls
     ├── main.nuance-main — shared width and navigation clearance
-    │   └── SectionLayout
+    │   └── Active SectionLayout (other mounted sections are hidden)
     │       ├── heading + local navigation
     │       ├── contextual description
     │       ├── section content (Explore, Saved, or Edit)
@@ -18,9 +18,9 @@ NuanceApp — account and persistent Color editor state
     └── native account / unsaved-change dialogs
 ```
 
-`AppShell` receives header, navigation, content, and overlay slots. It does not know about palettes, editors, grids, or persistence. `AppHeader` receives account labels and callbacks. `SectionLayout` receives a title, heading ID, optional local navigation, description, arbitrary content, and optional status message. Only the Color section is implemented. The other main navigation items remain disabled.
+`AppShell` receives header, navigation, content, and overlay slots. It does not know about palettes, editors, grids, or persistence. `AppHeader` receives account labels and callbacks. `SectionLayout` receives a title, heading ID, optional local navigation, description, arbitrary content, and optional status message. All five main destinations are active. Colors has its complete editor; Types, Spaces, and Details use a shared foundational view. Designs has its separate assembly-oriented structure.
 
-`NuanceApp` keeps its reducer and account hook above these layout components. Switching views changes content, not the owning store. The active composition, clean baseline, saved ID, and unsaved-change confirmation survive navigation. No database or composition-format changes are part of this refactor.
+`NuanceApp` keeps its application reducer, Color reducer, and account hook above these layout components. Theme and active main section live in `state/application.ts`; Color work remains in `state/editor.ts`. Switching views changes content, not the owning store. The active composition, clean baseline, saved ID, and unsaved-change confirmation survive navigation. No database or composition-format changes are part of this refactor.
 
 ## Document scrolling and short content
 
@@ -63,7 +63,7 @@ Avoid CSS `:has(.nuance-app)` theme patches, separate page background aliases, a
 
 ## Scroll and focus policy
 
-Initial load starts normally at the top. Switching Explore/Saved/Edit scrolls the document to the main section start with native `scrollIntoView` and instant motion. Home returns to the document top. Selecting the enabled main navigation item scrolls to the section start. Future main-section routing should use the same entry policy.
+Initial load starts normally at the top. Switching Explore/Saved/Edit scrolls the document to the main section start with native `scrollIntoView` and instant motion. Home returns to the document top. Selecting a different main section returns the document to the top and focuses its heading without an extra scroll. Selecting the current main section scrolls to its section start.
 
 The existing editor/card focus restoration remains, using `preventScroll` so it does not fight that document-scroll policy. Local arrow-key tab navigation retains focus on the chosen tab. Dialog focus trapping, Escape handling, and return focus remain native to the existing dialogs.
 
@@ -83,7 +83,7 @@ Important evidence distinction: local pre-refactor Chrome tests resolved the mai
 2. Pass local navigation and descriptions as content; do not teach the shell about fonts, colors, or saved datasets.
 3. Keep domain/editor/persistence state above view changes when work must survive navigation.
 4. Never introduce section viewport heights, primary vertical overflow, layout-only backgrounds, footer spacers, or view-specific navigation offsets.
-5. Use `Navigation.activeSection` and `onSelect` when enabling a real, implemented section. Availability and current-page state are separate.
+5. Use `Navigation.activeSection` and `onSelect` for global destinations. All five destinations are enabled; unfinished creative tools use restrained introduction states inside their real sections.
 6. Keep specialized overlays local or in the shell overlay slot; use native dialogs for modal UI.
 7. Test both sparse and long content, viewport resizing, zoom/reflow, and focus navigation before shipping.
 
@@ -114,3 +114,16 @@ Before/after Explore and empty Saved screenshots (desktop/mobile, dark/light), f
 ### Executed refactor checks
 
 At completion of the refactor, the TypeScript/Vite production build and all 49 Node/component/PostgreSQL test cases passed. The isolated Chrome suite passed 41 numeric layout checks plus the interaction flows described above, with no page exceptions. Background samples were uniform at the checked screenshot coordinates in both themes. Before/after images were visually reviewed for empty Saved and populated Explore; discovery colors differ because of the intentional shuffle.
+
+
+## Phase 2 destinations
+
+The shared shell is unchanged by the section foundation work. All five sections stay mounted as siblings inside main; exactly one `SectionLayout` is visible via its native `hidden` attribute. Hidden sections contribute no height, focus targets, or extra scrolling. The Color reducer survives global navigation, and each `FoundationSection` instance preserves its own local Explore/Saved view. There is no fake selection or Edit context in the new creative sections.
+
+Global navigation and theme have moved into `state/application.ts`; section state has no global theme field. Shared view types and foundational copy live in `domain/sections.ts`. The Color carousel ignores zero-width measurements while hidden so leaving and returning does not reset its horizontal page.
+
+Designs uses no segmented control. Its four ingredient areas show real saved-color counts/names from the existing account hook and clear availability messages for Types, Spaces, and Details. The foundation provides links to the appropriate sections without creating design selections, a preview, export tools, or new persistence.
+
+The existing background tokens and accepted near-black canvas value are preserved. Browser background assertions compare screenshot pixels against the active computed canvas color, rather than hardcoding an older palette value.
+
+Phase 2 validation passed the production build and 53 Node/component/PostgreSQL tests. The expanded browser suite passed 83 layout checks plus destination navigation, per-section local-view retention, Color workspace/carousel continuity, theme changes across sections, Designs real-data updates, and the existing Color/account flows. Physical mobile chrome, real email delivery, live Supabase writes, and native browser-toolbar zoom remain outside the mocked checks.

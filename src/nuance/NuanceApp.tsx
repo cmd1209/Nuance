@@ -8,6 +8,10 @@ import { SavedCompositions } from "./components/SavedCompositions";
 import { SwitchCompositionDialog } from "./components/SwitchCompositionDialog";
 import { AppShell } from "./components/AppShell";
 import { AppHeader } from "./components/AppHeader";
+import { FoundationSection } from "./components/FoundationSection";
+import { DesignsSection } from "./components/DesignsSection";
+import type { DesignCategoryId } from "./domain/categories";
+import { applicationReducer, createApplicationState } from "./state/application";
 import { SectionLayout } from "./components/SectionLayout";
 import { SectionNavigation } from "./components/SectionNavigation";
 import { MAX_COLORS, paletteAttribution } from "./domain/composition";
@@ -22,6 +26,7 @@ import { Icon } from "./components/Icon";
 import "./nuance.css";
 
 export default function NuanceApp() {
+  const [application, dispatchApplication] = useReducer(applicationReducer, undefined, createApplicationState);
   const [state, dispatch] = useReducer(editorReducer, undefined, createEditorState);
   const account = useAccount();
   const [accountOpen, setAccountOpen] = useState(!!authReturn.kind || authReturn.hasError), [saving, setSaving] = useState(false);
@@ -48,22 +53,41 @@ export default function NuanceApp() {
   useEffect(() => {
     if (editing === wasEditing.current) return;
     wasEditing.current = editing;
+    if (application.activeSection !== "colors") return;
     if (main.current?.contains(document.activeElement) && document.activeElement?.getAttribute("role") === "tab") return;
-    if (editing) main.current?.querySelector<HTMLElement>("#color-heading")?.focus({ preventScroll: true });
+    const colorSection = main.current?.querySelector<HTMLElement>('.section-layout[aria-labelledby="color-heading"]');
+    if (editing) colorSection?.querySelector<HTMLElement>("#color-heading")?.focus({ preventScroll: true });
     else {
       const previous = editorTrigger.current;
-      const cards = main.current?.querySelectorAll<HTMLButtonElement>("[data-composition-id]");
+      const cards = colorSection?.querySelectorAll<HTMLButtonElement>("[data-composition-id]");
       const target = previous?.isConnected ? previous : Array.from(cards ?? []).find(card => card.dataset.compositionId === previous?.dataset.compositionId)
-        ?? main.current?.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]');
+        ?? colorSection?.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]');
       target?.focus({ preventScroll: true });
     }
-  }, [editing]);
+  }, [editing, application.activeSection]);
   const viewKey = editing ? "edit" : state.sectionView;
   const previousView = useRef(viewKey);
   useLayoutEffect(() => {
-    if (previousView.current !== viewKey) main.current?.scrollIntoView({ block: "start", behavior: "instant" });
+    if (application.activeSection === "colors" && previousView.current !== viewKey) main.current?.scrollIntoView({ block: "start", behavior: "instant" });
     previousView.current = viewKey;
-  }, [viewKey]);
+  }, [viewKey, application.activeSection]);
+  const previousSection = useRef(application.activeSection);
+  useLayoutEffect(() => {
+    if (previousSection.current === application.activeSection) return;
+    previousSection.current = application.activeSection;
+    window.scrollTo({ top: 0, behavior: "instant" });
+    const headingId = application.activeSection === "colors" ? "color-heading" : `${application.activeSection}-heading`;
+    document.getElementById(headingId)?.focus({ preventScroll: true });
+  }, [application.activeSection]);
+  function navigate(section: DesignCategoryId) {
+    setAdjusting(false);
+    if (section === application.activeSection) main.current?.scrollIntoView({ block: "start", behavior: "instant" });
+    else dispatchApplication({ type: "navigate", section });
+  }
+  function openColorView(view: "explore" | "saved") {
+    dispatch({ type: "section", view });
+    navigate("colors");
+  }
   function rememberEditorTrigger() {
     selectionTrigger.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   }
@@ -78,18 +102,18 @@ export default function NuanceApp() {
     catch (error) { setNotice(accountError(error)); }
     finally { setSaving(false); }
   }
-  return <AppShell theme={state.preferences.theme} mainRef={main}
-    header={<AppHeader theme={state.preferences.theme} displayName={account.profile?.display_name ?? ""}
+  return <AppShell theme={application.theme} mainRef={main}
+    header={<AppHeader theme={application.theme} displayName={account.profile?.display_name ?? ""}
       signedIn={!!account.user} loading={account.authLoading} onAccount={() => setAccountOpen(true)}
-      onTheme={() => dispatch({ type: "theme" })}
-      onHome={() => { dispatch({ type: "back" }); closeEditor(); window.scrollTo({ top: 0, behavior: "instant" }); }} />}
-    navigation={<Navigation activeSection="colors" onSelect={() => main.current?.scrollIntoView({ block: "start", behavior: "instant" })} />}
+      onTheme={() => dispatchApplication({ type: "theme" })}
+      onHome={() => { if (application.activeSection === "colors") dispatch({ type: "back" }); navigate("colors"); window.scrollTo({ top: 0, behavior: "instant" }); }} />}
+    navigation={<Navigation activeSection={application.activeSection} onSelect={navigate} />}
     overlays={<>
       {state.pendingSelection && <SwitchCompositionDialog onCancel={() => dispatch({ type: "cancel-switch" })}
         onDiscard={() => { dispatch({ type: "discard-and-switch" }); closeEditor(); setNotice(""); }} />}
       {accountOpen && <AccountDialog account={account} onClose={() => { account.dismissRecovery(); setAccountOpen(false); }} />}
     </>}>
-    <SectionLayout title="Color" headingId="color-heading" notice={notice}
+    <SectionLayout hidden={application.activeSection !== "colors"} title="Color" headingId="color-heading" notice={notice}
       navigation={<SectionNavigation prefix="color" label="Color views" value={editing ? "edit" : state.sectionView} hasDraft={!!composition}
         onChange={view => { dispatch(view === "edit" ? { type: "resume-editor" } : { type: "section", view }); closeEditor(); setNotice(""); }} />}
       description={editing ? "Build your own color hierarchy with up to six colors. Add or remove colors, then drag the borders to adjust their proportions and explore how each color shapes the composition."
@@ -137,5 +161,9 @@ export default function NuanceApp() {
       </section>
       </>}
     </SectionLayout>
+    {(["types", "spaces", "details"] as const).map(section => <FoundationSection key={section} section={section}
+      hidden={application.activeSection !== section} onViewChange={() => main.current?.scrollIntoView({ block: "start", behavior: "instant" })} />)}
+    <DesignsSection hidden={application.activeSection !== "designs"} account={account} onVisit={navigate}
+      onSavedColors={() => openColorView("saved")} onExploreColors={() => openColorView("explore")} onSignIn={() => setAccountOpen(true)} />
   </AppShell>;
 }

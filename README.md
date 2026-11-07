@@ -1,6 +1,8 @@
-# Nuance — Color exploration
+# Nuance — Design exploration
 
 Nuance's Color experience builds on the existing Patternsmith React/Vite/TypeScript/Tailwind app and preserves its Figma palette-selection and manipulation screens. Palette discovery now draws from 348 Sanzo Wada combinations, with deterministic OKLCH extensions for compositions of up to six colors. See [the Wada integration notes](docs/sanzo-wada-integration.md) for source attribution, provenance, reset behavior, and generation details.
+
+All five main destinations are active. Colors contains the complete creative tool. Types, Spaces, and Details provide independent Explore/Saved foundations, while Designs introduces the four-ingredient assembly structure using only real saved-color availability. Switching destinations preserves the active Color workspace. See [section architecture](docs/sections.md).
 
 ```bash
 npm install

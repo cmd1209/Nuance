@@ -28,9 +28,18 @@ export function PaletteSlider({ palettes, activeId, onSelect, onPositionChange }
 
   useLayoutEffect(() => {
     const element = viewport.current!;
-    const step = element.clientWidth + parseFloat(getComputedStyle(element).columnGap);
-    element.scrollTo({ left: Math.floor(firstVisible.current / pageSize) * step, behavior: "instant" });
+    let needsRestore = true;
+    const restore = () => {
+      if (!element.clientWidth) return;
+      const step = element.clientWidth + parseFloat(getComputedStyle(element).columnGap);
+      element.scrollTo({ left: Math.floor(firstVisible.current / pageSize) * step, behavior: "instant" });
+      needsRestore = false;
+    };
+    restore();
     const update = () => {
+      // A hidden main section has no measurable width; keep its remembered page.
+      if (!element.clientWidth) { needsRestore = true; return; }
+      if (needsRestore) restore();
       const maximum = element.scrollWidth - element.clientWidth;
       const currentStep = element.clientWidth + parseFloat(getComputedStyle(element).columnGap);
       firstVisible.current = Math.round(element.scrollLeft / currentStep) * pageSize;

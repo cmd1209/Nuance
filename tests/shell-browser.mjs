@@ -36,7 +36,7 @@ const exceptions = [], reports = [];
 page.on('pageerror', error => exceptions.push(error.message));
 let profile = { id: user.id, display_name: 'Test' }, saved = [], posts = 0, failDelete = false;
 const records = count => fixtures.slice(0, count).map(composition => ({ id: composition.id, owner_id: user.id, document: structuredClone(composition), updated_at: new Date().toISOString() }));
-await page.addInitScript(({ project, token, user }) => localStorage.setItem(`sb-${project}-auth-token`, JSON.stringify({ access_token: token, refresh_token: 'test-refresh', token_type: 'bearer', expires_in: 3600, expires_at: Math.floor(Date.now() / 1000) + 3600, user })), { project, token, user });
+await page.addInitScript(({ project, token, user }) => !localStorage.getItem('nuance-test-signed-out') && localStorage.setItem(`sb-${project}-auth-token`, JSON.stringify({ access_token: token, refresh_token: 'test-refresh', token_type: 'bearer', expires_in: 3600, expires_at: Math.floor(Date.now() / 1000) + 3600, user })), { project, token, user });
 await page.route('**/*', route => {
   const request = route.request(), url = new URL(request.url());
   if (url.origin === new URL(baseURL).origin) return route.continue();
@@ -91,18 +91,18 @@ async function layout(label) {
   const result = await page.evaluate(() => {
     const root = document.documentElement, nav = document.querySelector('.nuance-navigation');
     const navStyle = getComputedStyle(nav), box = nav.getBoundingClientRect();
-    const content = document.querySelector('.section-layout__content').getBoundingClientRect();
-    const description = document.querySelector('.section-layout__description').getBoundingClientRect();
+    const content = document.querySelector('.section-layout:not([hidden]) .section-layout__content').getBoundingClientRect();
+    const description = document.querySelector('.section-layout:not([hidden]) .section-layout__description').getBoundingClientRect();
     const verticalScrollers = [...document.querySelectorAll('.nuance-app *')].filter(element => {
       const style = getComputedStyle(element);
       return /auto|scroll/.test(style.overflowY) && element.scrollHeight > element.clientHeight + 1 && !element.closest('dialog');
     }).map(element => element.className);
     return { scrollingElement: document.scrollingElement.tagName, width: root.clientWidth, scrollWidth: root.scrollWidth, navPosition: navStyle.position,
       navBottom: box.bottom, navHeight: box.height, navWidth: box.width, navCenter: box.x + box.width / 2,
-      sectionLeft: document.querySelector('.section-layout').getBoundingClientRect().left,
+      sectionLeft: document.querySelector('.section-layout:not([hidden])').getBoundingClientRect().left,
       viewport: innerHeight, scrollers: verticalScrollers, contentGap: content.top - description.bottom,
       appHeight: document.querySelector('.nuance-app').getBoundingClientRect().height,
-      sectionHeight: document.querySelector('.section-layout').getBoundingClientRect().height,
+      sectionHeight: document.querySelector('.section-layout:not([hidden])').getBoundingClientRect().height,
       mainPadding: parseFloat(getComputedStyle(document.querySelector('.nuance-main')).paddingBottom),
       scrollY, headerTop: document.querySelector('.nuance-header').getBoundingClientRect().top,
       lastContentBottom: content.bottom,
@@ -123,6 +123,7 @@ async function layout(label) {
 }
 async function pixels(label) {
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+  await page.mouse.move(0, 0);
   const screenshot = await page.screenshot({ path: join(artifacts, `${label}.png`), fullPage: true });
   const sampled = await page.evaluate(async data => {
     const image = new Image(); image.src = `data:image/png;base64,${data}`; await image.decode();
@@ -130,8 +131,8 @@ async function pixels(label) {
     const context = canvas.getContext('2d'); context.drawImage(image, 0, 0);
     return Array.from({ length: 12 }, (_, index) => [...context.getImageData(1, Math.floor((image.height - 1) * index / 11), 1, 1).data]);
   }, screenshot.toString('base64'));
-  const value = await page.locator('.nuance-app').getAttribute('data-theme');
-  for (const pixel of sampled) assert.deepEqual(pixel, value === 'dark' ? [15, 14, 14, 255] : [243, 243, 243, 255], `${label}: canvas band`);
+  const expected = await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor.match(/\d+/g).map(Number).slice(0, 3).concat(255));
+  for (const pixel of sampled) assert.deepEqual(pixel, expected, `${label}: canvas band`);
 }
 async function artwork() {
   return page.locator('.composition-artwork').evaluate(element => ({
@@ -160,6 +161,81 @@ try {
     }
   }
   console.log('PASS: eight viewport sizes × two themes, Explore and empty Saved, with screenshots.');
+  const appNav = page.getByRole('navigation', {name:'Design exploration'});
+  const destinations = { types:'Types', spaces:'Spaces', details:'Details', designs:'Designs' };
+  const expectedDescriptions = {
+    types: {
+      explore:'Explore how typography shapes character and hierarchy. Experiment with type combinations, scale, and rhythm to discover what feels right.',
+      saved:'Your saved typography selections, ready to revisit and refine. Select a favorite to continue editing or explore new combinations.'
+    },
+    spaces: {
+      explore:'Explore how spacing creates structure and rhythm. Discover how small changes in distance and proportion can transform a layout.',
+      saved:'Your saved spacing systems, ready to revisit and refine. Select a favorite to continue editing or explore new possibilities.'
+    },
+    details: {
+      explore:'Explore the subtle details that give interfaces their character. Discover combinations of corners, borders, shadows, and effects.',
+      saved:'Your saved detail configurations, ready to revisit and refine. Select a favorite to continue editing or explore new combinations.'
+    }
+  };
+  for (const viewport of [{width:1280,height:1000},{width:390,height:844},{width:568,height:320}]) {
+    await page.setViewportSize(viewport); await load();
+    for (const value of ['dark','light']) {
+      await theme(value);
+      for (const [section,title] of Object.entries(destinations)) {
+        await appNav.getByRole('button',{name:title,exact:true}).click();
+        await page.getByRole('heading',{name:title,level:1,exact:true}).waitFor();
+        assert.equal(await appNav.locator('[aria-current="page"]').textContent(),title);
+        assert.equal(await page.locator('.section-layout:not([hidden])').count(),1);
+        assert.equal(await page.evaluate(()=>window.scrollY),0);
+        assert.equal(await page.locator('html').getAttribute('data-theme'),value);
+        if(section==='designs') {
+          assert.equal(await page.getByRole('tab').count(),0);
+          assert.equal(await page.locator('.designs-ingredients > li').count(),4);
+          await page.getByText('No saved palettes yet. Save a color composition to use it here.',{exact:true}).waitFor();
+          await layout(`phase2-designs-${viewport.width}-${value}`);
+        } else {
+          assert.equal(await page.getByRole('tab',{name:'Edit',exact:true}).count(),0);
+          for(const local of ['explore','saved']) {
+            await page.getByRole('tab',{name:local==='explore'?'Explore':'Saved',exact:true}).click();
+            await page.getByRole('tab',{name:local==='explore'?'Explore':'Saved',selected:true,exact:true}).waitFor();
+            assert.equal(await page.locator('.section-layout:not([hidden]) .section-layout__description').textContent(),expectedDescriptions[section][local]);
+            await layout(`phase2-${section}-${local}-${viewport.width}-${value}`);
+          }
+        }
+        if(viewport.width!==568) await pixels(`phase2-${section}-${viewport.width}-${value}`);
+      }
+    }
+  }
+  await appNav.getByRole('button',{name:'Types',exact:true}).click();
+  assert.equal(await page.getByRole('tab',{name:'Saved',selected:true,exact:true}).count(),1);
+  await appNav.getByRole('button',{name:'Spaces',exact:true}).click();
+  await page.getByRole('button',{name:'Back to Explore',exact:true}).click();
+  await appNav.getByRole('button',{name:'Details',exact:true}).click();
+  assert.equal(await page.getByRole('tab',{name:'Saved',selected:true,exact:true}).count(),1);
+  await appNav.getByRole('button',{name:'Spaces',exact:true}).click();
+  assert.equal(await page.getByRole('tab',{name:'Explore',selected:true,exact:true}).count(),1);
+  await appNav.getByRole('button',{name:'Types',exact:true}).click();
+  assert.equal(await page.getByRole('tab',{name:'Saved',selected:true,exact:true}).count(),1);
+  console.log('PASS: all five destinations, exact descriptions, independent local views, contextual Edit, both themes, fixed navigation, and sparse layouts.');
+  await page.setViewportSize({width:1280,height:1000}); await load(2);
+  await appNav.getByRole('button',{name:'Designs',exact:true}).click();
+  await page.getByText('2 saved palettes available',{exact:true}).waitFor();
+  assert.equal(await page.locator('.designs-saved-colors > li').count(),2);
+  assert.deepEqual(await page.locator('.designs-saved-colors > li').allTextContents(),fixtures.slice(0,2).map(domain.paletteAttribution));
+  await page.getByRole('button',{name:'View saved colors',exact:true}).click();
+  await page.getByText('2 / 4 saved',{exact:true}).waitFor();
+  assert.equal(await appNav.locator('[aria-current="page"]').textContent(),'Colors');
+  page.once('dialog',dialog=>dialog.accept());
+  await page.locator('[data-delete-composition]').first().click();
+  await page.getByText('1 / 4 saved',{exact:true}).waitFor();
+  await appNav.getByRole('button',{name:'Designs',exact:true}).click();
+  await page.getByText('1 saved palette available',{exact:true}).waitFor();
+  assert.equal(await page.locator('.designs-saved-colors > li').count(),1);
+  await page.getByRole('button',{name:'Go to Types',exact:true}).click();
+  await page.getByRole('heading',{name:'Types',level:1,exact:true}).waitFor();
+  await appNav.getByRole('button',{name:'Designs',exact:true}).click();
+  await page.getByText('1 saved palette available',{exact:true}).waitFor();
+  console.log('PASS: Designs shows only real saved records, ingredient links work, and data updates after Color deletion.');
   for (const count of [1, 2, 4]) {
     await page.setViewportSize({ width: 390, height: 844 }); await load(count); await selectView('Saved');
     assert.equal(await page.locator('.saved-gallery__item').count(), count);
@@ -169,7 +245,7 @@ try {
   console.log('PASS: one, two, and four saved records; final content clears the navigation.');
   // Generic future section content must use the document scroll, too.
   await page.setViewportSize({ width: 1280, height: 720 }); await load(); await selectView('Saved');
-  await page.locator('.section-layout__content').evaluate(element => {
+  await page.locator('.section-layout:not([hidden]) .section-layout__content').evaluate(element => {
     const paragraph = document.createElement('p'); paragraph.textContent = 'Long section content. '.repeat(3000); element.appendChild(paragraph);
   });
   await page.evaluate(() => window.scrollTo({ top: 600, behavior: 'instant' }));
@@ -192,6 +268,10 @@ try {
   await page.waitForFunction(() => document.querySelector('.palette-slider__viewport').scrollLeft < 1);
   await carousel.focus(); await page.keyboard.press('ArrowRight');
   await page.waitForFunction(() => document.querySelector('.palette-slider__viewport').scrollLeft > 0);
+  const carouselPosition = await carousel.evaluate(element=>element.scrollLeft);
+  await appNav.getByRole('button',{name:'Types',exact:true}).click();
+  await appNav.getByRole('button',{name:'Colors',exact:true}).click();
+  await page.waitForFunction(position=>Math.abs(document.querySelector('.palette-slider__viewport').scrollLeft-position)<1,carouselPosition);
   await page.locator(`[data-composition-id="${threeSource.paletteId}"]`).click();
   assert.equal(await page.getByRole('tab', { name: 'Edit', selected: true }).count(), 1);
   const original = await artwork();
@@ -203,6 +283,18 @@ try {
   await page.mouse.move(bounds.x + bounds.width / 2 + 40, bounds.y + bounds.height / 2, { steps: 5 }); await page.mouse.up();
   const modified = await artwork(); assert.notDeepEqual(modified, original);
   for (const view of ['Explore', 'Saved']) { await selectView(view); await selectView('Edit'); assert.deepEqual(await artwork(), modified); }
+  for(const title of ['Types','Spaces','Details','Designs']) {
+    await appNav.getByRole('button',{name:title,exact:true}).click();
+    assert.equal(await page.getByRole('dialog',{name:'Switch palettes?'}).count(),0);
+    await appNav.getByRole('button',{name:'Colors',exact:true}).click();
+    assert.equal(await page.getByRole('tab',{name:'Edit',selected:true,exact:true}).count(),1);
+    assert.deepEqual(await artwork(),modified);
+  }
+  await appNav.getByRole('button',{name:'Types',exact:true}).click(); await theme('light');
+  await appNav.getByRole('button',{name:'Colors',exact:true}).click();
+  assert.equal(await page.locator('.nuance-app').getAttribute('data-theme'),'light');
+  assert.deepEqual(await artwork(),modified);
+  console.log('PASS: Color editing and carousel position survive every main destination; global theme remains independent.');
   await save(); assert.equal(saved.length, 1); const id = saved[0].id;
   await selectView('Saved'); await page.locator('.saved-gallery .palette-card').click();
   await page.locator('.color-region__select').first().click(); await page.getByLabel('HEX', { exact: true }).fill('#ABCDEF');
@@ -279,6 +371,17 @@ try {
   await selectView('Explore');
   await page.getByRole('tab', { name: 'Explore', exact: true }).focus(); await page.keyboard.press('ArrowRight');
   await page.getByRole('tab', { name: 'Saved', selected: true }).waitFor();
+  await page.evaluate(()=>{ localStorage.clear(); localStorage.setItem('nuance-test-signed-out', 'true'); });
+  await page.reload();
+  await page.getByRole('button',{name:'Sign in',exact:true}).waitFor();
+  await appNav.getByRole('button',{name:'Designs',exact:true}).click();
+  const activeDesigns = page.locator('.section-layout:not([hidden])');
+  await activeDesigns.getByText('Sign in to access your saved palettes.',{exact:true}).waitFor();
+  await activeDesigns.getByRole('button',{name:'Sign in',exact:true}).click();
+  await page.getByRole('dialog').getByLabel('Email',{exact:true}).waitFor();
+  await page.keyboard.press('Escape');
+  assert.equal(await page.getByRole('heading',{name:'Designs',level:1,exact:true}).count(),1);
+  console.log('PASS: Designs signed-out state and the shared authentication dialog.');
   assert.deepEqual(exceptions, []);
   await rm(join(artifacts, 'failure.png'), {force:true});
   await writeFile(join(artifacts, 'layout-report.json'), JSON.stringify({ reports, posts, exceptions }, null, 2));

@@ -1,6 +1,6 @@
 # Nuance — Architecture
 
-The current application-shell contract is documented in [application-shell.md](application-shell.md): one document scroll, a fixed viewport navigation, one document-owned theme canvas, and reusable `AppShell` / `SectionLayout` components. Read it before introducing a new section or changing layout geometry.
+The five-destination navigation and foundational section model are documented in [sections.md](sections.md). The current application-shell contract is documented in [application-shell.md](application-shell.md): one document scroll, a fixed viewport navigation, one document-owned theme canvas, and reusable `AppShell` / `SectionLayout` components. Read it before introducing a new section or changing layout geometry.
 
 The material below records the original Color implementation and domain/persistence boundary. Historical visual measurements and validation counts are not current shell requirements.
 
@@ -41,7 +41,7 @@ A layout node is either a region referring to a stable color ID or a binary spli
 
 `serializeComposition` and `deserializeComposition` are the only document format boundary. Deserialization reconstructs known fields, validates versions, timestamps, dimensions, colors, IDs, unique region references, tree depth and valid geometry. Unknown future versions are rejected rather than silently corrupted.
 
-`state/editor.ts` owns the editor transitions independently of the view. `NuanceApp` hosts that state with React's reducer. Preferences live separately in `state.preferences`; transient input text, the open color popover and download feedback stay in UI state. Drafts are currently indexed by source palette ID; each stored document has its own independent ID. Returning to the same palette restores its draft. Explore More replaces only suggestions and retains drafts. Changing the theme cannot mutate a composition.
+`state/editor.ts` owns the editor transitions independently of the view. `NuanceApp` hosts that state with React's reducer. Global active-section and theme state live in `state/application.ts`; transient input text, the open color popover and download feedback stay in UI state. Drafts are currently indexed by source palette ID; each stored document has its own independent ID. Returning to the same palette restores its draft. Explore More replaces only suggestions and retains drafts. Changing the theme cannot mutate a composition.
 
 ### Supabase accounts
 

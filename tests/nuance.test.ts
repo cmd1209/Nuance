@@ -1,3 +1,4 @@
+import { applicationReducer, createApplicationState } from "../src/nuance/state/application";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createComposition, normalizeHex, updateColor } from "../src/nuance/domain/composition";
@@ -73,7 +74,7 @@ test("palette browser includes every historical composition and keeps its order 
   assert.equal(state.activeCompositionId, palette.id);
   state = editorReducer(state, { type: "select-palette", palette });
   assert.equal(activeComposition(state)!.id, draftId);
-  state = editorReducer(state, { type: "theme" });
+  const application = applicationReducer(createApplicationState(), { type: "theme" });
   assert.equal(state.suggestions, order);
 });
 
@@ -148,10 +149,10 @@ test("editor navigation retains drafts, protects original palettes, and keeps th
   const colorId = activeComposition(state)!.colors[0].id;
   state = editorReducer(state, { type: "color", colorId, hex: "#0000FF" });
   const edited = serializeComposition(activeComposition(state)!);
-  state = editorReducer(state, { type: "theme" }); assert.equal(serializeComposition(activeComposition(state)!), edited);
+  const application = applicationReducer(createApplicationState(), { type: "theme" }); assert.equal(serializeComposition(activeComposition(state)!), edited);
   state = editorReducer(state, { type: "back" }); state = editorReducer(state, { type: "select-palette", palette });
   assert.equal(activeComposition(state)!.id, draftId); assert.equal(activeComposition(state)!.colors[0].hex, "#0000FF");
-  assert.equal(JSON.stringify(state.suggestions[0]), original); assert.equal(state.preferences.theme, "light");
+  assert.equal(JSON.stringify(state.suggestions[0]), original); assert.equal(application.theme, "light");
   state = editorReducer(state, { type: "explore", suggestions: generatePalettes(state.suggestions) });
   assert.equal(state.suggestions.length, 3); assert.ok(Object.values(state.drafts).some(c => c.id === draftId));
 });
@@ -347,7 +348,7 @@ test("Explore and Saved retain their editor origin, drafts, suggestions, and the
   state = editorReducer(state, { type: "back" });
   assert.equal(state.sectionView, "explore");
   state = editorReducer(state, { type: "section", view: "saved" });
-  state = editorReducer(state, { type: "theme" });
+  const application = applicationReducer(createApplicationState(), { type: "theme" });
   state = editorReducer(state, { type: "open-saved", composition: deserializeComposition(serializeComposition(draft)) });
   assert.deepEqual(activeComposition(state), draft);
   const snapshot = serializeComposition(draft);
@@ -362,7 +363,7 @@ test("Explore and Saved retain their editor origin, drafts, suggestions, and the
   assert.equal(state.sectionView, "saved");
   assert.equal(state.selectedColorId, null);
   assert.equal(state.suggestions, suggestions);
-  assert.equal(state.preferences.theme, "light");
+  assert.equal(application.theme, "light");
   state = editorReducer(state, { type: "section", view: "explore" });
   state = editorReducer(state, { type: "select-palette", palette });
   assert.deepEqual(activeComposition(state), edited);
@@ -370,7 +371,7 @@ test("Explore and Saved retain their editor origin, drafts, suggestions, and the
   state = editorReducer(state, { type: "clear-account" });
   assert.equal(state.sectionView, "explore");
   assert.deepEqual(state.drafts, {});
-  assert.equal(state.preferences.theme, "light");
+  assert.equal(application.theme, "light");
 });
 
 
@@ -565,7 +566,7 @@ test("clean sessions switch immediately and successful saves establish a new bas
 test("dirty detection ignores timestamps, navigation, selection, and restored geometry or colors", () => {
   let state = editorReducer(createEditorState(), { type: "open-saved", composition: fixture() });
   const original = activeComposition(state)!;
-  state = editorReducer(state, { type: "theme" });
+  const application = applicationReducer(createApplicationState(), { type: "theme" });
   state = editorReducer(state, { type: "select-color", colorId: original.colors[0].id });
   state = editorReducer(state, { type: "section", view: "explore" });
   state = editorReducer(state, { type: "resume-editor" });
@@ -649,9 +650,76 @@ test("shared section layout exposes generic content, labelled heading, and live 
   assert.ok(markup.indexOf('Section description') < markup.indexOf('Section content'));
 });
 
-test("global navigation identifies one active section and keeps unfinished sections disabled", () => {
+test("global navigation exposes five destinations and identifies one active section", () => {
   const markup = renderToStaticMarkup(createElement(Navigation, { activeSection: "colors" }));
   assert.equal((markup.match(/aria-current="page"/g) ?? []).length, 1);
-  assert.equal((markup.match(/disabled=""/g) ?? []).length, 4);
+  assert.equal((markup.match(/disabled=""/g) ?? []).length, 0);
   assert.match(markup, /aria-label="Design exploration"/);
+});
+
+import { FoundationSection } from "../src/nuance/components/FoundationSection";
+import { DesignsSection } from "../src/nuance/components/DesignsSection";
+import { FOUNDATION_SECTIONS } from "../src/nuance/domain/sections";
+import { DESIGN_CATEGORIES } from "../src/nuance/domain/categories";
+
+test("application navigation and theme remain independent of a modified Color editing session", () => {
+  let application = createApplicationState();
+  let color = editorReducer(createEditorState(), { type: "select-palette", palette: historicalComposition(WADA_PALETTES[0]) });
+  color = editorReducer(color, { type: "color", colorId: activeComposition(color)!.colors[0].id, hex: "#123456" });
+  const snapshot = serializeComposition(activeComposition(color)!);
+  for (const section of DESIGN_CATEGORIES) {
+    application = applicationReducer(application, { type: "navigate", section: section.id });
+    application = applicationReducer(application, { type: "theme" });
+    assert.equal(application.activeSection, section.id);
+    assert.equal(serializeComposition(activeComposition(color)!), snapshot);
+    assert.equal(hasUnsavedChanges(color), true);
+    assert.equal(color.view, "editor");
+  }
+  application = applicationReducer(application, { type: "navigate", section: "colors" });
+  assert.equal(application.activeSection, "colors");
+  assert.equal(application.theme, "light");
+});
+
+test("Types, Spaces, and Details share real section destinations with contextual Edit unavailable", () => {
+  for (const section of ["types", "spaces", "details"] as const) {
+    const markup = renderToStaticMarkup(createElement(FoundationSection, { section, hidden: false, onViewChange: noop }));
+    assert.ok(markup.includes(FOUNDATION_SECTIONS[section].title));
+    assert.ok(markup.includes(FOUNDATION_SECTIONS[section].descriptions.explore));
+    assert.ok(markup.includes(FOUNDATION_SECTIONS[section].empty.explore));
+    assert.ok(markup.includes(`id="${section}-explore-tab"`));
+    assert.ok(markup.includes(`id="${section}-saved-tab"`));
+    assert.ok(!markup.includes(`id="${section}-edit-tab"`));
+    assert.ok(!markup.includes("palette-card"));
+    assert.match(markup, /role="tabpanel"/);
+  }
+});
+
+function designsMarkup(account: Account) {
+  return renderToStaticMarkup(createElement(DesignsSection, { account, hidden: false, onSavedColors: noop,
+    onExploreColors: noop, onVisit: noop, onSignIn: noop }));
+}
+
+test("Designs presents four ingredients without creative tabs, fake selections, or export controls", () => {
+  const markup = designsMarkup(accountFixture());
+  assert.match(markup, /Your Design/);
+  assert.equal((markup.match(/class="designs-ingredient"/g) ?? []).length, 4);
+  assert.match(markup, /No saved palettes yet/);
+  assert.match(markup, /Explore colors/);
+  assert.ok(!markup.includes('role="tab'));
+  assert.ok(!markup.includes('palette-card'));
+  assert.ok(!markup.includes('<select'));
+  assert.ok(!markup.includes('Export'));
+  const guest = designsMarkup(accountFixture({ user: null }));
+  assert.match(guest, /Sign in to access your saved palettes/);
+  const failed = designsMarkup(accountFixture({ error: "Could not load saved colors." }));
+  assert.match(failed, /role="alert"/); assert.match(failed, /Try again/);
+});
+
+test("Designs derives available palette names and counts from actual saved records", () => {
+  const composition = fixture();
+  const markup = designsMarkup(accountFixture({ saved: [{ id: composition.id, updatedAt: composition.updatedAt, composition }] }));
+  assert.match(markup, /1 saved palette available/);
+  assert.ok(markup.includes(paletteAttribution(composition)));
+  assert.match(markup, /View saved colors/);
+  assert.ok(!markup.includes('No saved palettes yet'));
 });

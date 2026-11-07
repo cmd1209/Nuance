@@ -1,7 +1,7 @@
 import type { KeyboardEvent } from "react";
-import type { SectionView } from "../state/editor";
+import type { CreativeView } from "../domain/sections";
 
-type NavigationView = SectionView | "edit";
+type NavigationView = CreativeView;
 const labels: Record<NavigationView, string> = { explore: "Explore", saved: "Saved", edit: "Edit" };
 
 export function SectionNavigation({ value, onChange, prefix, label, hasDraft = false }: {

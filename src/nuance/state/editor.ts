@@ -3,13 +3,11 @@ import { addColor, removeColor, resizeSplit } from "../domain/layout";
 import { editorComposition, resetHistoricalComposition } from "../domain/wada";
 import { compositionContent } from "./compositionChanges";
 import { shuffledPalettes } from "../domain/palettes";
-
-export type SectionView = "explore" | "saved";
+import type { SectionView } from "../domain/sections";
 
 type CompositionSelection = { kind: "palette" | "saved"; composition: Composition };
 
 export interface EditorState {
-  preferences: { theme: "light" | "dark" };
   view: "palettes" | "editor";
   sectionView: SectionView;
   editorOrigin: SectionView;
@@ -37,11 +35,10 @@ export type EditorAction =
   | { type: "add"; hex: string }
   | { type: "remove"; colorId?: string }
   | { type: "reset" }
-  | { type: "resize"; splitId: string; ratio: number }
-  | { type: "theme" };
+  | { type: "resize"; splitId: string; ratio: number };
 
 export function createEditorState(): EditorState {
-  return { preferences: { theme: "dark" }, view: "palettes", sectionView: "explore", editorOrigin: "explore", suggestions: shuffledPalettes(), drafts: {}, baselines: {}, pendingSelection: null, activeCompositionId: null, selectedColorId: null };
+  return { view: "palettes", sectionView: "explore", editorOrigin: "explore", suggestions: shuffledPalettes(), drafts: {}, baselines: {}, pendingSelection: null, activeCompositionId: null, selectedColorId: null };
 }
 export const activeComposition = (state: EditorState) => state.activeCompositionId ? state.drafts[state.activeCompositionId] : undefined;
 
@@ -90,7 +87,6 @@ export function editorReducer(state: EditorState, action: EditorAction): EditorS
   if (action.type === "clear-account") return { ...state, view: "palettes", sectionView: "explore", editorOrigin: "explore", drafts: {}, baselines: {}, pendingSelection: null, activeCompositionId: null, selectedColorId: null };
   if (action.type === "open-saved") return openSelection(state, { kind: "saved", composition: action.composition });
   if (action.type === "select-palette") return openSelection(state, { kind: "palette", composition: action.palette });
-  if (action.type === "theme") return { ...state, preferences: { ...state.preferences, theme: state.preferences.theme === "dark" ? "light" : "dark" } };
   if (action.type === "back") return { ...state, view: "palettes", sectionView: state.editorOrigin, selectedColorId: null };
   if (action.type === "select-color") return { ...state, selectedColorId: action.colorId };
   if (action.type === "explore") return { ...state, suggestions: action.suggestions };

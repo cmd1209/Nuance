@@ -70,6 +70,10 @@
     min-width: 0;
 }
 
+.section-layout[hidden] {
+    display: none;
+}
+
 .section-layout__heading {
     position: sticky;
     top: 0;
@@ -179,9 +183,13 @@
     outline-offset: -4px;
 }
 
-.nuance-navigation .is-future:disabled {
+.nuance-navigation .nuance-button:not(.is-active) {
     background: var(--color-action-primary-hover);
-    color: var(--color-text-disabled);
+    color: var(--color-text-tertiary);
+}
+
+.nuance-navigation .nuance-button:not(.is-active):hover:not(:disabled) {
+    color: var(--color-text-primary);
 }
 
 /* ==========================================================================
@@ -1014,16 +1022,24 @@
 }
 
 .saved-gallery,
-.saved-compositions,
-.saved-gallery__empty {
+.saved-compositions {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: var(--gap-lg);
 }
 
-.saved-gallery__empty {
+.section-empty-state {
+    display: flex;
+    flex-direction: column;
     align-items: flex-start;
+    gap: var(--gap-lg);
+}
+
+.section-empty-state p {
+    margin: 0;
+    font-size: var(--body-sm-font-size);
+    line-height: var(--body-sm-line-height);
 }
 
 .saved-compositions p {
@@ -1074,6 +1090,60 @@
 @media (max-width: 700px) {
 
     .saved-gallery__grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* Designs groups saved ingredients without introducing a second tool editor. */
+.designs-assembly h2 {
+    margin: 0;
+    font-size: var(--heading-sm-font-size);
+    line-height: var(--heading-sm-line-height);
+    font-weight: var(--font-weight-medium);
+}
+
+.designs-ingredients {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gap-2xl);
+    margin: var(--gap-xl) 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.designs-ingredient {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    gap: var(--gap-lg);
+}
+
+.designs-ingredient h3 {
+    margin: 0;
+    font-size: var(--label-lg-font-size);
+    line-height: var(--label-lg-line-height);
+    font-weight: var(--font-weight-medium);
+}
+
+.designs-ingredient p,
+.designs-saved-colors {
+    margin: 0;
+    font-size: var(--body-sm-font-size);
+    line-height: var(--body-sm-line-height);
+}
+
+.designs-saved-colors {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+    padding: 0;
+    color: var(--color-text-tertiary);
+    list-style: none;
+}
+
+@media (max-width: 700px) {
+    .designs-ingredients {
         grid-template-columns: minmax(0, 1fr);
     }
 }

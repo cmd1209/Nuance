@@ -5,6 +5,7 @@ import { MAX_SAVED_COMPOSITIONS } from "../account/compositionLimit";
 import { paletteAttribution, type Composition } from "../domain/composition";
 import { Button } from "./Button";
 import { PaletteCard } from "./PaletteCard";
+import { EmptyState } from "./EmptyState";
 import { SavedGallery } from "./SavedGallery";
 
 export function SavedCompositions({ account, onOpen, onExplore, onSignIn }: {
@@ -34,15 +35,12 @@ export function SavedCompositions({ account, onOpen, onExplore, onSignIn }: {
 
   return <div ref={root} className="saved-compositions" tabIndex={-1} aria-label="Saved color compositions" aria-busy={account.dataLoading || busy}>
     {account.authLoading ? <p role="status">Loading your account…</p>
-      : !account.user ? <div className="saved-gallery__empty">
-        <p>Sign in to see your saved color compositions.</p>
-        <Button onClick={onSignIn}>Sign in</Button>
-      </div>
+      : !account.user ? <EmptyState message="Sign in to see your saved color compositions." action={<Button onClick={onSignIn}>Sign in</Button>} />
       : <>
         {account.dataLoading && <p role="status">Loading compositions…</p>}
         {account.error && <div><p role="alert">{account.error}</p><Button disabled={account.dataLoading || busy} onClick={() => { void account.refresh(); }}>Try again</Button></div>}
         {(!account.dataLoading && !account.error || account.saved.length > 0) && <SavedGallery items={account.saved} maximum={MAX_SAVED_COMPOSITIONS}
-          empty={<div className="saved-gallery__empty"><p>No saved colors yet. Explore a palette and save a composition to see it here.</p><Button onClick={onExplore}>Explore palettes</Button></div>}
+          empty={<EmptyState message="No saved colors yet. Explore a palette and save a composition to see it here." action={<Button onClick={onExplore}>Explore palettes</Button>} />}
           renderItem={item => <>
             <header className="palette-card__header">
               <span className="palette-card__label composition-source__name">{paletteAttribution(item.composition)}</span>
