@@ -1,4 +1,10 @@
-# Nuance Color — Phase 1
+# Nuance — Architecture
+
+The current application-shell contract is documented in [application-shell.md](application-shell.md): one document scroll, a fixed viewport navigation, one document-owned theme canvas, and reusable `AppShell` / `SectionLayout` components. Read it before introducing a new section or changing layout geometry.
+
+The material below records the original Color implementation and domain/persistence boundary. Historical visual measurements and validation counts are not current shell requirements.
+
+# Original Color implementation
 
 Account support now extends this original phase-one design. See [accounts](accounts.md) for the current Supabase setup, password sign-in/recovery flow, private library, schema, and validation. Historical Figma measurements and phase-one observations below describe the initial implementation.
 
@@ -41,7 +47,7 @@ A layout node is either a region referring to a stable color ID or a binary spli
 
 Persistence lives outside the editor in `account/repository.ts`. Saving validates a serialized composition and upserts it under `(owner_id, id)`; loading validates stored JSON with `deserializeComposition`. `open-saved` restores the document without cloning its ID, while `clear-account` removes in-memory drafts on sign-out or account change. Auth does not enter layout or rendering code.
 
-`account/useAccount.ts` restores Supabase browser sessions, loads the profile/library, and guards against stale responses from a previous account. `AccountDialog` provides email/password sign-in and sign-up, confirmation notices, password reset/recovery, display-name editing, sign-out, and saved composition previews. Saving to the account is explicit and separate from downloading PNG. Unsaved drafts and theme preferences last for the current page session; configured Supabase sessions and saved documents persist. See [account setup](accounts.md) for the required project migration, email templates, and callback URLs.
+`account/useAccount.ts` restores Supabase browser sessions, loads the profile/library, and guards against stale responses from a previous account. `AccountDialog` provides email/password sign-in and sign-up, confirmation notices, password reset/recovery, display-name editing, sign-out, and account controls. Saved compositions now live in the Color section’s Saved view. Saving to the account is explicit and separate from downloading PNG. Unsaved drafts and theme preferences last for the current page session; configured Supabase sessions and saved documents persist. See [account setup](accounts.md) for the required project migration, email templates, and callback URLs.
 
 ## Geometry and rendering
 

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
 import { HeartPlus, RotateCcw } from "lucide-react";
 import { useAccount, accountError } from "./account/useAccount";
 import { authReturn } from "./account/client";
@@ -6,6 +6,9 @@ import { canSaveComposition, MAX_SAVED_COMPOSITIONS } from "./account/compositio
 import { AccountDialog } from "./components/AccountDialog";
 import { SavedCompositions } from "./components/SavedCompositions";
 import { SwitchCompositionDialog } from "./components/SwitchCompositionDialog";
+import { AppShell } from "./components/AppShell";
+import { AppHeader } from "./components/AppHeader";
+import { SectionLayout } from "./components/SectionLayout";
 import { SectionNavigation } from "./components/SectionNavigation";
 import { MAX_COLORS, paletteAttribution } from "./domain/composition";
 import { nextColor } from "./domain/palettes";
@@ -46,15 +49,21 @@ export default function NuanceApp() {
     if (editing === wasEditing.current) return;
     wasEditing.current = editing;
     if (main.current?.contains(document.activeElement) && document.activeElement?.getAttribute("role") === "tab") return;
-    if (editing) main.current?.querySelector<HTMLElement>("#color-heading")?.focus();
+    if (editing) main.current?.querySelector<HTMLElement>("#color-heading")?.focus({ preventScroll: true });
     else {
       const previous = editorTrigger.current;
       const cards = main.current?.querySelectorAll<HTMLButtonElement>("[data-composition-id]");
       const target = previous?.isConnected ? previous : Array.from(cards ?? []).find(card => card.dataset.compositionId === previous?.dataset.compositionId)
         ?? main.current?.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]');
-      target?.focus();
+      target?.focus({ preventScroll: true });
     }
   }, [editing]);
+  const viewKey = editing ? "edit" : state.sectionView;
+  const previousView = useRef(viewKey);
+  useLayoutEffect(() => {
+    if (previousView.current !== viewKey) main.current?.scrollIntoView({ block: "start", behavior: "instant" });
+    previousView.current = viewKey;
+  }, [viewKey]);
   function rememberEditorTrigger() {
     selectionTrigger.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   }
@@ -69,76 +78,64 @@ export default function NuanceApp() {
     catch (error) { setNotice(accountError(error)); }
     finally { setSaving(false); }
   }
-  return <div className={`nuance-app ${editing ? "nuance-app--editor" : "nuance-app--palettes"}`} data-theme={state.preferences.theme}>
-    <header className="nuance-header">
-      <a className="nuance-wordmark" href="#" aria-label="Nuance — back to palettes" onClick={e => { e.preventDefault(); dispatch({ type: "back" }); closeEditor(); }}>
-        <img src={`/nuance/assets/nuance-logo__${state.preferences.theme === "dark" ? "light" : "dark"}.svg`} alt="" width={350} height={81} />
-      </a>
-      <div className="nuance-header__actions">
-        <Button className="account-button" disabled={account.authLoading} aria-label={account.user ? "Open your profile" : "Sign in"}
-          onClick={() => setAccountOpen(true)} leadingIcon={<Icon name="user" />}><span className="account-button__name">{account.authLoading ? "Loading…" : account.user ? account.profile?.display_name || "Account" : "Sign in"}</span></Button>
-        <Button onClick={() => dispatch({ type: "theme" })} aria-label={`Switch to ${state.preferences.theme === "dark" ? "light" : "dark"} theme`} leadingIcon={<Icon name="moon" />}>{state.preferences.theme === "dark" ? "Dark" : "Light"}</Button>
-      </div>
-    </header>
-    <main ref={main} className="nuance-main">
-      <div className="nuance-intro__heading">
-        <h1 id="color-heading" tabIndex={-1}>Color</h1>
-        <SectionNavigation prefix="color" label="Color views" value={editing ? "edit" : state.sectionView} hasDraft={!!composition}
-          onChange={view => { dispatch(view === "edit" ? { type: "resume-editor" } : { type: "section", view }); closeEditor(); setNotice(""); }} />
-      </div>
-      <div className="nuance-content">
-        <section className="nuance-intro" aria-labelledby="color-heading">
-          <p>{editing ? "Build your own color hierarchy with up to six colors. Add or remove colors, then drag the borders to adjust their proportions and explore how each color shapes the composition."
-            : state.sectionView === "saved" ? "Your saved color compositions, ready to revisit and refine. Select a palette to continue editing or explore new combinations to add to your collection."
-            : "Explore how colors interact through simple compositions. Experiment with different combinations to discover unexpected harmonies and contrasts."}</p>
-        </section>
-        {editing ? <section id="color-edit-panel" role="tabpanel" aria-labelledby="color-edit-tab" className="nuance-workspace">
-          <div className="nuance-stage">
-            <div className="artwork-anchor">
-              <p className="composition-source__name">{paletteAttribution(composition)}</p>
-              <Artwork composition={composition} selectedColorId={state.selectedColorId}
-                onSelect={id => { dispatch({ type: "select-color", colorId: id }); setAdjusting(true); }}
-                onAdjust={id => { dispatch({ type: "select-color", colorId: id }); setAdjusting(true); }}
-                onRemove={colorId => { dispatch({ type: "remove", colorId }); closeEditor(); }}
-                onResize={(splitId, ratio) => dispatch({ type: "resize", splitId, ratio })} />
-              {adjusting && selected && <ColorEditor color={selected} onChange={hex => dispatch({ type: "color", colorId: selected.id, hex })} onClose={closeEditor} />}
-            </div>
-            <div className="composition-actions" role="group" aria-label="Composition actions">
-              {composition.historical && <Button className="composition-action" aria-label="Reset composition"
-                title="Reset composition to its original colors and proportions"
-                onClick={() => { dispatch({ type: "reset" }); closeEditor(); setNotice(composition.historical?.originalColorCount === 2 ? "Original pair restored with a Nuance-generated third color for the editor." : "Original Wada combination restored."); }}
-                leadingIcon={<RotateCcw size={20} aria-hidden="true" />} />}
-              <Button className="composition-action composition-add" disabled={composition.colors.length >= MAX_COLORS}
-                aria-label={composition.colors.length >= MAX_COLORS ? "Add color — maximum of six colors reached" : "Add color"}
-                title={composition.colors.length >= MAX_COLORS ? "Maximum of six colors reached" : "Add a harmonizing color"}
-                onClick={() => { dispatch({ type: "add", hex: nextColor(composition) }); closeEditor(); }}><Icon name="plus" size={20} /></Button>
-              <Button className="composition-action" onClick={saveToAccount}
-                disabled={saving || account.authLoading || !!account.user && account.dataLoading || libraryFull}
-                aria-label={saving ? "Saving composition…" : libraryFull ? `Save composition — limit reached (${MAX_SAVED_COMPOSITIONS}/${MAX_SAVED_COMPOSITIONS})` : "Save composition"}
-                aria-busy={saving}
-                title={libraryFull ? "Delete a composition in Saved to make room. Existing saves can still be updated." : saving ? "Saving composition…" : "Save composition"}
-                leadingIcon={<HeartPlus size={20} aria-hidden="true" />} />
-            </div>
+  return <AppShell theme={state.preferences.theme} mainRef={main}
+    header={<AppHeader theme={state.preferences.theme} displayName={account.profile?.display_name ?? ""}
+      signedIn={!!account.user} loading={account.authLoading} onAccount={() => setAccountOpen(true)}
+      onTheme={() => dispatch({ type: "theme" })}
+      onHome={() => { dispatch({ type: "back" }); closeEditor(); window.scrollTo({ top: 0, behavior: "instant" }); }} />}
+    navigation={<Navigation activeSection="colors" onSelect={() => main.current?.scrollIntoView({ block: "start", behavior: "instant" })} />}
+    overlays={<>
+      {state.pendingSelection && <SwitchCompositionDialog onCancel={() => dispatch({ type: "cancel-switch" })}
+        onDiscard={() => { dispatch({ type: "discard-and-switch" }); closeEditor(); setNotice(""); }} />}
+      {accountOpen && <AccountDialog account={account} onClose={() => { account.dismissRecovery(); setAccountOpen(false); }} />}
+    </>}>
+    <SectionLayout title="Color" headingId="color-heading" notice={notice}
+      navigation={<SectionNavigation prefix="color" label="Color views" value={editing ? "edit" : state.sectionView} hasDraft={!!composition}
+        onChange={view => { dispatch(view === "edit" ? { type: "resume-editor" } : { type: "section", view }); closeEditor(); setNotice(""); }} />}
+      description={editing ? "Build your own color hierarchy with up to six colors. Add or remove colors, then drag the borders to adjust their proportions and explore how each color shapes the composition."
+        : state.sectionView === "saved" ? "Your saved color compositions, ready to revisit and refine. Select a palette to continue editing or explore new combinations to add to your collection."
+        : "Explore how colors interact through simple compositions. Experiment with different combinations to discover unexpected harmonies and contrasts."}>
+      {editing ? <section id="color-edit-panel" role="tabpanel" aria-labelledby="color-edit-tab" className="nuance-workspace">
+        <div className="nuance-stage">
+          <div className="artwork-anchor">
+            <p className="composition-source__name">{paletteAttribution(composition)}</p>
+            <Artwork composition={composition} selectedColorId={state.selectedColorId}
+              onSelect={id => { dispatch({ type: "select-color", colorId: id }); setAdjusting(true); }}
+              onAdjust={id => { dispatch({ type: "select-color", colorId: id }); setAdjusting(true); }}
+              onRemove={colorId => { dispatch({ type: "remove", colorId }); closeEditor(); }}
+              onResize={(splitId, ratio) => dispatch({ type: "resize", splitId, ratio })} />
+            {adjusting && selected && <ColorEditor color={selected} onChange={hex => dispatch({ type: "color", colorId: selected.id, hex })} onClose={closeEditor} />}
           </div>
-        </section> : <>
-        <section id="color-explore-panel" role="tabpanel" aria-labelledby="color-explore-tab" hidden={state.sectionView !== "explore"} className="nuance-palettes">
-          {state.sectionView === "explore" &&
-          <PaletteSlider palettes={state.suggestions} activeId={explorePosition.current ?? state.activeCompositionId} onPositionChange={rememberExplorePosition}
-            onSelect={palette => { rememberEditorTrigger(); dispatch({ type: "select-palette", palette }); closeEditor(); setNotice(""); }} />}
-        </section>
-        <section id="color-saved-panel" role="tabpanel" aria-labelledby="color-saved-tab" hidden={state.sectionView !== "saved"}>
-          {state.sectionView === "saved" && <SavedCompositions key={account.user?.id ?? "guest"} account={account}
-            onOpen={composition => { rememberEditorTrigger(); dispatch({ type: "open-saved", composition }); closeEditor(); setNotice(""); }}
-            onExplore={() => { dispatch({ type: "section", view: "explore" }); document.getElementById("color-explore-tab")?.focus(); }}
-            onSignIn={() => setAccountOpen(true)} />}
-        </section>
-        </>}
-      </div>
-      <p className="nuance-notice" role="status">{notice}</p>
-    </main>
-    <Navigation />
-    {state.pendingSelection && <SwitchCompositionDialog onCancel={() => dispatch({ type: "cancel-switch" })}
-      onDiscard={() => { dispatch({ type: "discard-and-switch" }); closeEditor(); setNotice(""); }} />}
-    {accountOpen && <AccountDialog account={account} onClose={() => { account.dismissRecovery(); setAccountOpen(false); }} />}
-  </div>;
+          <div className="composition-actions" role="group" aria-label="Composition actions">
+            {composition.historical && <Button className="composition-action" aria-label="Reset composition"
+              title="Reset composition to its original colors and proportions"
+              onClick={() => { dispatch({ type: "reset" }); closeEditor(); setNotice(composition.historical?.originalColorCount === 2 ? "Original pair restored with a Nuance-generated third color for the editor." : "Original Wada combination restored."); }}
+              leadingIcon={<RotateCcw size={20} aria-hidden="true" />} />}
+            <Button className="composition-action composition-add" disabled={composition.colors.length >= MAX_COLORS}
+              aria-label={composition.colors.length >= MAX_COLORS ? "Add color — maximum of six colors reached" : "Add color"}
+              title={composition.colors.length >= MAX_COLORS ? "Maximum of six colors reached" : "Add a harmonizing color"}
+              onClick={() => { dispatch({ type: "add", hex: nextColor(composition) }); closeEditor(); }}><Icon name="plus" size={20} /></Button>
+            <Button className="composition-action" onClick={saveToAccount}
+              disabled={saving || account.authLoading || !!account.user && account.dataLoading || libraryFull}
+              aria-label={saving ? "Saving composition…" : libraryFull ? `Save composition — limit reached (${MAX_SAVED_COMPOSITIONS}/${MAX_SAVED_COMPOSITIONS})` : "Save composition"}
+              aria-busy={saving}
+              title={libraryFull ? "Delete a composition in Saved to make room. Existing saves can still be updated." : saving ? "Saving composition…" : "Save composition"}
+              leadingIcon={<HeartPlus size={20} aria-hidden="true" />} />
+          </div>
+        </div>
+      </section> : <>
+      <section id="color-explore-panel" role="tabpanel" aria-labelledby="color-explore-tab" hidden={state.sectionView !== "explore"} className="nuance-palettes">
+        {state.sectionView === "explore" &&
+        <PaletteSlider palettes={state.suggestions} activeId={explorePosition.current ?? state.activeCompositionId} onPositionChange={rememberExplorePosition}
+          onSelect={palette => { rememberEditorTrigger(); dispatch({ type: "select-palette", palette }); closeEditor(); setNotice(""); }} />}
+      </section>
+      <section id="color-saved-panel" role="tabpanel" aria-labelledby="color-saved-tab" hidden={state.sectionView !== "saved"}>
+        {state.sectionView === "saved" && <SavedCompositions key={account.user?.id ?? "guest"} account={account}
+          onOpen={composition => { rememberEditorTrigger(); dispatch({ type: "open-saved", composition }); closeEditor(); setNotice(""); }}
+          onExplore={() => { dispatch({ type: "section", view: "explore" }); document.getElementById("color-explore-tab")?.focus(); }}
+          onSignIn={() => setAccountOpen(true)} />}
+      </section>
+      </>}
+    </SectionLayout>
+  </AppShell>;
 }

@@ -631,3 +631,27 @@ test("switch confirmation uses the existing modal styling and explicit cancel/di
   assert.match(markup, />Cancel</);
   assert.match(markup, />Discard &amp; Switch</);
 });
+
+import { SectionLayout } from "../src/nuance/components/SectionLayout";
+import { Navigation } from "../src/nuance/components/Navigation";
+
+test("shared section layout exposes generic content, labelled heading, and live feedback", () => {
+  const markup = renderToStaticMarkup(createElement(SectionLayout, {
+    title: "Example section", headingId: "example-heading", description: "Section description", notice: "Changes saved.",
+    navigation: createElement("nav", { "aria-label": "Example views" }, "Browse"),
+    children: createElement("form", { "aria-label": "Example form" }, "Section content"),
+  }));
+  assert.match(markup, /<section class="section-layout" aria-labelledby="example-heading">/);
+  assert.match(markup, /<h1 id="example-heading" tabindex="-1">Example section<\/h1>/);
+  assert.match(markup, /aria-label="Example form"/);
+  assert.match(markup, /role="status">Changes saved\./);
+  assert.ok(markup.indexOf('Example section') < markup.indexOf('Section description'));
+  assert.ok(markup.indexOf('Section description') < markup.indexOf('Section content'));
+});
+
+test("global navigation identifies one active section and keeps unfinished sections disabled", () => {
+  const markup = renderToStaticMarkup(createElement(Navigation, { activeSection: "colors" }));
+  assert.equal((markup.match(/aria-current="page"/g) ?? []).length, 1);
+  assert.equal((markup.match(/disabled=""/g) ?? []).length, 4);
+  assert.match(markup, /aria-label="Design exploration"/);
+});

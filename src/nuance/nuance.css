@@ -28,83 +28,93 @@
    App shell and page layout
    ========================================================================== */
 
-.nuance-app {
-    /* Frame dimensions are measured source values, not new library tokens. */
-    --content-width: 1140px;
-    --instructions-width: 780px;
+:root {
+    /* Shared shell geometry; sections never size themselves against the viewport. */
+    --app-content-width: 1140px;
+    --app-reading-width: 780px;
     --artwork-width: 640px;
-    --navigation-offset: calc(var(--gap-xl) + env(safe-area-inset-bottom, 0px));
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 100svh;
-    gap: var(--gap-4xl);
-    padding: var(--gap-2xl) var(--gap-xl) var(--navigation-offset);
-    background: var(--color-bg-canvas);
-    color: var(--color-text-primary);
-    font-family: var(--family-sans), sans-serif;
-    color-scheme: dark;
+    --app-gutter: var(--gap-xl);
+    --app-header-gap: var(--gap-4xl);
+    --app-nav-height: var(--button-lg-height);
+    --app-nav-offset: var(--gap-xl);
+    --app-bottom-clearance: calc(var(--app-nav-height) + var(--app-nav-offset) + var(--gap-2xl) + env(safe-area-inset-bottom, 0px));
+    --section-content-gap: var(--gap-2xl);
+    --z-navigation: 5;
+    --z-section-heading: 4;
 }
 
-.nuance-app[data-theme="light"] {
-    color-scheme: light;
+.nuance-app {
+    background: var(--color-bg-canvas);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding-top: max(var(--gap-2xl), env(safe-area-inset-top, 0px));
+    padding-left: max(var(--app-gutter), env(safe-area-inset-left, 0px));
+    padding-right: max(var(--app-gutter), env(safe-area-inset-right, 0px));
+    font-family: var(--family-sans), sans-serif;
 }
 
 .nuance-main {
-    position: relative;
-    display: flex;
-    flex-direction: column;
     flex: 1 0 auto;
-    gap: var(--gap-lg);
+    min-width: 0;
     width: 100%;
-    max-width: var(--content-width);
+    max-width: var(--app-content-width);
+    margin-top: var(--app-header-gap);
+    margin-inline: auto;
+    padding-bottom: var(--app-bottom-clearance);
 }
 
-.nuance-content {
-    display: flex;
-    flex-direction: column;
-    flex: 1 0 auto;
-    gap: var(--gap-2xl);
+/* Sections group their own content at the top, independently of shell height. */
+.section-layout {
     min-width: 0;
 }
 
-.nuance-intro {
-    width: 100%;
-    max-width: var(--instructions-width);
-    color: var(--color-text-primary);
-    font-family: var(--family-sans), sans-serif;
+.section-layout__heading {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-section-heading);
     display: flex;
-    flex-direction: column;
-    gap: var(--gap-lg);
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--gap-md) var(--gap-xl);
+    padding-block: var(--padding-sm);
+    padding-top: max(var(--padding-sm), env(safe-area-inset-top, 0px));
+    background-color: var(--color-bg-canvas);
 }
 
-.nuance-intro__heading h1 {
+.section-layout__heading h1 {
     margin: 0;
     font-size: var(--heading-lg-font-size);
     line-height: var(--heading-lg-line-height);
-    font-weight: 400;
+    font-weight: var(--font-weight-regular);
 }
 
-.nuance-intro p {
-    margin: 0;
+.section-layout__description {
+    max-width: var(--app-reading-width);
+    margin: var(--gap-lg) 0 0;
     font-size: var(--body-md-font-size);
     line-height: var(--body-md-line-height);
     font-weight: var(--font-weight-regular);
 }
 
-.nuance-notice {
-    position: absolute;
-    left: 0;
-    top: calc(100% + 12px);
-    margin: 0;
+.section-layout__content {
+    min-width: 0;
+    margin-top: var(--section-content-gap);
+}
+
+.section-layout__content > [hidden] {
+    display: none;
+}
+
+.section-layout__notice {
+    margin: var(--gap-lg) 0 0;
     font-size: var(--caption-font-size);
     line-height: var(--caption-line-height);
     color: var(--color-text-secondary);
 }
 
-.nuance-notice:empty {
+.section-layout__notice:empty {
     display: none;
 }
 
@@ -116,14 +126,18 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    flex-wrap: wrap;
+    gap: var(--gap-sm) var(--gap-xl);
     width: 100%;
-    max-width: var(--content-width);
+    max-width: var(--app-content-width);
     min-height: 65px;
+    margin-inline: auto;
 }
 
 .nuance-wordmark {
     display: inline-flex;
     align-items: center;
+    flex-shrink: 0;
     width: 152px;
     min-width: 0;
     height: 65px;
@@ -138,17 +152,24 @@
 
 .nuance-header__actions {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
     gap: var(--gap-none);
+    max-width: 100%;
+    margin-inline-start: auto;
 }
 
 /* The shared background fills the gaps between rounded child buttons. */
 .nuance-navigation {
-    position: sticky;
-    z-index: 5;
-    bottom: var(--navigation-offset);
-    max-width: 100%;
-    flex-shrink: 0;
+    position: fixed;
+    inset-inline: 0;
+    bottom: calc(var(--app-nav-offset) + env(safe-area-inset-bottom, 0px));
+    z-index: var(--z-navigation);
     display: flex;
+    width: max-content;
+    max-width: calc(100% - var(--app-gutter) * 2 - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
+    height: var(--app-nav-height);
+    margin-inline: auto;
     background: var(--color-action-primary-hover);
     border-radius: var(--radius-full);
     overflow: clip;
@@ -188,7 +209,6 @@
     gap: var(--palette-gap);
     width: 100%;
     overflow-x: auto;
-    background-color: var(--color-bg-canvas);
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
@@ -271,10 +291,7 @@
    ========================================================================== */
 
 .nuance-workspace {
-    display: flex;
-    flex-direction: column;
-    flex: 1 0 auto;
-    gap: var(--gap-xs);
+    min-width: 0;
 }
 
 .composition-source__name {
@@ -291,7 +308,7 @@
     align-items: center;
     gap: var(--gap-xs);
     border-radius: var(--radius-xl);
-    background:linear-gradient(to top, var(--color-bg-surface) 0%, var(--color-bg-canvas) 90%);
+    background: linear-gradient(to top, var(--color-bg-surface) 0%, var(--color-bg-canvas) 90%);
 }
 
 .artwork-anchor {
@@ -586,7 +603,8 @@
 
 .account-dialog {
     width: min(480px, calc(100% - var(--padding-lg) * 2));
-    max-height: calc(100svh - var(--padding-lg) * 2);
+    max-height: calc(100vh - var(--padding-lg) * 2);
+    max-height: calc(100dvh - var(--padding-lg) * 2);
     margin: auto;
     padding: var(--padding-lg);
     overflow-y: auto;
@@ -788,7 +806,7 @@
 
 .color-editor {
     position: absolute;
-    z-index: 4;
+    z-index: 3;
     right: 12px;
     top: 12px;
     width: 246px;
@@ -877,9 +895,15 @@
 }
 
 @media (max-width: 700px) {
+    :root {
+        --app-gutter: var(--gap-lg);
+        --app-header-gap: var(--gap-2xl);
+        --section-content-gap: var(--gap-xl);
+        --app-nav-height: calc(var(--size-icon-md) + var(--gap-xs) + var(--label-md-line-height) + var(--button-lg-padding-y) * 2);
+    }
+
     .nuance-app {
-        padding: var(--padding-xl) var(--padding-lg) var(--navigation-offset);
-        gap: var(--gap-2xl);
+        padding-top: max(var(--padding-xl), env(safe-area-inset-top, 0px));
     }
 
     .nuance-wordmark {
@@ -891,25 +915,19 @@
         min-height: 52px;
     }
 
-    .nuance-content {
-        gap: var(--gap-xl);
-    }
-
     .palette-slider {
         --palette-columns: 1;
-        --palette-gap: var(--gap-xl);
     }
 
-
     .nuance-navigation {
-        width: 100%;
-        max-width: 478px;
+        width: min(478px, calc(100% - var(--app-gutter) * 2 - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)));
     }
 
     .nuance-navigation .nuance-button {
         flex: 1 1 0;
         flex-direction: column;
-        height: auto;
+        height: 100%;
+        min-width: 0;
         min-height: var(--size-target-min);
         padding-inline: var(--padding-xs);
         gap: var(--gap-xs);
@@ -968,20 +986,7 @@
     }
 }
 
-/* Section navigation and saved libraries share the app's existing theme tokens. */
-.nuance-intro__heading {
-    position: sticky;
-    top: 0;
-    z-index: 6;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--gap-md) var(--gap-xl);
-    padding-block: var(--padding-sm);
-    padding-top: max(var(--padding-sm), env(safe-area-inset-top, 0px));
-    background: var(--color-bg-canvas);
-}
-
+/* Local section navigation and saved libraries. */
 .section-navigation {
     display: inline-flex;
     gap: var(--gap-xs);
@@ -1006,10 +1011,6 @@
 
 .section-navigation button:focus-visible {
     outline-offset: -4px;
-}
-
-.nuance-content > [hidden] {
-    display: none;
 }
 
 .saved-gallery,
