@@ -10,7 +10,7 @@
     --colors-primary-500: #7d7272;
     --colors-primary-600: #5e5656;
     --colors-primary-700: #3e3939;
-    --colors-primary-800: #1b1919;
+    --colors-primary-800: #1f1d1d;
     --colors-primary-900: #151313;
     --colors-primary-black: #000000;
     --colors-primary-white: #ffffff;
@@ -198,6 +198,11 @@
    ========================================================================== */
 
 [data-theme="light"] {
+    /* Navigation surfaces are independent of action-button feedback. */
+    --color-nav-background: var(--colors-primary-200);
+    --color-nav-hover: var(--colors-primary-300);
+    --color-nav-selected: var(--colors-primary-100);
+
     /* Backgrounds */
     --color-bg-canvas: var(--colors-primary-50);
     --color-bg-surface: var(--colors-primary-white);
@@ -242,6 +247,11 @@
    ========================================================================== */
 
 [data-theme="dark"] {
+    /* Navigation surfaces are independent of action-button feedback. */
+    --color-nav-background: var(--colors-primary-700);
+    --color-nav-hover: var(--colors-primary-800);
+    --color-nav-selected: var(--colors-primary-600);
+
     /* Backgrounds */
     --color-bg-canvas: var(--colors-primary-900);
     --color-bg-surface: var(--colors-primary-800);

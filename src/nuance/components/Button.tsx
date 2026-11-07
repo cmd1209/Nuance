@@ -2,7 +2,7 @@ import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: "XS" | "SM" | "LG";
-  variant?: "ghost" | "primary";
+  variant?: "ghost" | "primary" | "navigation";
   leadingIcon?: ReactNode;
   trailingIcon?: ReactNode;
   children?: ReactNode;

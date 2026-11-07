@@ -174,7 +174,7 @@
     max-width: calc(100% - var(--app-gutter) * 2 - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
     height: var(--app-nav-height);
     margin-inline: auto;
-    background: var(--color-action-primary-hover);
+    background: var(--color-nav-background);
     border-radius: var(--radius-full);
     overflow: clip;
 }
@@ -183,12 +183,20 @@
     outline-offset: -4px;
 }
 
-.nuance-navigation .nuance-button:not(.is-active) {
-    background: var(--color-action-primary-hover);
+.nuance-navigation .nuance-button {
+    background: transparent;
     color: var(--color-text-tertiary);
 }
 
-.nuance-navigation .nuance-button:not(.is-active):hover:not(:disabled) {
+.nuance-navigation .nuance-button:not([aria-current="page"]):hover:not(:disabled),
+.nuance-navigation .nuance-button:not([aria-current="page"]):active:not(:disabled) {
+    background: var(--color-nav-hover);
+    color: var(--color-text-primary);
+}
+
+/* Selection stays visible during pointer feedback as well as keyboard focus. */
+.nuance-navigation .nuance-button[aria-current="page"] {
+    background: var(--color-nav-selected);
     color: var(--color-text-primary);
 }
 
