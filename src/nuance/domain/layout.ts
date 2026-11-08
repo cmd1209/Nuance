@@ -35,6 +35,15 @@ export function computeLayout(root: LayoutNode): { regions: Region[]; dividers: 
   return { regions, dividers };
 }
 
+/** Share of the whole composition, independent of gutters and rendered size. */
+export function colorProportions(composition: Composition): Array<{ colorId: string; proportion: number }> {
+  const areas = new Map<string, number>();
+  for (const region of computeLayout(composition.layout).regions) {
+    areas.set(region.colorId, (areas.get(region.colorId) ?? 0) + region.width * region.height);
+  }
+  return composition.colors.map(color => ({ colorId: color.id, proportion: areas.get(color.id) ?? 0 }));
+}
+
 /** Gutters are artwork geometry, so previews and PNGs share exactly the same painted rectangles. */
 export function paintedRect(rect: Rect, artwork: Composition["artwork"]): Rect {
   const gx = artwork.gap / artwork.width / 2, gy = artwork.gap / artwork.height / 2;

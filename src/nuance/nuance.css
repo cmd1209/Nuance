@@ -343,6 +343,52 @@
     gap: var(--gap-sm);
 }
 
+/* A grid track animates between zero and the readout's natural wrapped height. */
+.composition-proportions {
+    display: grid;
+    grid-template-rows: 0fr;
+    color: var(--color-text-secondary);
+    font-size: var(--caption-font-size);
+    line-height: var(--caption-line-height);
+    opacity: 0;
+    visibility: hidden;
+    transition: grid-template-rows 180ms ease, opacity 180ms ease, visibility 0s 180ms;
+}
+
+.composition-proportions.is-visible {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+.composition-proportions__content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    min-height: 0;
+    gap: var(--gap-xs) var(--gap-sm);
+    overflow: hidden;
+}
+
+.composition-proportions__item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-xs);
+}
+
+.composition-proportions__swatch {
+    width: 0.75em;
+    height: 0.75em;
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-sm);
+}
+
+.composition-proportions__value {
+    width: 5ch;
+    font-variant-numeric: tabular-nums;
+}
+
 .nuance-button.composition-action {
     width: var(--size-control-sm);
     height: var(--size-control-sm);

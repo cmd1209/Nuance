@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent } from "react";
 import { MIN_COLORS, type Composition } from "../domain/composition";
-import { computeLayout, paintedRect, type Divider } from "../domain/layout";
+import { colorProportions, computeLayout, paintedRect, type Divider } from "../domain/layout";
+
+const percentage = new Intl.NumberFormat("en", { style: "percent", maximumFractionDigits: 1 });
 
 export interface ArtworkProps {
   composition: Composition;
@@ -19,7 +21,14 @@ export function Artwork({ composition, selectedColorId, onSelect, onAdjust, onRe
   const removalFocusIndex = useRef<number | null>(null);
   const dragging = useRef<{ pointerId: number; divider: Divider; bounds: DOMRect } | null>(null);
   const [dragId, setDragId] = useState<string | null>(null);
+  const [keyboardId, setKeyboardId] = useState<string | null>(null);
+  const resizing = dragId !== null || keyboardId !== null;
   const { regions, dividers } = computeLayout(composition.layout);
+  useEffect(() => {
+    const stop = () => { dragging.current = null; setDragId(null); setKeyboardId(null); };
+    window.addEventListener("blur", stop);
+    return () => window.removeEventListener("blur", stop);
+  }, []);
   useEffect(() => {
     if (removalFocusIndex.current === null) return;
     const buttons = root.current?.querySelectorAll<HTMLButtonElement>(".color-region__select");
@@ -55,9 +64,9 @@ export function Artwork({ composition, selectedColorId, onSelect, onAdjust, onRe
     else if (event.key === "Home") ratio = divider.min;
     else if (event.key === "End") ratio = divider.max;
     else return;
-    event.preventDefault(); onResize(divider.id, ratio);
+    event.preventDefault(); setKeyboardId(divider.id); onResize(divider.id, ratio);
   }
-  return <div ref={root} className={`composition-artwork ${dragId ? "is-resizing" : ""}`} data-testid="composition-artwork"
+  return <><div ref={root} className={`composition-artwork ${resizing ? "is-resizing" : ""}`} data-testid="composition-artwork"
     aria-label="Editable color composition" style={{ aspectRatio: `${composition.artwork.width} / ${composition.artwork.height}` }}>
     {regions.map((region, index) => {
       const color = composition.colors.find(c => c.id === region.colorId)!;
@@ -85,7 +94,22 @@ export function Artwork({ composition, selectedColorId, onSelect, onAdjust, onRe
         aria-valuemin={Math.round(divider.min * 100)} aria-valuemax={Math.round(divider.max * 100)} aria-valuenow={Math.round(divider.ratio * 100)}
         aria-valuetext={`${Math.round(divider.ratio * 100)} percent`} style={style}
         onPointerDown={e => start(e, divider)} onPointerMove={move} onPointerUp={finish} onPointerCancel={finish}
-        onLostPointerCapture={() => { dragging.current = null; setDragId(null); }} onKeyDown={e => keyResize(e, divider)} />;
+        onLostPointerCapture={() => { dragging.current = null; setDragId(null); }} onKeyDown={e => keyResize(e, divider)}
+        onKeyUp={e => { if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(e.key)) setKeyboardId(null); }}
+        onBlur={() => setKeyboardId(null)} />;
     })}
-  </div>;
+  </div>
+    <span className={`composition-proportions ${resizing ? "is-visible" : ""}`} role="group" aria-label="Color proportions" aria-hidden={!resizing}>
+      <span className="composition-proportions__content">
+      {colorProportions(composition).map(({ colorId, proportion }) => {
+        const color = composition.colors.find(item => item.id === colorId)!;
+        const value = percentage.format(proportion);
+        return <span key={colorId} className="composition-proportions__item" aria-label={`${color.hex}: ${value}`}>
+          <span className="composition-proportions__swatch" style={{ backgroundColor: color.hex }} aria-hidden="true" />
+          <span className="composition-proportions__value">{value}</span>
+        </span>;
+      })}
+      </span>
+    </span>
+  </>;
 }

@@ -2,7 +2,7 @@ import { applicationReducer, createApplicationState } from "../src/nuance/state/
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createComposition, normalizeHex, updateColor } from "../src/nuance/domain/composition";
-import { addColor, computeLayout, MIN_EXTENT, paintedRect, removeColor, resizeSplit } from "../src/nuance/domain/layout";
+import { addColor, colorProportions, computeLayout, MIN_EXTENT, paintedRect, removeColor, resizeSplit } from "../src/nuance/domain/layout";
 import { discoverPalettes, generatePalettes, initialPalettes, legacyInitialPalettes, nextColor, PRESET_HEXES, shuffledPalettes } from "../src/nuance/domain/palettes";
 import { deserializeComposition, serializeComposition } from "../src/nuance/domain/serialization";
 import { activeComposition, createEditorState, editorReducer, hasUnsavedChanges } from "../src/nuance/state/editor";
@@ -108,6 +108,17 @@ function valid(composition: ReturnType<typeof fixture>) {
 test("initial presets preserve the exact Figma HEX values and 50/25/25 split", () => {
   assert.deepEqual(legacyInitialPalettes().map(p => p.colors.map(c => c.hex)), PRESET_HEXES);
   assert.deepEqual(computeLayout(fixture().layout).regions.map(r => r.width * r.height), [0.5, 0.25, 0.25]);
+});
+test("color proportions follow resized geometry and survive saving without depending on gutters", () => {
+  const initial = fixture();
+  const edited = resizeSplit(initial, initial.layout.id, 0.6);
+  const shares = colorProportions(edited);
+  assert.deepEqual(shares.map(item => item.colorId), edited.colors.map(color => color.id));
+  shares.forEach((item, index) => assert.ok(Math.abs(item.proportion - [0.6, 0.2, 0.2][index]) < 1e-10));
+  assert.deepEqual(colorProportions(deserializeComposition(serializeComposition(edited))), shares);
+  assert.deepEqual(colorProportions({ ...edited, artwork: { width: 1000, height: 800, gap: 20 } }), shares);
+  const extended = addColor(edited, "#123456");
+  assert.ok(Math.abs(colorProportions(extended).reduce((total, item) => total + item.proportion, 0) - 1) < 1e-10);
 });
 test("HEX validation accepts shorthand and rejects malformed or alpha colors", () => {
   assert.equal(normalizeHex(" abc "), "#AABBCC"); assert.equal(normalizeHex("#12abEF"), "#12ABEF");
