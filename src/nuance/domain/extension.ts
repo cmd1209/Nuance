@@ -52,7 +52,7 @@ function seeded(seed: string): () => number {
 export type ExtensionStrategy = "tonal" | "complementary" | "analogous" | "neutral" | "intermediate";
 export function suggestExtension(composition: Composition, onlyStrategy?: ExtensionStrategy): { hex: string; strategy: ExtensionStrategy } {
   const labs = composition.colors.map(c => hexToOklab(c.hex));
-  const paletteId = composition.historical?.paletteId ?? composition.id;
+  const paletteId = composition.historical?.paletteId ?? composition.curated?.paletteId ?? composition.id;
   const random = seeded(`${paletteId}:${composition.extensionIndex ?? composition.colors.length}`);
   const meanL = labs.reduce((s,c) => s+c.l,0)/labs.length;
   const meanC = labs.reduce((s,c) => s+chroma(c),0)/labs.length;

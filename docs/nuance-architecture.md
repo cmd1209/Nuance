@@ -1,5 +1,7 @@
 # Nuance — Architecture
 
+The [Werner · Nuance Curation Studio](werner-curation.md) is an isolated, development-only branch. Its generator and local review/export model remain development-only. The [unified discovery integration](unified-color-exploration.md) explicitly publishes 30 approved palettes alongside Wada, with additive curated-source metadata and independent balanced cycles.
+
 The five-destination navigation and foundational section model are documented in [sections.md](sections.md). The current application-shell contract is documented in [application-shell.md](application-shell.md): one document scroll, a fixed viewport navigation, one document-owned theme canvas, and reusable `AppShell` / `SectionLayout` components. Read it before introducing a new section or changing layout geometry.
 
 The material below records the original Color implementation and domain/persistence boundary. Historical visual measurements and validation counts are not current shell requirements.

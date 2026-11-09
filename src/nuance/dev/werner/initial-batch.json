@@ -1,0 +1,3215 @@
+{
+  "batch": {
+    "id": "werner-batch-e95f398215351b50",
+    "datasetVersion": 1,
+    "generationVersion": "werner-oklab-v1",
+    "seed": "werner-nuance-1821-01",
+    "counts": {
+      "2": 50,
+      "3": 100,
+      "4": 50
+    }
+  },
+  "candidates": [
+    {
+      "id": "werner-candidate-5a9fca16825b86ec",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-005",
+        "werner-107"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-c026561ffa57e4cb",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-063",
+        "werner-027"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-cea2675ce815879e",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-001",
+        "werner-022"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-54d9c8e69188dea0",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-067",
+        "werner-024"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-d410221967143f67",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-090",
+        "werner-081"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-3c303246bfcbc662",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-006",
+        "werner-025"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-391ee46c0463eee6",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-006",
+        "werner-096"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-f895552ab079a34a",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-004",
+        "werner-027"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-26dff2c36aa28bb9",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-053",
+        "werner-055"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-200bb30494269890",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-058",
+        "werner-024"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-a9859354928841e2",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-035",
+        "werner-021"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-ced8099875cd14e6",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-071",
+        "werner-025"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-d2101ef3e1aee2fd",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-090",
+        "werner-083"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-a0e1b82dab4dc45f",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-047",
+        "werner-038"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-ab85967a0d22e578",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-035",
+        "werner-023"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-38b7b959f5ca84bb",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-061",
+        "werner-038"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-6f033b262b01a888",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-005",
+        "werner-064"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-f23088cf7ba58c99",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-057",
+        "werner-037"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-826628bb46a70f4b",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-011",
+        "werner-022"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-e6df2beaa8184678",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-067",
+        "werner-042"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-953df48a3658c038",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-052",
+        "werner-055"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-40295e36689bd9d2",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-063",
+        "werner-037"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-254e48e2c1b0d964",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-002",
+        "werner-018"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-bfc3c6d1057d9ee1",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-061",
+        "werner-041"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-13a261304cb5c37c",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-076",
+        "werner-107"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-d9a278ad3af84b11",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-001",
+        "werner-029"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-f6bc56ea44bad836",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-075",
+        "werner-096"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-cdf7cd69eea52993",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-077",
+        "werner-037"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-d610253fec799bd1",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-090",
+        "werner-087"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-987a7d348cf0b220",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-062",
+        "werner-025"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-81deb75aa1538aea",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-088",
+        "werner-023"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-94359153f6054e1f",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-089",
+        "werner-027"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-3b719ac743cfddb3",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-066",
+        "werner-055"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-051d06ae38ebae32",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-074",
+        "werner-028"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-303a56dc31d73f48",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-008",
+        "werner-102"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-3c73daf1d8e85443",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-066",
+        "werner-040"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-0fc875971274501f",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-089",
+        "werner-104"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-6d0dc55ceb51e156",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-005",
+        "werner-026"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-0f1d6b35ad7ee58d",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-009",
+        "werner-106"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-cffa0f2630dadcb0",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-077",
+        "werner-025"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-552e1b950c26b9f9",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-082",
+        "werner-099"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-e96e4d640defcaac",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-054",
+        "werner-042"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-fa07b5c594b7f507",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-012",
+        "werner-021"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-953592e6aded4380",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-089",
+        "werner-024"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-d54837c9055a088f",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-082",
+        "werner-103"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-0ede93c0acd9ba1a",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-047",
+        "werner-024"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-e5ffe418e20371da",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-073",
+        "werner-023"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-7b23ce8c2512448e",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-065",
+        "werner-028"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-5d17b589ea6238ed",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-090",
+        "werner-078"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-eaaf7813b80aa513",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-075",
+        "werner-028"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-137c60daad4d3324",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-003",
+        "werner-110",
+        "werner-022"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-3a745ea6f0175dae",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-074",
+        "werner-108",
+        "werner-025"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-d39ae1ad7c28b985",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-004",
+        "werner-064",
+        "werner-019"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-ec024a33ceee22af",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-068",
+        "werner-030",
+        "werner-098"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-8b3c568715d28c4b",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-002",
+        "werner-014",
+        "werner-096"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-1e0bffceab799576",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-067",
+        "werner-040",
+        "werner-022"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-e256a3e8fce2a9ce",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-005",
+        "werner-073",
+        "werner-101"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-16603c02ca48b1de",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-010",
+        "werner-057",
+        "werner-024"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-f475ca7f2a92bab1",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-003",
+        "werner-016",
+        "werner-020"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-45ae31e9a7b999c1",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-007",
+        "werner-068",
+        "werner-038"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-f1f9324e93ed3b66",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-003",
+        "werner-053",
+        "werner-055"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-0ade90e0977b2798",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-001",
+        "werner-039",
+        "werner-110"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-6a35cbfb323568f7",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-009",
+        "werner-095",
+        "werner-023"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-752424fa09f94644",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-004",
+        "werner-091",
+        "werner-025"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-3cdc79e7312132a5",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-010",
+        "werner-095",
+        "werner-087"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-7191bac4fa382f52",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-011",
+        "werner-056",
+        "werner-024"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-7c8eecb8158b48e6",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-006",
+        "werner-015",
+        "werner-021"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-1fd1364df14ca069",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-066",
+        "werner-051",
+        "werner-042"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-52bc6cb006110fa2",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-063",
+        "werner-066",
+        "werner-110"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-3a4f60b20be62c92",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-072",
+        "werner-036",
+        "werner-018"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-cdcd1d8291e6ce5a",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-007",
+        "werner-010",
+        "werner-106"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-7b12fcde1a727334",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-067",
+        "werner-049",
+        "werner-025"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-147e90bb8d87eaef",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-008",
+        "werner-083",
+        "werner-087"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-c5bfbd87c4666119",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-075",
+        "werner-036",
+        "werner-098"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-aa37c746d7db22ea",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-006",
+        "werner-034",
+        "werner-101"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-da6c3330ec5630de",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-065",
+        "werner-031",
+        "werner-022"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-8cb4c20278640f18",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-077",
+        "werner-108",
+        "werner-017"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-c57553ee9f00ad26",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-035",
+        "werner-033",
+        "werner-102"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-a278cd010628e71d",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-002",
+        "werner-048",
+        "werner-019"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-6799480a44eb99fe",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-001",
+        "werner-091",
+        "werner-037"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-948f95ef5bc11459",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-009",
+        "werner-081",
+        "werner-079"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-91d5906ec7a5843e",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-071",
+        "werner-043",
+        "werner-026"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-15935e845043f26a",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-005",
+        "werner-045",
+        "werner-023"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-807183f218c130c0",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-008",
+        "werner-033",
+        "werner-087"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-927b211e0b334e9c",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-073",
+        "werner-068",
+        "werner-045"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-823b0e6cc928df2c",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-063",
+        "werner-039",
+        "werner-110"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-423bfd03cce88709",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-007",
+        "werner-109",
+        "werner-023"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-2828405630df008e",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-089",
+        "werner-076",
+        "werner-027"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-d5563199ff45d5fb",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-051",
+        "werner-084",
+        "werner-095"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-ca05e2198ce41b4d",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-061",
+        "werner-029",
+        "werner-020"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-b87f1d100358707c",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-075",
+        "werner-046",
+        "werner-096"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-2f709951526c5cad",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-062",
+        "werner-015",
+        "werner-042"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-41fd0d89b3deead3",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-072",
+        "werner-060",
+        "werner-096"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-868f99013cff1075",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-013",
+        "werner-036",
+        "werner-023"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-6bdd5bd0e29ec7e8",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-008",
+        "werner-013",
+        "werner-098"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-eb11c368e400b48a",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-032",
+        "werner-092",
+        "werner-106"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-88d79996d3d2c63a",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-002",
+        "werner-084",
+        "werner-087"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-0a3ca58aae7a70e6",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-058",
+        "werner-039",
+        "werner-020"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-3c6836b91e49f4c9",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-003",
+        "werner-109",
+        "werner-018"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-9ebce7d24d29c2d8",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-004",
+        "werner-029",
+        "werner-022"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-5e5ad4a2445ab5a8",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-077",
+        "werner-107",
+        "werner-023"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-5a9e19f554fb0cb9",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-043",
+        "werner-054",
+        "werner-037"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-82d0c6364a59a270",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-002",
+        "werner-097",
+        "werner-102"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-53b475958cfec0d7",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-052",
+        "werner-084",
+        "werner-038"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-e6848e2fcc96b88d",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-051",
+        "werner-086",
+        "werner-099"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-f7a286d808f26da4",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-008",
+        "werner-056",
+        "werner-040"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-bc3fb11dad026fe7",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-011",
+        "werner-014",
+        "werner-094"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-01cb234849d90304",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-076",
+        "werner-030",
+        "werner-094"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-4b29f3676ddd9ebf",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-075",
+        "werner-060",
+        "werner-101"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-8759ddca5eb63750",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-105",
+        "werner-029",
+        "werner-022"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-68e4220830c3cc0c",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-046",
+        "werner-049",
+        "werner-019"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-d0413ee701352399",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-066",
+        "werner-044",
+        "werner-042"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-d209fdf5b566cd5b",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-043",
+        "werner-085",
+        "werner-079"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-2f84ecf9b30e1bcd",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-007",
+        "werner-059",
+        "werner-041"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-ffa357742a5ec012",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-009",
+        "werner-016",
+        "werner-038"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-33a8d8de2396c0ee",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-071",
+        "werner-097",
+        "werner-027"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-6ab784e07566802a",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-001",
+        "werner-072",
+        "werner-018"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-3aa4c6bcbeb87068",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-010",
+        "werner-033",
+        "werner-103"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-24cd011766caa7df",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-003",
+        "werner-017",
+        "werner-023"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-c2fd9d93e63daba1",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-006",
+        "werner-086",
+        "werner-024"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-2ce0bd05ae82459b",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-073",
+        "werner-070",
+        "werner-096"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-1585b218f2cc1c36",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-105",
+        "werner-026",
+        "werner-098"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-96c7a1b54e2bbd8d",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-012",
+        "werner-015",
+        "werner-098"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-fbfeb1509b0391b2",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-006",
+        "werner-078",
+        "werner-037"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-971daf06079c347c",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-009",
+        "werner-100",
+        "werner-102"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-d5e6031d6b3759e9",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-071",
+        "werner-044",
+        "werner-026"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-c59e605a5dfc2e28",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-046",
+        "werner-050",
+        "werner-110"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-a36fabc2a626d9ea",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-065",
+        "werner-014",
+        "werner-025"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-873959dd3faa4445",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-077",
+        "werner-070",
+        "werner-023"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-3dfaa71e4239757a",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-061",
+        "werner-046",
+        "werner-040"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-9fe55bacc9473fa6",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-007",
+        "werner-104",
+        "werner-021"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-800ffcea1dc6269e",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-089",
+        "werner-056",
+        "werner-025"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-84395524025cf27a",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-077",
+        "werner-070",
+        "werner-020"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-22d6b7956033e187",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-088",
+        "werner-050",
+        "werner-041"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-7ca9135e5485b184",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-011",
+        "werner-048",
+        "werner-106"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-19a92f2cc622bb66",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-004",
+        "werner-076",
+        "werner-037"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-f4203cc8e712f252",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-105",
+        "werner-108",
+        "werner-101"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-699af453de7b7d3f",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-063",
+        "werner-015",
+        "werner-027"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-820614446c3849ac",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-001",
+        "werner-016",
+        "werner-045"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-c71e8234db8ba710",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-067",
+        "werner-105",
+        "werner-024"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-d120a4a6aa418eae",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-053",
+        "werner-059",
+        "werner-106"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-fe8bf6ac3312c880",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-071",
+        "werner-028",
+        "werner-016"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-65931178a31c9abe",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-002",
+        "werner-012",
+        "werner-055"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-6add280d12191645",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-066",
+        "werner-014",
+        "werner-038"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-cdf3cea09f1e7728",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-047",
+        "werner-056",
+        "werner-021"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-2334363ba3824c71",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-047",
+        "werner-097",
+        "werner-038"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-c1bb8992bd392a9c",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-004",
+        "werner-051",
+        "werner-021"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-a3ea412a76afef02",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-066",
+        "werner-078",
+        "werner-024"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-5a90b494a338f7f6",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-088",
+        "werner-108",
+        "werner-101"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-288954e2472ab26c",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-031",
+        "werner-069",
+        "werner-017"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-11c53ab8b0a59f68",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-035",
+        "werner-043",
+        "werner-033",
+        "werner-020"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-b1af709db1d2c36f",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-067",
+        "werner-033",
+        "werner-080",
+        "werner-023"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-3d1de2eec8e65be0",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-010",
+        "werner-082",
+        "werner-085",
+        "werner-045"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-72fd05741ae2cc2c",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-073",
+        "werner-030",
+        "werner-109",
+        "werner-022"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-8c8b3b902a3dae94",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-089",
+        "werner-051",
+        "werner-049",
+        "werner-096"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-72864cf750d56dfb",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-005",
+        "werner-046",
+        "werner-080",
+        "werner-025"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-6b3721efdbab1a09",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-012",
+        "werner-034",
+        "werner-084",
+        "werner-079"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-8f7cd422544a9f00",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-008",
+        "werner-057",
+        "werner-100",
+        "werner-037"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-9fee64563022555a",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-035",
+        "werner-049",
+        "werner-045",
+        "werner-102"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-fd38aaaa4ffed1a6",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-052",
+        "werner-032",
+        "werner-060",
+        "werner-094"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-5c52e5e3aa7df27b",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-046",
+        "werner-048",
+        "werner-092",
+        "werner-094"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-47919315cd1bd917",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-013",
+        "werner-036",
+        "werner-079",
+        "werner-018"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-538fadf666c4df26",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-058",
+        "werner-014",
+        "werner-049",
+        "werner-101"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-dc7149b1c8dbb9a5",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-090",
+        "werner-013",
+        "werner-092",
+        "werner-024"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-16d616a2b69197f2",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-003",
+        "werner-086",
+        "werner-085",
+        "werner-045"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-7447a2176206afb7",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-074",
+        "werner-036",
+        "werner-103",
+        "werner-022"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-19effa592beefd35",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-063",
+        "werner-012",
+        "werner-034",
+        "werner-096"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-3a0c246cae6590ca",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-073",
+        "werner-062",
+        "werner-036",
+        "werner-022"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-c86fbf3f5249c15b",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-011",
+        "werner-080",
+        "werner-100",
+        "werner-098"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-100f8a2667654fbc",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-002",
+        "werner-050",
+        "werner-081",
+        "werner-094"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-bf52bb91515b9323",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-035",
+        "werner-058",
+        "werner-097",
+        "werner-098"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-07640d4171f7b5ad",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-062",
+        "werner-083",
+        "werner-017",
+        "werner-025"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-0f365b3862108886",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-003",
+        "werner-083",
+        "werner-100",
+        "werner-110"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-22ad93e33041a881",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-065",
+        "werner-105",
+        "werner-031",
+        "werner-021"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-8f10e339122f4f1d",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-003",
+        "werner-015",
+        "werner-044",
+        "werner-098"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-2f4ea6bfdce19faf",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-005",
+        "werner-091",
+        "werner-069",
+        "werner-024"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-a568d39ff33be9b1",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-074",
+        "werner-012",
+        "werner-068",
+        "werner-019"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-80ea903d4bba005f",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-001",
+        "werner-011",
+        "werner-057",
+        "werner-038"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-b8f7430d6fc36f13",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-007",
+        "werner-058",
+        "werner-017",
+        "werner-110"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-fa6fe5046b04f466",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-067",
+        "werner-015",
+        "werner-093",
+        "werner-024"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-a869ab08b70f3ffc",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-001",
+        "werner-034",
+        "werner-064",
+        "werner-021"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-d662bf2a27e8d56c",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-043",
+        "werner-076",
+        "werner-031",
+        "werner-087"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-844e5e312e545ba9",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-002",
+        "werner-015",
+        "werner-107",
+        "werner-020"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-c090bc2e60269d70",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-013",
+        "werner-081",
+        "werner-092",
+        "werner-025"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-2f444bc434a3fc74",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-077",
+        "werner-076",
+        "werner-108",
+        "werner-016"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-f19e4e7b165e2ba3",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-075",
+        "werner-054",
+        "werner-040",
+        "werner-096"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-aa02b4c433d4671c",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-006",
+        "werner-048",
+        "werner-016",
+        "werner-020"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-4f6d890b987016f1",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-089",
+        "werner-085",
+        "werner-028",
+        "werner-019"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-4067c60a2ec1d56e",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-074",
+        "werner-070",
+        "werner-017",
+        "werner-106"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-5ee2b6f1f5950bdb",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-009",
+        "werner-054",
+        "werner-091",
+        "werner-037"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-83cc0e305badde44",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-007",
+        "werner-072",
+        "werner-048",
+        "werner-023"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-02e36a6b6549e96b",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-005",
+        "werner-029",
+        "werner-079",
+        "werner-099"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-16f4cc7686e419aa",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-071",
+        "werner-076",
+        "werner-014",
+        "werner-021"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-a6a1bdec4f091494",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-003",
+        "werner-030",
+        "werner-054",
+        "werner-042"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-d06dcbab15470715",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-008",
+        "werner-032",
+        "werner-048",
+        "werner-096"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-ed96dd53f81e8251",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-006",
+        "werner-078",
+        "werner-039",
+        "werner-041"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-d1d7e95583caaff9",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-072",
+        "werner-012",
+        "werner-060",
+        "werner-020"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-6302c40a917899cc",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-075",
+        "werner-082",
+        "werner-029",
+        "werner-110"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-fbad913f3cd7905d",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-003",
+        "werner-059",
+        "werner-049",
+        "werner-110"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    },
+    {
+      "id": "werner-candidate-77d6073573d88b29",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-062",
+        "werner-078",
+        "werner-107",
+        "werner-025"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "pending"
+    }
+  ]
+}

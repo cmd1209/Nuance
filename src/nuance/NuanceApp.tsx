@@ -41,8 +41,9 @@ export default function NuanceApp() {
     previousOwner.current = next;
   }, [account.user?.id]);
   const main = useRef<HTMLElement>(null);
-  const explorePosition = useRef<string | null>(null);
-  const rememberExplorePosition = useCallback((id: string) => { explorePosition.current = id; }, []);
+  const explorePosition = useRef<number | null>(null);
+  const rememberExplorePosition = useCallback((_id: string, index: number) => { explorePosition.current = index; }, []);
+  const requestMorePalettes = useCallback(() => dispatch({ type: "more-palettes" }), []);
   const editorTrigger = useRef<HTMLElement | null>(null);
   const selectionTrigger = useRef<HTMLElement | null>(null);
   useEffect(() => {
@@ -60,7 +61,7 @@ export default function NuanceApp() {
     else {
       const previous = editorTrigger.current;
       const cards = colorSection?.querySelectorAll<HTMLButtonElement>("[data-composition-id]");
-      const target = previous?.isConnected ? previous : Array.from(cards ?? []).find(card => card.dataset.compositionId === previous?.dataset.compositionId)
+      const target = previous?.isConnected ? previous : Array.from(cards ?? []).find(card => card.dataset.compositionId === previous?.dataset.compositionId && card.dataset.paletteIndex === previous?.dataset.paletteIndex)
         ?? colorSection?.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]');
       target?.focus({ preventScroll: true });
     }
@@ -131,9 +132,9 @@ export default function NuanceApp() {
             {adjusting && selected && <ColorEditor color={selected} onChange={hex => dispatch({ type: "color", colorId: selected.id, hex })} onClose={closeEditor} />}
           </div>
           <div className="composition-actions" role="group" aria-label="Composition actions">
-            {composition.historical && <Button className="composition-action" aria-label="Reset composition"
+            {(composition.historical || composition.curated) && <Button className="composition-action" aria-label="Reset composition"
               title="Reset composition to its original colors and proportions"
-              onClick={() => { dispatch({ type: "reset" }); closeEditor(); setNotice(composition.historical?.originalColorCount === 2 ? "Original pair restored with a Nuance-generated third color for the editor." : "Original Wada combination restored."); }}
+              onClick={() => { dispatch({ type: "reset" }); closeEditor(); setNotice((composition.historical ?? composition.curated)?.originalColorCount === 2 ? "Original pair restored with a Nuance-generated third color for the editor." : composition.curated ? "Original Werner · Nuance combination restored." : "Original Wada combination restored."); }}
               leadingIcon={<RotateCcw size={20} aria-hidden="true" />} />}
             <Button className="composition-action composition-add" disabled={composition.colors.length >= MAX_COLORS}
               aria-label={composition.colors.length >= MAX_COLORS ? "Add color — maximum of six colors reached" : "Add color"}
@@ -150,8 +151,8 @@ export default function NuanceApp() {
       </section> : <>
       <section id="color-explore-panel" role="tabpanel" aria-labelledby="color-explore-tab" hidden={state.sectionView !== "explore"} className="nuance-palettes">
         {state.sectionView === "explore" &&
-        <PaletteSlider palettes={state.suggestions} activeId={explorePosition.current ?? state.activeCompositionId} onPositionChange={rememberExplorePosition}
-          onSelect={palette => { rememberEditorTrigger(); dispatch({ type: "select-palette", palette }); closeEditor(); setNotice(""); }} />}
+        <PaletteSlider palettes={state.suggestions} activeId={state.activeCompositionId} activeIndex={explorePosition.current ?? undefined} onPositionChange={rememberExplorePosition} onRequestMore={requestMorePalettes}
+          onSelect={(palette, index) => { explorePosition.current = index; rememberEditorTrigger(); dispatch({ type: "select-palette", palette }); closeEditor(); setNotice(""); }} />}
       </section>
       <section id="color-saved-panel" role="tabpanel" aria-labelledby="color-saved-tab" hidden={state.sectionView !== "saved"}>
         {state.sectionView === "saved" && <SavedCompositions key={account.user?.id ?? "guest"} account={account}

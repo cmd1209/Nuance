@@ -4,7 +4,7 @@ Nuance has five functional destinations in its existing fixed bottom navigation:
 
 ## Global and local responsibilities
 
-`state/application.ts` owns only the active main section and global light/dark theme. Authentication, profile, and existing saved Color records remain in the application-level `useAccount` hook. No new database tables, schemas, persistence adapters, routing dependencies, or generated datasets were introduced.
+`state/application.ts` owns only the active main section and global light/dark theme. Authentication, profile, and existing saved Color records remain in the application-level `useAccount` hook. No new database tables, schemas, persistence adapters, routing dependencies, or generated datasets were introduced. The current configured save allowances are eight for Colors and future Types, and four for future Spaces and Details. Only Color persistence is implemented; the eight-save migration is documented in accounts.md.
 
 `state/editor.ts` continues to own all Color-specific work: local Explore/Saved/Edit view, active composition, drafts, clean baselines, source attribution, selection, and unsaved-change confirmation. It no longer owns the application theme. Composition documents and algorithms are unchanged.
 

@@ -1,0 +1,20 @@
+{
+  "datasetVersion": 1,
+  "source": "werner-1821",
+  "edition": 1821,
+  "title": "Werner’s Nomenclature of Colours",
+  "historicalAuthor": "Patrick Syme, after Abraham Gottlob Werner",
+  "digitizer": "Nicholas Rougeux",
+  "referenceURL": "https://www.c82.net/werner/",
+  "catalogURL": "https://docs.google.com/spreadsheets/d/10w7UebIDqN6ChEpBwLDQmAgVZZhLtKvnrLeNnBjJmsc/edit",
+  "hexTableAuthor": "Robert Rothenberg",
+  "hexTableLicense": "CC0-1.0",
+  "hexTableRevision": "854ecaa1997d3cc71b75b3324890ed6815241a77",
+  "hexTableURL": "https://github.com/robrwo/Graphics-ColorNames-Werner/tree/854ecaa1997d3cc71b75b3324890ed6815241a77",
+  "catalogSha256": "b378a905b52feedc5cdc52ade9bfa73fb0526e4156073fbb6e24c68d949faf84",
+  "hexTableSha256": "aebe78a8ebe839a91911bd0e317502a71a15ac7d09db53278ef30bdd43b24ab4",
+  "normalizedSha256": "5409827555bf7879e8b48c07e4a75c95f53ae0c610e46c07fedafced76f3eea6",
+  "importedOn": "2026-11-09",
+  "count": 110,
+  "limitation": "sRGB approximations of aged scanned swatches, not calibrated measurements of original pigments. Names, numbering, families and natural-history references transcribed from the 1821 catalog; historical spelling retained. No modern photographs imported."
+}

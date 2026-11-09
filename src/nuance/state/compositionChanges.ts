@@ -9,6 +9,6 @@ export function compositionContent(composition: Composition): string {
   return JSON.stringify({
     name: composition.name, artwork: composition.artwork,
     colors: composition.colors.map(color => ({ hex: color.hex.toUpperCase(), name: color.name, sourceColorId: color.sourceColorId })),
-    layout: layout(composition.layout), source: composition.source, historical: composition.historical,
+    layout: layout(composition.layout), source: composition.source, historical: composition.historical, curated: composition.curated,
   });
 }

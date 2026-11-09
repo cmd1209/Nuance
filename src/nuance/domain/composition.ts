@@ -8,6 +8,22 @@ export interface HistoricalReference {
   originalColorCount: number;
   colors: ReadonlyArray<Readonly<{ sourceColorId: string; name: string; hex: string }>>;
 }
+/** Contemporary curation from historical colors; never an original historical combination. */
+export interface CuratedReference {
+  paletteId: string;
+  collection: string;
+  combinationNumber: number;
+  datasetVersion: number;
+  originalColorCount: number;
+  curation: "nuance-generated";
+  candidateId: string;
+  generationVersion: string;
+  seed: string;
+  batchId: string;
+  method: string;
+  provenance: Readonly<Record<string, unknown>>;
+  colors: ReadonlyArray<Readonly<{ sourceColorId: string; name: string; hex: string }>>;
+}
 export type LayoutNode =
   | { id: string; kind: "region"; colorId: string }
   | { id: string; kind: "split"; axis: "x" | "y"; ratio: number; first: LayoutNode; second: LayoutNode };
@@ -21,8 +37,9 @@ export interface Composition {
   artwork: { width: number; height: number; gap: number };
   colors: ColorValue[];
   layout: LayoutNode;
-  source?: "sanzo-wada";
+  source?: "sanzo-wada" | "werner-nuance";
   historical?: HistoricalReference;
+  curated?: CuratedReference;
   currentColorCount?: number;
   extensionIndex?: number;
   layoutModified?: boolean;
@@ -65,11 +82,12 @@ export function updateColor(composition: Composition, colorId: string, input: st
 }
 
 export function isAdaptation(composition: Composition): boolean {
-  const original = composition.historical;
+  const original = composition.historical ?? composition.curated;
   return !!original && (!!composition.layoutModified || composition.colors.length !== original.originalColorCount ||
     composition.colors.some((c, i) => c.origin !== "original" || c.sourceColorId !== original.colors[i]?.sourceColorId || c.hex !== normalizeHex(original.colors[i]?.hex || "")));
 }
 
 export function paletteAttribution(composition: Composition): string {
+  if (composition.curated) return `${isAdaptation(composition) ? "Based on " : ""}Werner · Nuance No. ${composition.curated.combinationNumber}`;
   return composition.historical ? `${isAdaptation(composition) ? "Based on " : ""}Sanzo Wada · No. ${composition.historical.combinationNumber}` : composition.name;
 }

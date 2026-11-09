@@ -33,15 +33,12 @@ export function generatePalettes(previous: Composition[], random = Math.random):
 
 // Keep the original procedural source available without changing the discovery UI.
 export { nextColor } from "./extension";
-import { discoverWada, historicalComposition, WADA_PALETTES } from "./wada";
+import { discoverWada } from "./wada";
+import { COLOR_COLLECTIONS } from "./collections";
+import { createDiscoveryCursor, discoverBatch } from "./discovery";
 
 export function shuffledPalettes(random = Math.random): Composition[] {
-  const references = [...WADA_PALETTES];
-  for (let index = references.length - 1; index > 0; index--) {
-    const other = Math.floor(random() * (index + 1));
-    [references[index], references[other]] = [references[other], references[index]];
-  }
-  return references.map(historicalComposition);
+  return discoverBatch(COLOR_COLLECTIONS, createDiscoveryCursor(), undefined, random).palettes;
 }
 
 export const initialPalettes = () => discoverWada([], () => 0.4);

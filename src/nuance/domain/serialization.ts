@@ -1,6 +1,7 @@
 import { MAX_COLORS, normalizeHex, type ColorValue, type Composition, type LayoutNode } from "./composition";
 import { computeLayout, MIN_EXTENT } from "./layout";
 import { WADA_PALETTES } from "./wada";
+import { WERNER_PALETTES } from "./werner-palettes";
 
 /** Validate plain JSON at the storage boundary, independently of auth and the storage SDK. */
 export function serializeComposition(composition: Composition): string {
@@ -28,13 +29,16 @@ export function deserializeComposition(json: string): Composition {
     !Array.isArray(reference.colors) || reference.colors.length !== historical.colors.length ||
     reference.colors.some((c, i) => !object(c) || c.sourceColorId !== historical.colors[i].sourceColorId ||
       c.name !== historical.colors[i].name || c.hex !== historical.colors[i].hex))) return fail();
-  if ((value.source !== undefined && value.source !== "sanzo-wada") ||
+  if ((value.source !== undefined && value.source !== "sanzo-wada" && value.source !== "werner-nuance") ||
     (value.historical !== undefined && !historical) ||
     (value.source === "sanzo-wada") !== !!historical ||
     (historical && value.currentColorCount !== value.colors.length) ||
     (value.currentColorCount !== undefined && value.currentColorCount !== value.colors.length) ||
     (value.extensionIndex !== undefined && (!Number.isSafeInteger(value.extensionIndex) || (value.extensionIndex as number) < 0)) ||
     (value.layoutModified !== undefined && typeof value.layoutModified !== "boolean")) return fail();
+  const curated = value.curated === undefined ? undefined : WERNER_PALETTES.find(reference => object(value.curated) && reference.paletteId === value.curated.paletteId);
+  if ((value.curated !== undefined && !curated) || (curated && (historical || value.source !== "werner-nuance" || value.currentColorCount !== value.colors.length || canonical(value.curated) !== canonical(curated))) || (value.source === "werner-nuance" && !curated)) return fail();
+  const sourceColors = historical?.colors ?? curated?.colors;
   const colorIds = new Set<string>();
   const colors: ColorValue[] = value.colors.map(c => {
     if (!object(c) || !id(c.id) || colorIds.has(c.id) || typeof c.hex !== "string" || !normalizeHex(c.hex)) return fail();
@@ -42,8 +46,8 @@ export function deserializeComposition(json: string): Composition {
       (c.name !== undefined && (typeof c.name !== "string" || c.name.length > 200)) ||
       (c.originalHex !== undefined && (typeof c.originalHex !== "string" || !normalizeHex(c.originalHex))) ||
       (c.sourceColorId !== undefined && !id(c.sourceColorId))) return fail();
-    const sourceColor = historical?.colors.find(original => original.sourceColorId === c.sourceColorId);
-    if (historical && (!c.origin || (c.origin === "original" && (!sourceColor || normalizeHex(sourceColor.hex) !== normalizeHex(c.hex))) ||
+    const sourceColor = sourceColors?.find(original => original.sourceColorId === c.sourceColorId);
+    if (sourceColors && (!c.origin || (c.origin === "original" && (!sourceColor || normalizeHex(sourceColor.hex) !== normalizeHex(c.hex))) ||
       (c.sourceColorId !== undefined && (!sourceColor || c.name !== sourceColor.name || c.originalHex !== sourceColor.hex || c.origin === "generated")) ||
       (c.originalHex !== undefined && !sourceColor))) return fail();
     colorIds.add(c.id);
@@ -69,7 +73,8 @@ export function deserializeComposition(json: string): Composition {
   // Reconstruct known fields rather than trusting foreign JSON properties on a future adapter boundary.
   return { schemaVersion: 1, id: value.id, name: value.name, createdAt: value.createdAt, updatedAt: value.updatedAt,
     artwork: { width: value.artwork.width, height: value.artwork.height, gap: value.artwork.gap }, colors, layout,
-    ...(historical ? { source: "sanzo-wada", historical } : {}),
+    ...(historical ? { source: "sanzo-wada" as const, historical } : {}),
+    ...(curated ? { source: "werner-nuance" as const, curated } : {}),
     ...(value.currentColorCount === undefined ? {} : { currentColorCount: value.currentColorCount as number }),
     ...(value.extensionIndex === undefined ? {} : { extensionIndex: value.extensionIndex as number }),
     ...(value.layoutModified === undefined ? {} : { layoutModified: value.layoutModified as boolean }) };
@@ -80,4 +85,11 @@ function findRatio(node: LayoutNode, id: string): number {
   if (node.id === id) return node.ratio;
   const first = findRatio(node.first, id);
   return Number.isNaN(first) ? findRatio(node.second, id) : first;
+}
+
+/** Property order can change in JSONB without changing a canonical source snapshot. */
+function canonical(value: unknown): string {
+  const order = (item: unknown): unknown => Array.isArray(item) ? item.map(order)
+    : item && typeof item === "object" ? Object.fromEntries(Object.entries(item).sort(([a], [b]) => a.localeCompare(b)).map(([key, child]) => [key, order(child)])) : item;
+  return JSON.stringify(order(value));
 }

@@ -11,6 +11,10 @@ try {
   await build({ entryPoints: ["tests/nuance.test.ts"], outfile, bundle: true, platform: "node", format: "esm",
     // Component rendering runs without browser credentials or an authentication session.
     define: { "import.meta.env": "{}", "window.location.href": JSON.stringify("http://localhost/") } });
-  const result = spawnSync(process.execPath, ["--test", outfile, "tests/account-database.test.mjs"], { stdio: "inherit" });
+  const werner = join(directory, "werner.test.mjs");
+  await build({ entryPoints: ["tests/werner.test.ts"], outfile:werner, bundle:true, platform:"node", format:"esm" });
+  const unified = join(directory, "unified-colors.test.mjs");
+  await build({ entryPoints:["tests/unified-colors.test.ts"], outfile:unified, bundle:true, platform:"node", format:"esm" });
+  const result = spawnSync(process.execPath, ["--test", outfile, werner, unified, "tests/account-database.test.mjs"], { stdio: "inherit" });
   process.exitCode = result.status ?? 1;
 } finally { await rm(directory, { recursive: true, force: true }); }

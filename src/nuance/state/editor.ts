@@ -1,8 +1,9 @@
 import { cloneComposition, updateColor, type Composition } from "../domain/composition";
 import { addColor, removeColor, resizeSplit } from "../domain/layout";
-import { editorComposition, resetHistoricalComposition } from "../domain/wada";
+import { editorComposition } from "../domain/wada";
+import { COLOR_COLLECTIONS, resetSourceComposition } from "../domain/collections";
+import { createDiscoveryCursor, discoverBatch, type DiscoveryCursor } from "../domain/discovery";
 import { compositionContent } from "./compositionChanges";
-import { shuffledPalettes } from "../domain/palettes";
 import type { SectionView } from "../domain/sections";
 
 type CompositionSelection = { kind: "palette" | "saved"; composition: Composition };
@@ -12,6 +13,7 @@ export interface EditorState {
   sectionView: SectionView;
   editorOrigin: SectionView;
   suggestions: Composition[];
+  discovery: DiscoveryCursor;
   /** Unsaved client-side drafts; original preset/suggestion documents are never mutated. */
   drafts: Record<string, Composition>;
   baselines: Record<string, Composition>;
@@ -29,6 +31,7 @@ export type EditorAction =
   | { type: "open-saved"; composition: Composition }
   | { type: "clear-account" }
   | { type: "explore"; suggestions: Composition[] }
+  | { type: "more-palettes"; random?: () => number }
   | { type: "back" }
   | { type: "select-color"; colorId: string | null }
   | { type: "color"; colorId: string; hex: string }
@@ -38,7 +41,8 @@ export type EditorAction =
   | { type: "resize"; splitId: string; ratio: number };
 
 export function createEditorState(): EditorState {
-  return { view: "palettes", sectionView: "explore", editorOrigin: "explore", suggestions: shuffledPalettes(), drafts: {}, baselines: {}, pendingSelection: null, activeCompositionId: null, selectedColorId: null };
+  const initial = discoverBatch(COLOR_COLLECTIONS, createDiscoveryCursor());
+  return { view: "palettes", sectionView: "explore", editorOrigin: "explore", suggestions: initial.palettes, discovery: initial.cursor, drafts: {}, baselines: {}, pendingSelection: null, activeCompositionId: null, selectedColorId: null };
 }
 export const activeComposition = (state: EditorState) => state.activeCompositionId ? state.drafts[state.activeCompositionId] : undefined;
 
@@ -90,9 +94,13 @@ export function editorReducer(state: EditorState, action: EditorAction): EditorS
   if (action.type === "back") return { ...state, view: "palettes", sectionView: state.editorOrigin, selectedColorId: null };
   if (action.type === "select-color") return { ...state, selectedColorId: action.colorId };
   if (action.type === "explore") return { ...state, suggestions: action.suggestions };
+  if (action.type === "more-palettes") {
+    const next = discoverBatch(COLOR_COLLECTIONS, state.discovery ?? createDiscoveryCursor(), undefined, action.random);
+    return { ...state, suggestions: [...state.suggestions, ...next.palettes], discovery: next.cursor };
+  }
   const composition = activeComposition(state);
   if (!composition || !state.activeCompositionId) return state;
-  const updated = action.type === "reset" ? resetHistoricalComposition(composition)
+  const updated = action.type === "reset" ? resetSourceComposition(composition)
     : action.type === "color" ? updateColor(composition, action.colorId, action.hex)
     : action.type === "add" ? addColor(composition, action.hex)
     : action.type === "remove" ? removeColor(composition, action.colorId ?? state.selectedColorId ?? "")

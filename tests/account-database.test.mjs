@@ -51,6 +51,18 @@ test("account migration enforces ownership in PostgreSQL", async t => {
       assert.equal((await db.query("select id from public.compositions")).rows.length, 1);
     });
 
+    await t.test("eight-save migration preserves four existing records and their protected counter", async () => {
+      await asUser(alice);
+      for (let index = 0; index < 3; index++) await insertComposition(alice);
+      await assert.rejects(insertComposition(alice), /up to four compositions/);
+      const before = (await db.query("select id, document from public.compositions order by id")).rows;
+      await db.exec("reset role");
+      await db.exec(await readFile("supabase/migrations/202611090001_eight_saved_compositions.sql", "utf8"));
+      await asUser(alice);
+      assert.deepEqual((await db.query("select id, document from public.compositions order by id")).rows, before);
+      assert.equal((await db.query("select saved_composition_count from public.profiles")).rows[0].saved_composition_count, 4);
+    });
+
     await t.test("another account cannot read, overwrite, or impersonate the owner", async () => {
       await asUser(bob);
       assert.equal((await db.query("select * from public.profiles")).rows.length, 0);
@@ -78,19 +90,19 @@ test("account migration enforces ownership in PostgreSQL", async t => {
       return id;
     }
 
-    await t.test("the fifth save is denied, updates at capacity work, and deleting frees one slot", async () => {
+    await t.test("the ninth save is denied, updates at capacity work, and deleting frees one slot", async () => {
       await asUser(alice);
-      for (let index = 0; index < 3; index++) await insertComposition(alice);
-      await assert.rejects(insertComposition(alice), /up to four compositions/);
-      assert.equal((await db.query("select id from public.compositions")).rows.length, 4);
+      for (let index = 0; index < 4; index++) await insertComposition(alice);
+      await assert.rejects(insertComposition(alice), /up to eight compositions/);
+      assert.equal((await db.query("select id from public.compositions")).rows.length, 8);
       await db.query(`insert into public.compositions (owner_id, id, document) values ($1, $2, $3)
         on conflict (owner_id, id) do update set owner_id = excluded.owner_id, id = excluded.id, document = excluded.document`,
         [alice, composition, JSON.stringify({ id: composition, schemaVersion: 1, name: "Updated at capacity" })]);
-      assert.equal((await db.query("select saved_composition_count from public.profiles")).rows[0].saved_composition_count, 4);
+      assert.equal((await db.query("select saved_composition_count from public.profiles")).rows[0].saved_composition_count, 8);
       await db.query("delete from public.compositions where id = $1", [composition]);
-      assert.equal((await db.query("select saved_composition_count from public.profiles")).rows[0].saved_composition_count, 3);
+      assert.equal((await db.query("select saved_composition_count from public.profiles")).rows[0].saved_composition_count, 7);
       await insertComposition(alice);
-      await assert.rejects(insertComposition(alice), /up to four compositions/);
+      await assert.rejects(insertComposition(alice), /up to eight compositions/);
     });
 
     await t.test("clients cannot falsify the quota counter and profile upserts preserve it", async () => {
@@ -99,17 +111,17 @@ test("account migration enforces ownership in PostgreSQL", async t => {
       await assert.rejects(db.query("insert into public.profiles (id, saved_composition_count) values ($1, 0)", [alice]), /permission denied/);
       await db.query(`insert into public.profiles (id, display_name) values ($1, 'Alice updated')
         on conflict (id) do update set id = excluded.id, display_name = excluded.display_name`, [alice]);
-      assert.equal((await db.query("select saved_composition_count from public.profiles")).rows[0].saved_composition_count, 4);
+      assert.equal((await db.query("select saved_composition_count from public.profiles")).rows[0].saved_composition_count, 8);
     });
 
     await t.test("quotas are per account and an owner can delete all their own compositions", async () => {
       await asUser(bob);
-      for (let index = 0; index < 4; index++) await insertComposition(bob);
-      await assert.rejects(insertComposition(bob), /up to four compositions/);
-      assert.equal((await db.query("delete from public.compositions returning id")).rows.length, 4);
+      for (let index = 0; index < 8; index++) await insertComposition(bob);
+      await assert.rejects(insertComposition(bob), /up to eight compositions/);
+      assert.equal((await db.query("delete from public.compositions returning id")).rows.length, 8);
       assert.equal((await db.query("select saved_composition_count from public.profiles")).rows[0].saved_composition_count, 0);
       await asUser(alice);
-      assert.equal((await db.query("select id from public.compositions")).rows.length, 4);
+      assert.equal((await db.query("select id from public.compositions")).rows.length, 8);
     });
 
     await t.test("signed-out requests cannot access account tables", async () => {

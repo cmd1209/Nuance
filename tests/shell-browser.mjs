@@ -19,7 +19,7 @@ const three = editorComposition(cloneComposition(historicalComposition(threeSour
 const four = editorComposition(cloneComposition(historicalComposition(WADA_PALETTES.find(p => p.originalColorCount === 4))));
 let six = editorComposition(cloneComposition(historicalComposition(threeSource)));
 for (const hex of ['#112233', '#445566', '#778899']) six = addColor(six, hex);
-const fixtures = [two, three, four, six];
+const fixtures = [two, three, four, six, ...[two, three, four, six].map(cloneComposition)];
 let env = '';
 try { env = await readFile('.env.local', 'utf8'); } catch { /* CI may configure Vite through the environment. */ }
 const supabaseURL = process.env.VITE_SUPABASE_URL || env.match(/^VITE_SUPABASE_URL\s*=\s*["']?([^\s"']+)/m)?.[1];
@@ -54,7 +54,7 @@ await page.route('**/*', route => {
       posts++;
       const record = { ...request.postDataJSON(), updated_at: new Date().toISOString() };
       assert.equal(record.owner_id, user.id);
-      if (saved.length >= 4 && !saved.some(item => item.id === record.id)) return reply({ message: 'You can save up to four compositions.' }, 400);
+      if (saved.length >= 8 && !saved.some(item => item.id === record.id)) return reply({ message: 'You can save up to eight compositions.' }, 400);
       saved = [record, ...saved.filter(item => item.id !== record.id)];
       return reply(record);
     }
@@ -77,7 +77,7 @@ async function load(count = 0) {
 }
 async function selectView(name) {
   await page.getByRole('tab', { name, exact: true }).click();
-  if (name === 'Saved') await page.getByText(`${saved.length} / 4 saved`, { exact: true }).waitFor();
+  if (name === 'Saved') await page.getByText(`${saved.length} / 8 saved`, { exact: true }).waitFor();
 }
 async function theme(value) {
   if (await page.locator('.nuance-app').getAttribute('data-theme') !== value)
@@ -223,11 +223,11 @@ try {
   assert.equal(await page.locator('.designs-saved-colors > li').count(),2);
   assert.deepEqual(await page.locator('.designs-saved-colors > li').allTextContents(),fixtures.slice(0,2).map(domain.paletteAttribution));
   await page.getByRole('button',{name:'View saved colors',exact:true}).click();
-  await page.getByText('2 / 4 saved',{exact:true}).waitFor();
+  await page.getByText('2 / 8 saved',{exact:true}).waitFor();
   assert.equal(await appNav.locator('[aria-current="page"]').textContent(),'Colors');
   page.once('dialog',dialog=>dialog.accept());
   await page.locator('[data-delete-composition]').first().click();
-  await page.getByText('1 / 4 saved',{exact:true}).waitFor();
+  await page.getByText('1 / 8 saved',{exact:true}).waitFor();
   await appNav.getByRole('button',{name:'Designs',exact:true}).click();
   await page.getByText('1 saved palette available',{exact:true}).waitFor();
   assert.equal(await page.locator('.designs-saved-colors > li').count(),1);
@@ -236,13 +236,13 @@ try {
   await appNav.getByRole('button',{name:'Designs',exact:true}).click();
   await page.getByText('1 saved palette available',{exact:true}).waitFor();
   console.log('PASS: Designs shows only real saved records, ingredient links work, and data updates after Color deletion.');
-  for (const count of [1, 2, 4]) {
+  for (const count of [1, 2, 4, 8]) {
     await page.setViewportSize({ width: 390, height: 844 }); await load(count); await selectView('Saved');
     assert.equal(await page.locator('.saved-gallery__item').count(), count);
     await scrollEnd(); const result = await layout(`saved-${count}-at-document-end`);
     assert.ok(result.lastContentBottom < result.viewport - result.navHeight - 24, 'final card clears navigation');
   }
-  console.log('PASS: one, two, and four saved records; final content clears the navigation.');
+  console.log('PASS: one, two, four, and eight saved records; final content clears the navigation.');
   // Generic future section content must use the document scroll, too.
   await page.setViewportSize({ width: 1280, height: 720 }); await load(); await selectView('Saved');
   await page.locator('.section-layout:not([hidden]) .section-layout__content').evaluate(element => {
@@ -272,7 +272,8 @@ try {
   await appNav.getByRole('button',{name:'Types',exact:true}).click();
   await appNav.getByRole('button',{name:'Colors',exact:true}).click();
   await page.waitForFunction(position=>Math.abs(document.querySelector('.palette-slider__viewport').scrollLeft-position)<1,carouselPosition);
-  await page.locator(`[data-composition-id="${threeSource.paletteId}"]`).click();
+  const exploredWadaId = await page.locator('.palette-card').evaluateAll(cards => cards.find(card => card.dataset.compositionId.startsWith('sanzo-wada-') && card.querySelectorAll('.palette-card__color').length === 3).dataset.compositionId);
+  await page.locator(`[data-composition-id="${exploredWadaId}"]`).click();
   assert.equal(await page.getByRole('tab', { name: 'Edit', selected: true }).count(), 1);
   const original = await artwork();
   await page.locator('.color-region__select').first().click();
@@ -308,7 +309,7 @@ try {
   await page.getByRole('button', { name: 'Reset composition', exact: true }).click(); assert.equal(await page.locator('.color-region').count(), 3);
   const beforeSwitch = await artwork();
   await selectView('Explore');
-  const otherId = await page.locator('.palette-card').evaluateAll((cards, current) => cards.find(card => card.dataset.compositionId !== current).dataset.compositionId, threeSource.paletteId);
+  const otherId = await page.locator('.palette-card').evaluateAll((cards, current) => cards.find(card => card.dataset.compositionId !== current).dataset.compositionId, exploredWadaId);
   await page.locator(`[data-composition-id="${otherId}"]`).click();
   await page.getByRole('dialog', { name: 'Switch palettes?' }).waitFor(); await page.getByRole('button', { name: 'Cancel', exact: true }).click();
   assert.deepEqual(await artwork(), beforeSwitch);
@@ -316,22 +317,64 @@ try {
   await page.getByRole('button', { name: 'Discard & Switch', exact: true }).click(); assert.notEqual((await artwork()).source, beforeSwitch.source);
   assert.equal(await page.getByRole('button', { name: /PNG|Download composition/ }).count(), 0);
   console.log('PASS: palette arrows/keyboard, edits, real mouse drag, view continuity, save/upsert identity, six-color limit, removal/reset, cancel/discard. PNG stays hidden.');
-  await load(4); await selectView('Saved'); await page.locator('.saved-gallery .palette-card').first().click();
+  await load(8); await selectView('Saved'); await page.locator('.saved-gallery .palette-card').first().click();
   assert.equal(await page.locator('.color-region').count(), 2);
-  await save(); assert.equal(saved.length, 4);
+  await save(); assert.equal(saved.length, 8);
   await selectView('Explore'); await page.locator('.palette-card').first().click();
   assert.ok(await page.getByRole('button', { name: /Save composition — limit reached/ }).isDisabled());
   await selectView('Saved');
   page.on('dialog', dialog => dialog.accept()); failDelete = true;
   await page.locator('[data-delete-composition]').first().click();
-  await page.getByRole('alert').filter({ hasText: 'Temporary delete failure' }).waitFor(); assert.equal(saved.length, 4);
-  await page.locator('[data-delete-composition]').first().click(); await page.getByText('3 / 4 saved', { exact: true }).waitFor(); assert.equal(saved.length, 3);
+  await page.getByRole('alert').filter({ hasText: 'Temporary delete failure' }).waitFor(); assert.equal(saved.length, 8);
+  await page.locator('[data-delete-composition]').first().click(); await page.getByText('7 / 8 saved', { exact: true }).waitFor(); assert.equal(saved.length, 7);
   await page.getByRole('button', { name: 'Open your profile' }).click();
   await page.getByRole('dialog').getByRole('button', { name: 'Save changes', exact: true }).waitFor();
   await page.getByLabel('Display name', { exact: true }).fill('Updated name'); await page.getByRole('button', { name: 'Save changes', exact: true }).click();
   await page.getByText('Profile updated.', { exact: true }).waitFor(); assert.equal(profile.display_name, 'Updated name');
   await page.keyboard.press('Escape'); assert.equal(await page.getByRole('button', { name: 'Open your profile' }).evaluate(element => element === document.activeElement), true);
   console.log('PASS: editing at capacity, two-color saved geometry, quota, deletion failure/retry/count, profile update and modal focus return.');
+  await page.setViewportSize({width:1280,height:1000}); await load();
+  const allCards = page.locator('.palette-slider .palette-card');
+  assert.equal(await allCards.count(),60);
+  assert.equal(await page.locator('.palette-slider [data-composition-id^="sanzo-wada-"]').count(),30);
+  assert.equal(await page.locator('.palette-slider [data-composition-id^="werner-nuance-"]').count(),30);
+  assert.equal(await page.getByRole('combobox').count(),0);
+  const firstBatch = await allCards.evaluateAll(cards=>cards.map(card=>card.dataset.compositionId));
+  await page.locator('.palette-slider__viewport').evaluate(element=>element.scrollTo({left:element.scrollWidth,behavior:'instant'}));
+  await page.waitForFunction(()=>document.querySelectorAll('.palette-slider .palette-card').length===120);
+  assert.deepEqual((await allCards.evaluateAll(cards=>cards.map(card=>card.dataset.compositionId))).slice(0,60),firstBatch);
+  assert.equal(await page.locator('.palette-slider [data-composition-id^="werner-nuance-"]').count(),60);
+  const occurrence = await page.locator('.palette-slider [data-composition-id="werner-nuance-005"]').last().getAttribute('data-palette-index');
+  await page.locator(`[data-palette-index="${occurrence}"]`).click();
+  assert.equal((await artwork()).source,'Werner · Nuance No. 5');
+  const originalWerner = await artwork();
+  await page.locator('.color-region__select').first().click();await page.getByLabel('HEX',{exact:true}).fill('#123456');
+  await page.getByRole('button',{name:'Close color editor',exact:true}).click();
+  const wernerDivider=page.getByRole('separator').first();await wernerDivider.focus();await page.keyboard.press('ArrowRight');
+  assert.match((await artwork()).source,/^Based on Werner · Nuance No. 5/);
+  const modifiedWerner=await artwork();await selectView('Explore');await selectView('Edit');assert.deepEqual(await artwork(),modifiedWerner);
+  await selectView('Saved');await selectView('Edit');assert.deepEqual(await artwork(),modifiedWerner);
+  await selectView('Explore');
+  await page.waitForFunction(index=>{
+    const el=document.querySelector('.palette-slider__viewport');const step=el.clientWidth+parseFloat(getComputedStyle(el).columnGap);
+    return Math.round(el.scrollLeft/step)===Math.floor(Number(index)/3);
+  },occurrence);
+  await page.locator('.palette-slider [data-composition-id^="sanzo-wada-"]').first().click();
+  await page.getByRole('dialog',{name:'Switch palettes?'}).waitFor();await page.getByRole('button',{name:'Cancel',exact:true}).click();assert.deepEqual(await artwork(),modifiedWerner);
+  await save();const wernerSavedId=saved[0].id;assert.equal(saved[0].document.source,'werner-nuance');assert.equal(saved[0].document.curated.combinationNumber,5);
+  assert.equal(saved[0].document.curated.curation,'nuance-generated');assert.equal(saved[0].document.curated.colors.length,3);
+  await page.getByRole('button',{name:'Reset composition',exact:true}).click();assert.equal((await artwork()).source,'Werner · Nuance No. 5');
+  assert.deepEqual((await artwork()).colors.map(c=>c.hex),originalWerner.colors.map(c=>c.hex));
+  await save();assert.equal(saved.length,1);assert.equal(saved[0].id,wernerSavedId);
+  await selectView('Explore');await page.locator('.palette-slider [data-composition-id^="sanzo-wada-"]').first().click();await save();assert.equal(saved.length,2);
+  await selectView('Saved');await page.locator(`[data-composition-id="${wernerSavedId}"]`).click();assert.equal((await artwork()).source,'Werner · Nuance No. 5');
+  await page.locator('.color-region__select').first().click();await page.getByLabel('HEX',{exact:true}).fill('#ABCDEF');await page.getByRole('button',{name:'Close color editor',exact:true}).click();
+  await save();assert.equal(saved.length,2);assert.equal(saved.find(record=>record.id===wernerSavedId).document.colors[0].hex,'#ABCDEF');
+  await page.reload();await page.getByRole('button',{name:'Open your profile'}).waitFor();await selectView('Saved');
+  await page.locator(`[data-composition-id="${wernerSavedId}"]`).click();assert.equal((await artwork()).colors[0].hex,'#ABCDEF');
+  await page.setViewportSize({width:390,height:844});await layout('unified-werner-editor-mobile');await pixels('unified-werner-editor-mobile');
+  assert.equal(await page.getByRole('button',{name:/PNG|Download composition/}).count(),0);
+  console.log('PASS: unified 50/50 discovery, appended source cycles, repeated-palette position, Werner attribution/reset/editing/dirty protection and mixed-source save/update/reload. No added controls or PNG action.');
   await load(4); await selectView('Saved');
   await page.locator(`[data-composition-id="${six.id}"]`).click();
   for (const viewport of [{width:390,height:844},{width:320,height:568},{width:568,height:320}]) {

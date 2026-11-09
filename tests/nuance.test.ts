@@ -10,10 +10,13 @@ import { drawComposition } from "../src/nuance/export/png";
 import { readSavedComposition } from "../src/nuance/account/repository";
 import { authReturnUrl, readAuthReturn, validatePassword, MIN_PASSWORD_LENGTH } from "../src/nuance/account/emailAuth";
 import { canSaveComposition, MAX_SAVED_COMPOSITIONS } from "../src/nuance/account/compositionLimit";
+import { SOURCE_LIBRARY_LIMITS } from "../src/nuance/domain/categories";
 
 const fixture = () => createComposition(PRESET_HEXES[0], "Test composition");
 
-test("four saved compositions blocks new documents while allowing edits and a replacement after deletion", () => {
+test("eight saved compositions blocks new documents while allowing edits and a replacement after deletion", () => {
+  assert.equal(MAX_SAVED_COMPOSITIONS, 8);
+  assert.deepEqual(SOURCE_LIBRARY_LIMITS, { colors:8, types:8, spaces:4, details:4 });
   const saved = Array.from({ length: MAX_SAVED_COMPOSITIONS }, (_, index) => ({ id: `saved-${index}` }));
   assert.equal(canSaveComposition(saved, "new"), false);
   assert.equal(canSaveComposition(saved, "saved-0"), true);
@@ -60,17 +63,18 @@ test("saved compositions validate cloud documents and reopen without cloning or 
   assert.throws(() => readSavedComposition({ id: original.id, document: { ...original, layout: null }, updated_at: new Date().toISOString() }));
 });
 
-test("palette browser includes every historical composition and keeps its order while editing", () => {
+test("palette browser starts with a balanced batch and keeps its order while editing", () => {
   let state = createEditorState();
   const order = state.suggestions;
-  assert.equal(state.suggestions.length, 348);
-  assert.deepEqual(state.suggestions.map(palette => palette.historical!.combinationNumber).sort((a, b) => a - b), Array.from({ length: 348 }, (_, index) => index + 1));
-  assert.equal(new Set(state.suggestions.map(palette => palette.id)).size, 348);
-  const palette = state.suggestions[347];
+  assert.equal(state.suggestions.length, 60);
+  assert.equal(state.suggestions.filter(palette => palette.source === "sanzo-wada").length, 30);
+  assert.equal(state.suggestions.filter(palette => palette.source === "werner-nuance").length, 30);
+  assert.equal(new Set(state.suggestions.map(palette => palette.id)).size, 60);
+  const palette = state.suggestions[59];
   state = editorReducer(state, { type: "select-palette", palette });
   const draftId = activeComposition(state)!.id;
   state = editorReducer(state, { type: "back" });
-  assert.equal(state.suggestions.length, 348);
+  assert.equal(state.suggestions.length, 60);
   assert.equal(state.activeCompositionId, palette.id);
   state = editorReducer(state, { type: "select-palette", palette });
   assert.equal(activeComposition(state)!.id, draftId);
@@ -84,8 +88,8 @@ test("palette shuffling changes order without duplicating or altering historical
   assert.notDeepEqual(first.map(palette => palette.id), second.map(palette => palette.id));
   assert.notDeepEqual(first.map(palette => palette.id), WADA_PALETTES.map(reference => reference.paletteId));
   for (const palettes of [first, second]) {
-    assert.equal(new Set(palettes.map(palette => palette.id)).size, WADA_PALETTES.length);
-    for (const palette of palettes) {
+    assert.equal(new Set(palettes.map(palette => palette.id)).size, 60);
+    for (const palette of palettes.filter(palette => palette.source === "sanzo-wada")) {
       const reference = WADA_PALETTES.find(reference => reference.paletteId === palette.id)!;
       assert.equal(palette.historical, reference);
       assert.deepEqual(palette.colors.map(color => color.hex), reference.colors.map(color => normalizeHex(color.hex)));
@@ -411,7 +415,7 @@ test("Saved renders actual records, accurate previews, accessible actions, and a
   const markup = savedMarkup(accountFixture({ saved }));
   assert.equal((markup.match(/<article/g) ?? []).length, 2);
   assert.equal((markup.match(/data-delete-composition=/g) ?? []).length, 2);
-  assert.match(markup, /2 \/ 4 saved/);
+  assert.match(markup, /2 \/ 8 saved/);
   assert.ok(markup.includes(paletteAttribution(composition)));
   assert.ok(markup.includes(`Delete ${paletteAttribution(composition)}`));
   assert.ok(markup.includes(`Edit ${composition.name}`));
@@ -420,13 +424,13 @@ test("Saved renders actual records, accurate previews, accessible actions, and a
   assert.ok(markup.includes(`width:${rect.width * 100}%`));
   assert.ok(markup.includes(`aspect-ratio:${composition.artwork.width} / ${composition.artwork.height}`));
   const afterDeletion = savedMarkup(accountFixture({ saved: saved.slice(1) }));
-  assert.match(afterDeletion, /1 \/ 4 saved/);
+  assert.match(afterDeletion, /1 \/ 8 saved/);
   assert.equal((afterDeletion.match(/<article/g) ?? []).length, 1);
 });
 
 test("Saved distinguishes empty, signed-out, loading, and error states without placeholder cards", () => {
   const empty = savedMarkup(accountFixture());
-  assert.match(empty, /No saved colors yet/); assert.match(empty, /Explore palettes/); assert.match(empty, /0 \/ 4 saved/);
+  assert.match(empty, /No saved colors yet/); assert.match(empty, /Explore palettes/); assert.match(empty, /0 \/ 8 saved/);
   assert.ok(!empty.includes('<article'));
   const guest = savedMarkup(accountFixture({ user: null }));
   assert.match(guest, /Sign in to see/); assert.ok(!guest.includes('No saved colors yet'));

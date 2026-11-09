@@ -126,7 +126,7 @@ export function useAccount() {
   }
   async function save(composition: Composition) {
     if (!supabase || !userId || owner.current !== userId) throw new Error("Please sign in to save your composition.");
-    if (data?.owner === userId && !canSaveComposition(data.saved, composition.id)) throw new Error("You can save up to four compositions. Delete one before saving another.");
+    if (data?.owner === userId && !canSaveComposition(data.saved, composition.id)) throw new Error("You can save up to eight compositions. Delete one before saving another.");
     const saved = await saveComposition(supabase, userId, composition);
     if (owner.current !== userId) throw new Error("Your account changed. Please sign in and save again.");
     setData(previous => ({ owner: userId, profile: previous?.owner === userId ? previous.profile : { id: userId, display_name: "" },

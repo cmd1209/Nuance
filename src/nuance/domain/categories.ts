@@ -10,4 +10,4 @@ export type DesignCategoryId = typeof DESIGN_CATEGORIES[number]["id"];
 export type FoundationSectionId = Exclude<DesignCategoryId, "colors" | "designs">;
 
 // Each source library has its own allowance. Designs will combine one of each.
-export const SOURCE_LIBRARY_LIMITS = { colors: 4, types: 4, spaces: 4, details: 4 } as const;
+export const SOURCE_LIBRARY_LIMITS = { colors: 8, types: 8, spaces: 4, details: 4 } as const;

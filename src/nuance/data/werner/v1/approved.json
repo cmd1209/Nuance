@@ -1,0 +1,1527 @@
+{
+  "collection": "werner-nuance",
+  "version": 1,
+  "exportedAt": "2026-11-09T14:09:36.784Z",
+  "exportSha256": "f937a28639187f0bc8ef42b98acf3be36dbcb335721236f88ae3c9675a4ba1a8",
+  "colors": [
+    {
+      "id": "werner-005",
+      "source": "werner-1821",
+      "number": 5,
+      "name": "Orange coloured White",
+      "hex": "#F3E9CA",
+      "family": "white",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Breast of White or Screech Owl.",
+        "vegetable": "Large Wild Convolvulus.",
+        "mineral": "French Porcelain Clay."
+      }
+    },
+    {
+      "id": "werner-007",
+      "source": "werner-1821",
+      "number": 7,
+      "name": "Skimmed milk White",
+      "hex": "#E6E1C9",
+      "family": "white",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "White of the Human Eyeballs.",
+        "vegetable": "Back of the Petals of Blue Hepatica.",
+        "mineral": "Common Opal."
+      }
+    },
+    {
+      "id": "werner-008",
+      "source": "werner-1821",
+      "number": 8,
+      "name": "Greyish White",
+      "hex": "#E2DDC6",
+      "family": "white",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Inside Quill-feathers of the Kittiwake.",
+        "vegetable": "White Hamburgh Grapes.",
+        "mineral": "Granular Limestone."
+      }
+    },
+    {
+      "id": "werner-009",
+      "source": "werner-1821",
+      "number": 9,
+      "name": "Ash Grey",
+      "hex": "#CBC8B7",
+      "family": "grey",
+      "alias": "grey",
+      "characteristic": true,
+      "references": {
+        "animal": "Breast of long tailed Hen Titmouse.",
+        "vegetable": "Fresh Wood ashes.",
+        "mineral": "Flint."
+      }
+    },
+    {
+      "id": "werner-010",
+      "source": "werner-1821",
+      "number": 10,
+      "name": "Smoke Grey",
+      "hex": "#BFBBB0",
+      "family": "grey",
+      "alias": "smoke",
+      "characteristic": false,
+      "references": {
+        "animal": "Breast of the Robin round the Red.",
+        "vegetable": null,
+        "mineral": "Flint."
+      }
+    },
+    {
+      "id": "werner-013",
+      "source": "werner-1821",
+      "number": 13,
+      "name": "Yellowish Grey",
+      "hex": "#BAB191",
+      "family": "grey",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Vent coverts of White Rump.",
+        "vegetable": "Stems of the Barberry.",
+        "mineral": "Common Calcedony."
+      }
+    },
+    {
+      "id": "werner-015",
+      "source": "werner-1821",
+      "number": 15,
+      "name": "Greenish Grey",
+      "hex": "#8A8D84",
+      "family": "grey",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Quill feathers of the Robin.",
+        "vegetable": "Bark of Ash Tree.",
+        "mineral": "Clay Slate Wacke."
+      }
+    },
+    {
+      "id": "werner-017",
+      "source": "werner-1821",
+      "number": 17,
+      "name": "Greyish Black",
+      "hex": "#555152",
+      "family": "black",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Water Ousel. Breast and upper Part of Back of Water Hen.",
+        "vegetable": null,
+        "mineral": "Basalt."
+      }
+    },
+    {
+      "id": "werner-018",
+      "source": "werner-1821",
+      "number": 18,
+      "name": "Bluish Black",
+      "hex": "#413F44",
+      "family": "black",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Largest Black Slug",
+        "vegetable": "Crowberry.",
+        "mineral": "Black Cobalt Ochre."
+      }
+    },
+    {
+      "id": "werner-019",
+      "source": "werner-1821",
+      "number": 19,
+      "name": "Greenish Black",
+      "hex": "#454445",
+      "family": "black",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Breast of Lapwing",
+        "vegetable": null,
+        "mineral": "Hornblende"
+      }
+    },
+    {
+      "id": "werner-022",
+      "source": "werner-1821",
+      "number": 22,
+      "name": "Ink Black",
+      "hex": "#252024",
+      "family": "black",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": null,
+        "vegetable": "Berry of Deadly Night Shade",
+        "mineral": "Oliven ore"
+      }
+    },
+    {
+      "id": "werner-023",
+      "source": "werner-1821",
+      "number": 23,
+      "name": "Velvet Black",
+      "hex": "#241F20",
+      "family": "black",
+      "alias": "black",
+      "characteristic": true,
+      "references": {
+        "animal": "Mole. Tail Feathers of Black Cock.",
+        "vegetable": "Black of Red and Black West-Indian peas.",
+        "mineral": "Obsidian"
+      }
+    },
+    {
+      "id": "werner-024",
+      "source": "werner-1821",
+      "number": 24,
+      "name": "Scotch Blue",
+      "hex": "#281F3F",
+      "family": "blue",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Throat of Blue Titmouse.",
+        "vegetable": "Stamina of Single Purple Anemone.",
+        "mineral": "Blue Copper Ore."
+      }
+    },
+    {
+      "id": "werner-026",
+      "source": "werner-1821",
+      "number": 26,
+      "name": "Indigo Blue",
+      "hex": "#4F638D",
+      "family": "blue",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": null,
+        "vegetable": null,
+        "mineral": "Blue Copper Ore."
+      }
+    },
+    {
+      "id": "werner-028",
+      "source": "werner-1821",
+      "number": 28,
+      "name": "Azure Blue",
+      "hex": "#5C6B8F",
+      "family": "blue",
+      "alias": "azure",
+      "characteristic": false,
+      "references": {
+        "animal": "Breast of Emerald-crested Manakin",
+        "vegetable": "Grape Hyacinth. Gentian.",
+        "mineral": "Blue Copper Ore."
+      }
+    },
+    {
+      "id": "werner-029",
+      "source": "werner-1821",
+      "number": 29,
+      "name": "Ultramarine Blue",
+      "hex": "#657ABB",
+      "family": "blue",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Upper Side of the Wings of small blue Heath Butterfly.",
+        "vegetable": "Borrage.",
+        "mineral": "Azure Stone or Lapis Lazuli."
+      }
+    },
+    {
+      "id": "werner-030",
+      "source": "werner-1821",
+      "number": 30,
+      "name": "Flax-Flower Blue",
+      "hex": "#6F88AF",
+      "family": "blue",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Light Parts of the Margin of the Wings of Devil's Butterfly.",
+        "vegetable": "Flax flower.",
+        "mineral": "Blue Copper Ore"
+      }
+    },
+    {
+      "id": "werner-031",
+      "source": "werner-1821",
+      "number": 31,
+      "name": "Berlin Blue",
+      "hex": "#7994B5",
+      "family": "blue",
+      "alias": "berlin,blue",
+      "characteristic": true,
+      "references": {
+        "animal": "Wing Feathers of Jay.",
+        "vegetable": "Hepatica.",
+        "mineral": "Blue Sapphire."
+      }
+    },
+    {
+      "id": "werner-032",
+      "source": "werner-1821",
+      "number": 32,
+      "name": "Verditter Blue",
+      "hex": "#6FB5A8",
+      "family": "blue",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": null,
+        "vegetable": null,
+        "mineral": "Lenticular Ore."
+      }
+    },
+    {
+      "id": "werner-033",
+      "source": "werner-1821",
+      "number": 33,
+      "name": "Greenish Blue",
+      "hex": "#719BA2",
+      "family": "blue",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": null,
+        "vegetable": "Great Fennel Flower.",
+        "mineral": "Turquoise or Flour Spar."
+      }
+    },
+    {
+      "id": "werner-035",
+      "source": "werner-1821",
+      "number": 35,
+      "name": "Bluish Lilac Purple",
+      "hex": "#D0D5D3",
+      "family": "purple",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Male of the Lebellula Depressa.",
+        "vegetable": "Blue Lilac.",
+        "mineral": "Lepidolite."
+      }
+    },
+    {
+      "id": "werner-036",
+      "source": "werner-1821",
+      "number": 36,
+      "name": "Bluish Purple",
+      "hex": "#8590AE",
+      "family": "purple",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Papilio Argeotus. Azure Blue Butterfly.",
+        "vegetable": "Parts of White and Purple Crocus.",
+        "mineral": null
+      }
+    },
+    {
+      "id": "werner-038",
+      "source": "werner-1821",
+      "number": 38,
+      "name": "Pansy Purple",
+      "hex": "#39334A",
+      "family": "purple",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Chrysomela Goettingensis.",
+        "vegetable": "Sweet-scented Violet.",
+        "mineral": "Derbyshire Spar."
+      }
+    },
+    {
+      "id": "werner-041",
+      "source": "werner-1821",
+      "number": 41,
+      "name": "Auricula Purple",
+      "hex": "#533552",
+      "family": "purple",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Egg of largest Bluebottle. or Flesh Fly.",
+        "vegetable": "Largest Purple Auricula.",
+        "mineral": "Fluor Spar."
+      }
+    },
+    {
+      "id": "werner-042",
+      "source": "werner-1821",
+      "number": 42,
+      "name": "Plum Purple",
+      "hex": "#463759",
+      "family": "purple",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": null,
+        "vegetable": "Plum.",
+        "mineral": "Fluor Spar."
+      }
+    },
+    {
+      "id": "werner-045",
+      "source": "werner-1821",
+      "number": 45,
+      "name": "Pale Blackish Purple",
+      "hex": "#4A475C",
+      "family": "purple",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": null,
+        "vegetable": null,
+        "mineral": "Porcelain Jasper."
+      }
+    },
+    {
+      "id": "werner-050",
+      "source": "werner-1821",
+      "number": 50,
+      "name": "Verdigris Green",
+      "hex": "#61AC86",
+      "family": "green",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Tail of small Long-tailed Green Parrot.",
+        "vegetable": null,
+        "mineral": "Copper Green."
+      }
+    },
+    {
+      "id": "werner-051",
+      "source": "werner-1821",
+      "number": 51,
+      "name": "Bluish Green",
+      "hex": "#A4B6A7",
+      "family": "green",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Egg of Thrush.",
+        "vegetable": "Under Disk of Wild Rose Leaves.",
+        "mineral": "Beryl."
+      }
+    },
+    {
+      "id": "werner-052",
+      "source": "werner-1821",
+      "number": 52,
+      "name": "Apple Green",
+      "hex": "#ADBA98",
+      "family": "green",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Under Side of Wings of Green Broom Moth.",
+        "vegetable": null,
+        "mineral": "Crysoprase."
+      }
+    },
+    {
+      "id": "werner-053",
+      "source": "werner-1821",
+      "number": 53,
+      "name": "Emerald Green",
+      "hex": "#93B778",
+      "family": "green",
+      "alias": "green",
+      "characteristic": true,
+      "references": {
+        "animal": "Beauty Spot on Wing of Teal Drake.",
+        "vegetable": null,
+        "mineral": "Emerald."
+      }
+    },
+    {
+      "id": "werner-054",
+      "source": "werner-1821",
+      "number": 54,
+      "name": "Grass Green",
+      "hex": "#7D8C55",
+      "family": "green",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Scarabœus Nobilis.",
+        "vegetable": "General Appearance of Grass Fields. Sweet Sugar Pear",
+        "mineral": "Uran Mica."
+      }
+    },
+    {
+      "id": "werner-057",
+      "source": "werner-1821",
+      "number": 57,
+      "name": "Pistachio Green",
+      "hex": "#8E9849",
+      "family": "green",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Neck of Eider Drake",
+        "vegetable": "Ripe Pound Pear. Hypman like Saxifrage.",
+        "mineral": "Crysolite."
+      }
+    },
+    {
+      "id": "werner-058",
+      "source": "werner-1821",
+      "number": 58,
+      "name": "Asparagus Green",
+      "hex": "#C2C190",
+      "family": "green",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Brimstone Butterfly.",
+        "vegetable": "Veriegated Horse-Shoe Geranium.",
+        "mineral": "Beryl."
+      }
+    },
+    {
+      "id": "werner-059",
+      "source": "werner-1821",
+      "number": 59,
+      "name": "Olive Green",
+      "hex": "#67765B",
+      "family": "green",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": null,
+        "vegetable": "Foliage of Lignum vitœ.",
+        "mineral": "Epidote Olvene Ore."
+      }
+    },
+    {
+      "id": "werner-060",
+      "source": "werner-1821",
+      "number": 60,
+      "name": "Oil Green",
+      "hex": "#AB924B",
+      "family": "green",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Animal and Shell of common Water Snail.",
+        "vegetable": "Nonpareil Apple from the Wall.",
+        "mineral": "Beryl."
+      }
+    },
+    {
+      "id": "werner-061",
+      "source": "werner-1821",
+      "number": 61,
+      "name": "Siskin Green",
+      "hex": "#C8C76F",
+      "family": "green",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Siskin.",
+        "vegetable": "Ripe Coalmar Pear. Irish Pitcher Apple.",
+        "mineral": "Uran Mica."
+      }
+    },
+    {
+      "id": "werner-062",
+      "source": "werner-1821",
+      "number": 62,
+      "name": "Sulphur Yellow",
+      "hex": "#CCC050",
+      "family": "yellow",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Yellow Parts of large Dragon Fly.",
+        "vegetable": "Various Coloured Snap dragon.",
+        "mineral": "Sulphur"
+      }
+    },
+    {
+      "id": "werner-065",
+      "source": "werner-1821",
+      "number": 65,
+      "name": "Lemon Yellow",
+      "hex": "#DBC364",
+      "family": "yellow",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Large Wasp or Hornet",
+        "vegetable": "Shrubby Goldylocks.",
+        "mineral": "Yellow Orpiment."
+      }
+    },
+    {
+      "id": "werner-067",
+      "source": "werner-1821",
+      "number": 67,
+      "name": "Kings Yellow",
+      "hex": "#EAD665",
+      "family": "yellow",
+      "alias": "king's yellow",
+      "characteristic": false,
+      "references": {
+        "animal": "Head of Golden Pheasant.",
+        "vegetable": "Yellow tulip. Cinque foil.",
+        "mineral": null
+      }
+    },
+    {
+      "id": "werner-068",
+      "source": "werner-1821",
+      "number": 68,
+      "name": "Saffron Yellow",
+      "hex": "#D09B2C",
+      "family": "yellow",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Tail Coverts of Golden Pheasant.",
+        "vegetable": "Anhers of Saffron Grocus.",
+        "mineral": null
+      }
+    },
+    {
+      "id": "werner-069",
+      "source": "werner-1821",
+      "number": 69,
+      "name": "Gallstone Yellow",
+      "hex": "#A36629",
+      "family": "yellow",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Gallstones.",
+        "vegetable": "Marigold Apple.",
+        "mineral": null
+      }
+    },
+    {
+      "id": "werner-072",
+      "source": "werner-1821",
+      "number": 72,
+      "name": "Wine Yellow",
+      "hex": "#D7C485",
+      "family": "yellow",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Body of Silk Moth.",
+        "vegetable": "White Currants.",
+        "mineral": "Saxon Topaz."
+      }
+    },
+    {
+      "id": "werner-073",
+      "source": "werner-1821",
+      "number": 73,
+      "name": "Sienna Yellow",
+      "hex": "#F1D28C",
+      "family": "yellow",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Vent Parts of Tail of Bird of Paradise.",
+        "vegetable": "Stamina of Honey-suckle.",
+        "mineral": "Pale Brazilian Topaz."
+      }
+    },
+    {
+      "id": "werner-074",
+      "source": "werner-1821",
+      "number": 74,
+      "name": "Ochre Yellow",
+      "hex": "#EFCC83",
+      "family": "yellow",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Vent Coverts of Red Start.",
+        "vegetable": null,
+        "mineral": "Porcelain Jasper."
+      }
+    },
+    {
+      "id": "werner-076",
+      "source": "werner-1821",
+      "number": 76,
+      "name": "Dutch Orange",
+      "hex": "#DFA837",
+      "family": "orange",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Crest of Golden crested Wren.",
+        "vegetable": "Common Marigold. Seedpod of Spindle-tree.",
+        "mineral": "Streak of Red Orpiment."
+      }
+    },
+    {
+      "id": "werner-077",
+      "source": "werner-1821",
+      "number": 77,
+      "name": "Buff Orange",
+      "hex": "#EBBC71",
+      "family": "orange",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Streak from the Eye of the King Fisher.",
+        "vegetable": "Stamina of the large White Cistus.",
+        "mineral": "Natrolite."
+      }
+    },
+    {
+      "id": "werner-079",
+      "source": "werner-1821",
+      "number": 79,
+      "name": "Brownish Orange",
+      "hex": "#92462F",
+      "family": "orange",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Eyes of the largest Flesh Fly.",
+        "vegetable": "Style of the Orange Lily.",
+        "mineral": "Dark Brazilian Topaz."
+      }
+    },
+    {
+      "id": "werner-080",
+      "source": "werner-1821",
+      "number": 80,
+      "name": "Reddish Orange",
+      "hex": "#BE7249",
+      "family": "orange",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Lower Wings of Tyger Moth.",
+        "vegetable": "Hemimeris. Buff Hibiscus.",
+        "mineral": null
+      }
+    },
+    {
+      "id": "werner-083",
+      "source": "werner-1821",
+      "number": 83,
+      "name": "Hyacinth Red",
+      "hex": "#A75536",
+      "family": "red",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Red Spots of the Lygœns Apterus Fly.",
+        "vegetable": "Red on the golden Rennette Apple.",
+        "mineral": "Hyacinth."
+      }
+    },
+    {
+      "id": "werner-084",
+      "source": "werner-1821",
+      "number": 84,
+      "name": "Scarlet Red",
+      "hex": "#B63E36",
+      "family": "red",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Scarlet Ibis or Curlew. Mark on the Head of Red Grouse.",
+        "vegetable": "Large red Oriental Poppy. Red Parts of red and black Indian Peas.",
+        "mineral": "Light red Cinnaber."
+      }
+    },
+    {
+      "id": "werner-085",
+      "source": "werner-1821",
+      "number": 85,
+      "name": "Vermilion Red",
+      "hex": "#B5493A",
+      "family": "red",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Red Coral.",
+        "vegetable": "Love Apple.",
+        "mineral": "Cinnaber."
+      }
+    },
+    {
+      "id": "werner-086",
+      "source": "werner-1821",
+      "number": 86,
+      "name": "Aurora Red",
+      "hex": "#CD6D57",
+      "family": "red",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Vent convers of Pied Wood-Pecker.",
+        "vegetable": "Red on the Naked Apple.",
+        "mineral": "Red Orpiment."
+      }
+    },
+    {
+      "id": "werner-087",
+      "source": "werner-1821",
+      "number": 87,
+      "name": "Arterial Blood Red",
+      "hex": "#711518",
+      "family": "red",
+      "alias": "red",
+      "characteristic": true,
+      "references": {
+        "animal": "Head of the Cock Gold-finch.",
+        "vegetable": "Corn Poppy Cherry.",
+        "mineral": null
+      }
+    },
+    {
+      "id": "werner-088",
+      "source": "werner-1821",
+      "number": 88,
+      "name": "Flesh Red",
+      "hex": "#E9C49D",
+      "family": "red",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Human Skin.",
+        "vegetable": "Larkspur.",
+        "mineral": "Heavy Spar. Limestone."
+      }
+    },
+    {
+      "id": "werner-089",
+      "source": "werner-1821",
+      "number": 89,
+      "name": "Rose Red",
+      "hex": "#EEDAC3",
+      "family": "red",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": null,
+        "vegetable": "Common Garden Rose.",
+        "mineral": "Figure Stone."
+      }
+    },
+    {
+      "id": "werner-094",
+      "source": "werner-1821",
+      "number": 94,
+      "name": "Purplish Red",
+      "hex": "#612741",
+      "family": "red",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Outside of Quills of Terico.",
+        "vegetable": "Dark Crimson Officinal Garden Rose.",
+        "mineral": "Precious Garnet."
+      }
+    },
+    {
+      "id": "werner-095",
+      "source": "werner-1821",
+      "number": 95,
+      "name": "Cochineal Red",
+      "hex": "#7A4848",
+      "family": "red",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": null,
+        "vegetable": "Under Disk of decayed Leaves of None-so-pretty.",
+        "mineral": "Dark Cinnaber"
+      }
+    },
+    {
+      "id": "werner-096",
+      "source": "werner-1821",
+      "number": 96,
+      "name": "Veinous Blood Red",
+      "hex": "#3F3033",
+      "family": "red",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Veinous Blood.",
+        "vegetable": "Musk Flower, or dark Purple Scabious.",
+        "mineral": "Pyrope."
+      }
+    },
+    {
+      "id": "werner-098",
+      "source": "werner-1821",
+      "number": 98,
+      "name": "Chocolate Red",
+      "hex": "#4D3635",
+      "family": "red",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Breast of Bird of Paradise.",
+        "vegetable": "Brown Disk of common Marigold.",
+        "mineral": null
+      }
+    },
+    {
+      "id": "werner-099",
+      "source": "werner-1821",
+      "number": 99,
+      "name": "Brownish Red",
+      "hex": "#6E3B31",
+      "family": "red",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Mark on Throat of Red-throated Diver.",
+        "vegetable": null,
+        "mineral": "Iron Flint."
+      }
+    },
+    {
+      "id": "werner-102",
+      "source": "werner-1821",
+      "number": 102,
+      "name": "Umber Brown",
+      "hex": "#613936",
+      "family": "brown",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Moor Buzzard.",
+        "vegetable": "Disk of Rubeckia.",
+        "mineral": null
+      }
+    },
+    {
+      "id": "werner-105",
+      "source": "werner-1821",
+      "number": 105,
+      "name": "Wood Brown",
+      "hex": "#C39E6D",
+      "family": "brown",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Common Weasel. Light parts of Feathers on the Back of the Snipe.",
+        "vegetable": "Hazel Nuts.",
+        "mineral": "Mountain Wood."
+      }
+    },
+    {
+      "id": "werner-106",
+      "source": "werner-1821",
+      "number": 106,
+      "name": "Liver Brown",
+      "hex": "#513E32",
+      "family": "brown",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Middle Parts of Feathers of Hen Pheasant, and Wing coverts of Gosbeak.",
+        "vegetable": null,
+        "mineral": "Semi Opal."
+      }
+    },
+    {
+      "id": "werner-108",
+      "source": "werner-1821",
+      "number": 108,
+      "name": "Broccoli Brown",
+      "hex": "#9B856B",
+      "family": "brown",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Head of Black headed Gull.",
+        "vegetable": null,
+        "mineral": "Zircon."
+      }
+    },
+    {
+      "id": "werner-109",
+      "source": "werner-1821",
+      "number": 109,
+      "name": "Clove Brown",
+      "hex": "#766051",
+      "family": "brown",
+      "alias": null,
+      "characteristic": false,
+      "references": {
+        "animal": "Head and Neck of Male Kestril.",
+        "vegetable": "Stems of Black Currant Bush.",
+        "mineral": "Axinite, Rok Cristal."
+      }
+    }
+  ],
+  "palettes": [
+    {
+      "id": "werner-candidate-200bb30494269890",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-058",
+        "werner-024"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-001",
+      "combinationNumber": 1
+    },
+    {
+      "id": "werner-candidate-bfc3c6d1057d9ee1",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-061",
+        "werner-041"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-002",
+      "combinationNumber": 2
+    },
+    {
+      "id": "werner-candidate-051d06ae38ebae32",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-074",
+        "werner-028"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-003",
+      "combinationNumber": 3
+    },
+    {
+      "id": "werner-candidate-e96e4d640defcaac",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-054",
+        "werner-042"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-004",
+      "combinationNumber": 4
+    },
+    {
+      "id": "werner-candidate-ec024a33ceee22af",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-068",
+        "werner-030",
+        "werner-098"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-005",
+      "combinationNumber": 5
+    },
+    {
+      "id": "werner-candidate-16603c02ca48b1de",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-010",
+        "werner-057",
+        "werner-024"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-006",
+      "combinationNumber": 6
+    },
+    {
+      "id": "werner-candidate-45ae31e9a7b999c1",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-007",
+        "werner-068",
+        "werner-038"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-007",
+      "combinationNumber": 7
+    },
+    {
+      "id": "werner-candidate-6a35cbfb323568f7",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "tonal",
+      "colorIds": [
+        "werner-009",
+        "werner-095",
+        "werner-023"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-008",
+      "combinationNumber": 8
+    },
+    {
+      "id": "werner-candidate-3cdc79e7312132a5",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-010",
+        "werner-095",
+        "werner-087"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-009",
+      "combinationNumber": 9
+    },
+    {
+      "id": "werner-candidate-147e90bb8d87eaef",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-008",
+        "werner-083",
+        "werner-087"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-010",
+      "combinationNumber": 10
+    },
+    {
+      "id": "werner-candidate-da6c3330ec5630de",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-065",
+        "werner-031",
+        "werner-022"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-011",
+      "combinationNumber": 11
+    },
+    {
+      "id": "werner-candidate-8cb4c20278640f18",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-077",
+        "werner-108",
+        "werner-017"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-012",
+      "combinationNumber": 12
+    },
+    {
+      "id": "werner-candidate-c57553ee9f00ad26",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-035",
+        "werner-033",
+        "werner-102"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-013",
+      "combinationNumber": 13
+    },
+    {
+      "id": "werner-candidate-927b211e0b334e9c",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-073",
+        "werner-068",
+        "werner-045"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-014",
+      "combinationNumber": 14
+    },
+    {
+      "id": "werner-candidate-2f709951526c5cad",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-062",
+        "werner-015",
+        "werner-042"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-015",
+      "combinationNumber": 15
+    },
+    {
+      "id": "werner-candidate-41fd0d89b3deead3",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-072",
+        "werner-060",
+        "werner-096"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-016",
+      "combinationNumber": 16
+    },
+    {
+      "id": "werner-candidate-868f99013cff1075",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-013",
+        "werner-036",
+        "werner-023"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-017",
+      "combinationNumber": 17
+    },
+    {
+      "id": "werner-candidate-53b475958cfec0d7",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-052",
+        "werner-084",
+        "werner-038"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-018",
+      "combinationNumber": 18
+    },
+    {
+      "id": "werner-candidate-e6848e2fcc96b88d",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-051",
+        "werner-086",
+        "werner-099"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-019",
+      "combinationNumber": 19
+    },
+    {
+      "id": "werner-candidate-01cb234849d90304",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-076",
+        "werner-030",
+        "werner-094"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-020",
+      "combinationNumber": 20
+    },
+    {
+      "id": "werner-candidate-1585b218f2cc1c36",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-105",
+        "werner-026",
+        "werner-098"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-021",
+      "combinationNumber": 21
+    },
+    {
+      "id": "werner-candidate-22d6b7956033e187",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-088",
+        "werner-050",
+        "werner-041"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-022",
+      "combinationNumber": 22
+    },
+    {
+      "id": "werner-candidate-d120a4a6aa418eae",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "analogous",
+      "colorIds": [
+        "werner-053",
+        "werner-059",
+        "werner-106"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-023",
+      "combinationNumber": 23
+    },
+    {
+      "id": "werner-candidate-288954e2472ab26c",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-031",
+        "werner-069",
+        "werner-017"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-024",
+      "combinationNumber": 24
+    },
+    {
+      "id": "werner-candidate-b1af709db1d2c36f",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-067",
+        "werner-033",
+        "werner-080",
+        "werner-023"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-025",
+      "combinationNumber": 25
+    },
+    {
+      "id": "werner-candidate-72fd05741ae2cc2c",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-073",
+        "werner-030",
+        "werner-109",
+        "werner-022"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-026",
+      "combinationNumber": 26
+    },
+    {
+      "id": "werner-candidate-fd38aaaa4ffed1a6",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-052",
+        "werner-032",
+        "werner-060",
+        "werner-094"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-027",
+      "combinationNumber": 27
+    },
+    {
+      "id": "werner-candidate-47919315cd1bd917",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "complementary",
+      "colorIds": [
+        "werner-013",
+        "werner-036",
+        "werner-079",
+        "werner-018"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-028",
+      "combinationNumber": 28
+    },
+    {
+      "id": "werner-candidate-4f6d890b987016f1",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-089",
+        "werner-085",
+        "werner-028",
+        "werner-019"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-029",
+      "combinationNumber": 29
+    },
+    {
+      "id": "werner-candidate-02e36a6b6549e96b",
+      "collection": "werner",
+      "source": "werner-1821",
+      "curation": "nuance-generated",
+      "method": "expressive",
+      "colorIds": [
+        "werner-005",
+        "werner-029",
+        "werner-079",
+        "werner-099"
+      ],
+      "generationVersion": "werner-oklab-v1",
+      "seed": "werner-nuance-1821-01",
+      "batchId": "werner-batch-e95f398215351b50",
+      "status": "approved",
+      "paletteId": "werner-nuance-030",
+      "combinationNumber": 30
+    }
+  ]
+}
