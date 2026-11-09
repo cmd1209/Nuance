@@ -127,3 +127,8 @@ Designs uses no segmented control. Its four ingredient areas show real saved-col
 The existing background tokens and accepted near-black canvas value are preserved. Browser background assertions compare screenshot pixels against the active computed canvas color, rather than hardcoding an older palette value.
 
 Phase 2 validation passed the production build and 53 Node/component/PostgreSQL tests. The expanded browser suite passed 83 layout checks plus destination navigation, per-section local-view retention, Color workspace/carousel continuity, theme changes across sections, Designs real-data updates, and the existing Color/account flows. Physical mobile chrome, real email delivery, live Supabase writes, and native browser-toolbar zoom remain outside the mocked checks.
+
+
+## Types discovery
+
+Types now uses its own `TypesSection` and local selection reducer. Its eight-font Explore gallery and read-only contextual Edit preview follow the same mounted/hidden section contract. Specimen fonts load lazily from self-hosted WOFF2 assets only for active/visible artwork; UI typography, shell geometry and Color state are unchanged. Spaces and Details remain `FoundationSection` instances. See [Types discovery](types-discovery.md) for the registry, licenses, loading policy, responsive layout and future favorites/pairing boundary.

@@ -4,7 +4,7 @@ Nuance has five functional destinations in its existing fixed bottom navigation:
 
 ## Global and local responsibilities
 
-`state/application.ts` owns only the active main section and global light/dark theme. Authentication, profile, and existing saved Color records remain in the application-level `useAccount` hook. No new database tables, schemas, persistence adapters, routing dependencies, or generated datasets were introduced. The current configured save allowances are eight for Colors and future Types, and four for future Spaces and Details. Only Color persistence is implemented; the eight-save migration is documented in accounts.md.
+`state/application.ts` owns only the active main section and global light/dark theme. Authentication, profile, and existing saved Color records remain in the application-level `useAccount` hook. The original section foundation added no persistence or routing dependencies. Types now has a private account-favorites table and repository, documented separately. The current configured save allowances are eight each for Colors and Types, and four for future Spaces and Details. Colors and Types have separate account persistence and quota counters; their migrations are documented in accounts.md.
 
 `state/editor.ts` continues to own all Color-specific work: local Explore/Saved/Edit view, active composition, drafts, clean baselines, source attribution, selection, and unsaved-change confirmation. It no longer owns the application theme. Composition documents and algorithms are unchanged.
 
@@ -18,11 +18,11 @@ The Color carousel ignores zero-width measurements while its containing section 
 
 Colors remains the complete palette exploration/editing/saving experience.
 
-Types, Spaces, and Details use one `FoundationSection` component configured by `domain/sections.ts`. Each mounted instance has its own local Explore/Saved state. Changing Types to Saved does not change Spaces or Details; leaving and returning preserves that local choice.
+Types now has a functional [Google Fonts discovery gallery](types-discovery.md) and read-only contextual Edit preview. Its `TypesSection` keeps independent state in `state/types.ts`, with independent account favorites and no pairing yet. Spaces and Details use the `FoundationSection` component configured by `domain/sections.ts`. Each mounted instance has its own local Explore/Saved state. Changing one section to Saved does not change the others; leaving and returning preserves that local choice.
 
 Each uses the established `SectionLayout`, `SectionNavigation`, `Button`, and shared `EmptyState` presentation. All provided contextual descriptions are kept in the section definitions, including the future Edit descriptions. Explore is initially active, Saved works, and Edit stays hidden because no valid selection exists yet. Do not enable Edit with a fabricated selection merely to fill out the navigation.
 
-The foundation deliberately does not load fonts, pair typefaces, generate scales, edit typography, create grids/spacing systems, render detail generators, or persist new favorites. Future implementations may replace a section's content and add its own editing state without changing the shell. The shared structure does not assume palettes or a grid.
+Types loads only its visible specimen faces, with its implementation documented separately. The remaining foundation does not generate scales, create grids/spacing systems, render detail generators, or persist new favorites. Typography pairing and advanced editing remain deferred; favorite typefaces now persist through the Types account repository. Future implementations may replace a section's content and add its own editing state without changing the shell. The shared structure does not assume palettes or a grid.
 
 ## Designs is assembly-oriented
 

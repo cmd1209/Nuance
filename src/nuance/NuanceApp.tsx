@@ -9,6 +9,7 @@ import { SwitchCompositionDialog } from "./components/SwitchCompositionDialog";
 import { AppShell } from "./components/AppShell";
 import { AppHeader } from "./components/AppHeader";
 import { FoundationSection } from "./components/FoundationSection";
+import { TypesSection } from "./components/TypesSection";
 import { DesignsSection } from "./components/DesignsSection";
 import type { DesignCategoryId } from "./domain/categories";
 import { applicationReducer, createApplicationState } from "./state/application";
@@ -162,7 +163,8 @@ export default function NuanceApp() {
       </section>
       </>}
     </SectionLayout>
-    {(["types", "spaces", "details"] as const).map(section => <FoundationSection key={section} section={section}
+    <TypesSection hidden={application.activeSection !== "types"} account={account} onSignIn={() => setAccountOpen(true)} onViewChange={() => main.current?.scrollIntoView({ block: "start", behavior: "instant" })} />
+    {(["spaces", "details"] as const).map(section => <FoundationSection key={section} section={section}
       hidden={application.activeSection !== section} onViewChange={() => main.current?.scrollIntoView({ block: "start", behavior: "instant" })} />)}
     <DesignsSection hidden={application.activeSection !== "designs"} account={account} onVisit={navigate}
       onSavedColors={() => openColorView("saved")} onExploreColors={() => openColorView("explore")} onSignIn={() => setAccountOpen(true)} />

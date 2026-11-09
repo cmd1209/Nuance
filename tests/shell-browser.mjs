@@ -45,6 +45,7 @@ await page.route('**/*', route => {
   if (request.method() === 'OPTIONS') return route.fulfill({ status: 204, headers });
   if (url.pathname.endsWith('/user')) return reply(user);
   if (url.pathname.endsWith('/logout')) return route.fulfill({ status: 204, headers });
+  if (url.pathname.endsWith('/typeface_favorites')) return reply([]);
   if (url.pathname.endsWith('/profiles')) {
     if (request.method() === 'POST') { profile = request.postDataJSON(); return reply(profile); }
     return reply([profile]);
@@ -77,7 +78,7 @@ async function load(count = 0) {
 }
 async function selectView(name) {
   await page.getByRole('tab', { name, exact: true }).click();
-  if (name === 'Saved') await page.getByText(`${saved.length} / 8 saved`, { exact: true }).waitFor();
+  if (name === 'Saved') await page.locator('.section-layout:not([hidden])').getByText(`${saved.length} / 8 saved`, { exact: true }).waitFor();
 }
 async function theme(value) {
   if (await page.locator('.nuance-app').getAttribute('data-theme') !== value)
@@ -261,17 +262,17 @@ try {
   await page.evaluate(() => { document.documentElement.style.zoom = ''; });
   console.log('PASS: long generic content, native document scroll, and 200% CSS page zoom.');
   await page.setViewportSize({ width: 1280, height: 1000 }); await load();
-  const carousel = page.locator('.palette-slider__viewport');
+  const carousel = page.locator('#color-explore-panel .palette-slider__viewport');
   await page.getByRole('button', {name:'Next palettes',exact:true}).click();
-  await page.waitForFunction(() => document.querySelector('.palette-slider__viewport').scrollLeft > 0);
+  await page.waitForFunction(() => document.querySelector('#color-explore-panel .palette-slider__viewport').scrollLeft > 0);
   await page.getByRole('button', {name:'Previous palettes',exact:true}).click();
-  await page.waitForFunction(() => document.querySelector('.palette-slider__viewport').scrollLeft < 1);
+  await page.waitForFunction(() => document.querySelector('#color-explore-panel .palette-slider__viewport').scrollLeft < 1);
   await carousel.focus(); await page.keyboard.press('ArrowRight');
-  await page.waitForFunction(() => document.querySelector('.palette-slider__viewport').scrollLeft > 0);
+  await page.waitForFunction(() => document.querySelector('#color-explore-panel .palette-slider__viewport').scrollLeft > 0);
   const carouselPosition = await carousel.evaluate(element=>element.scrollLeft);
   await appNav.getByRole('button',{name:'Types',exact:true}).click();
   await appNav.getByRole('button',{name:'Colors',exact:true}).click();
-  await page.waitForFunction(position=>Math.abs(document.querySelector('.palette-slider__viewport').scrollLeft-position)<1,carouselPosition);
+  await page.waitForFunction(position=>Math.abs(document.querySelector('#color-explore-panel .palette-slider__viewport').scrollLeft-position)<1,carouselPosition);
   const exploredWadaId = await page.locator('.palette-card').evaluateAll(cards => cards.find(card => card.dataset.compositionId.startsWith('sanzo-wada-') && card.querySelectorAll('.palette-card__color').length === 3).dataset.compositionId);
   await page.locator(`[data-composition-id="${exploredWadaId}"]`).click();
   assert.equal(await page.getByRole('tab', { name: 'Edit', selected: true }).count(), 1);
@@ -340,7 +341,7 @@ try {
   assert.equal(await page.locator('.palette-slider [data-composition-id^="werner-nuance-"]').count(),30);
   assert.equal(await page.getByRole('combobox').count(),0);
   const firstBatch = await allCards.evaluateAll(cards=>cards.map(card=>card.dataset.compositionId));
-  await page.locator('.palette-slider__viewport').evaluate(element=>element.scrollTo({left:element.scrollWidth,behavior:'instant'}));
+  await page.locator('#color-explore-panel .palette-slider__viewport').evaluate(element=>element.scrollTo({left:element.scrollWidth,behavior:'instant'}));
   await page.waitForFunction(()=>document.querySelectorAll('.palette-slider .palette-card').length===120);
   assert.deepEqual((await allCards.evaluateAll(cards=>cards.map(card=>card.dataset.compositionId))).slice(0,60),firstBatch);
   assert.equal(await page.locator('.palette-slider [data-composition-id^="werner-nuance-"]').count(),60);
@@ -356,7 +357,7 @@ try {
   await selectView('Saved');await selectView('Edit');assert.deepEqual(await artwork(),modifiedWerner);
   await selectView('Explore');
   await page.waitForFunction(index=>{
-    const el=document.querySelector('.palette-slider__viewport');const step=el.clientWidth+parseFloat(getComputedStyle(el).columnGap);
+    const el=document.querySelector('#color-explore-panel .palette-slider__viewport');const step=el.clientWidth+parseFloat(getComputedStyle(el).columnGap);
     return Math.round(el.scrollLeft/step)===Math.floor(Number(index)/3);
   },occurrence);
   await page.locator('.palette-slider [data-composition-id^="sanzo-wada-"]').first().click();

@@ -1,0 +1,417 @@
+[
+  {
+    "id": "google-fonts:dm-serif-display",
+    "family": "DM Serif Display",
+    "classification": "serif",
+    "source": "google-fonts",
+    "availableWeights": [
+      400
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": false,
+    "supportedSubsets": [
+      "latin",
+      "latin-ext"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2014 - 2017 Adobe Systems Incorporated (http://www.adobe.com/), with Reserved Font Name 'Source'. Copyright 2019 Google LLC. DMSerifDisplay-Italic.ttf: Copyright 2014 - 2017 Adobe Systems Incorporated (http://www.adobe.com/), with Reserved Font Name 'Source'. Copyright 2019 Google LLC.",
+      "noticeUrl": "/nuance/fonts/specimens/dm-serif-display-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen DM Serif Display",
+      "url": "/nuance/fonts/specimens/dm-serif-display-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "400",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource/dm-serif-display",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v17",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/dm-serif-display@5.3.0/files/dm-serif-display-latin-400-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource/dm-serif-display@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource/dm-serif-display@5.3.0/LICENSE",
+      "sha256": "fdf61e20fd2c0108e0ea28da4daca0035205b4b7fc031a3974b865b704de160a",
+      "bytes": 24744
+    },
+    "sourceLabel": "Google Fonts"
+  },
+  {
+    "id": "google-fonts:inter",
+    "family": "Inter",
+    "classification": "sans-serif",
+    "source": "google-fonts",
+    "availableWeights": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "cyrillic",
+      "cyrillic-ext",
+      "greek",
+      "greek-ext",
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2016 The Inter Project Authors (https://github.com/rsms/inter) Inter-Italic[opsz,wght].ttf: Copyright 2016 The Inter Project Authors (https://github.com/rsms/inter)",
+      "noticeUrl": "/nuance/fonts/specimens/inter-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Inter",
+      "url": "/nuance/fonts/specimens/inter-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "100 900",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/inter",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v20",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/inter@5.3.0/files/inter-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/inter@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/inter@5.3.0/LICENSE",
+      "sha256": "3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62",
+      "bytes": 48256
+    },
+    "sourceLabel": "Google Fonts"
+  },
+  {
+    "id": "google-fonts:manrope",
+    "family": "Manrope",
+    "classification": "sans-serif",
+    "source": "google-fonts",
+    "availableWeights": [
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800
+    ],
+    "availableStyles": [
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "cyrillic",
+      "cyrillic-ext",
+      "greek",
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2019 The Manrope Project Authors (https://github.com/sharanda/manrope)",
+      "noticeUrl": "/nuance/fonts/specimens/manrope-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Manrope",
+      "url": "/nuance/fonts/specimens/manrope-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "200 800",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/manrope",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v20",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/manrope@5.3.0/files/manrope-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/manrope@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/manrope@5.3.0/LICENSE",
+      "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972",
+      "bytes": 24836
+    },
+    "sourceLabel": "Google Fonts"
+  },
+  {
+    "id": "google-fonts:fraunces",
+    "family": "Fraunces",
+    "classification": "serif",
+    "source": "google-fonts",
+    "availableWeights": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2020 The Fraunces Project Authors (github.com/undercasetype/Fraunces) Fraunces-Italic[SOFT,WONK,opsz,wght].ttf: Copyright 2020 The Fraunces Project Authors (github.com/undercasetype/Fraunces)",
+      "noticeUrl": "/nuance/fonts/specimens/fraunces-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Fraunces",
+      "url": "/nuance/fonts/specimens/fraunces-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "100 900",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/fraunces",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v38",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/fraunces@5.3.0/files/fraunces-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/fraunces@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/fraunces@5.3.0/LICENSE",
+      "sha256": "7f9d191d999336d3b9790afa72e1358e50a13b06d4f289341e92a311967a80f9",
+      "bytes": 36620
+    },
+    "sourceLabel": "Google Fonts"
+  },
+  {
+    "id": "google-fonts:libre-baskerville",
+    "family": "Libre Baskerville",
+    "classification": "serif",
+    "source": "google-fonts",
+    "availableWeights": [
+      400,
+      500,
+      600,
+      700
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "latin",
+      "latin-ext"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2012 The Libre Baskerville Project Authors (https://github.com/impallari/Libre-Baskerville) LibreBaskerville-Italic[wght].ttf: Copyright 2012 The Libre Baskerville Project Authors (https://github.com/impallari/Libre-Baskerville)",
+      "noticeUrl": "/nuance/fonts/specimens/libre-baskerville-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Libre Baskerville",
+      "url": "/nuance/fonts/specimens/libre-baskerville-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "400 700",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/libre-baskerville",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v24",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/libre-baskerville@5.3.0/files/libre-baskerville-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/libre-baskerville@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/libre-baskerville@5.3.0/LICENSE",
+      "sha256": "22219fb90e3b9bd28debd1825fe8d9a0154a0e31f8b3fa601ac1a0a5aa5e6d1b",
+      "bytes": 33872
+    },
+    "sourceLabel": "Google Fonts"
+  },
+  {
+    "id": "google-fonts:ibm-plex-sans",
+    "family": "IBM Plex Sans",
+    "classification": "sans-serif",
+    "source": "google-fonts",
+    "availableWeights": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "cyrillic",
+      "cyrillic-ext",
+      "greek",
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2019 IBM Corp. All rights reserved. IBMPlexSans-Italic[wdth,wght].ttf: Copyright 2019 IBM Corp. All rights reserved.",
+      "noticeUrl": "/nuance/fonts/specimens/ibm-plex-sans-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen IBM Plex Sans",
+      "url": "/nuance/fonts/specimens/ibm-plex-sans-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "100 700",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/ibm-plex-sans",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v23",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/ibm-plex-sans@5.3.0/files/ibm-plex-sans-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/ibm-plex-sans@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/ibm-plex-sans@5.3.0/LICENSE",
+      "sha256": "e2291e842cf5af167122a22881a740c7f2dda7716f1e8cd76680264f4a859470",
+      "bytes": 45712
+    },
+    "sourceLabel": "Google Fonts"
+  },
+  {
+    "id": "google-fonts:space-grotesk",
+    "family": "Space Grotesk",
+    "classification": "sans-serif",
+    "source": "google-fonts",
+    "availableWeights": [
+      300,
+      400,
+      500,
+      600,
+      700
+    ],
+    "availableStyles": [
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2020 The Space Grotesk Project Authors (https://github.com/floriankarsten/space-grotesk)",
+      "noticeUrl": "/nuance/fonts/specimens/space-grotesk-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Space Grotesk",
+      "url": "/nuance/fonts/specimens/space-grotesk-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "300 700",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/space-grotesk",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v22",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/space-grotesk@5.3.0/files/space-grotesk-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/space-grotesk@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/space-grotesk@5.3.0/LICENSE",
+      "sha256": "0640890476fc1198ab4de571fb658de443c4d85b66466ec09534a8737ab1ce9d",
+      "bytes": 22288
+    },
+    "sourceLabel": "Google Fonts"
+  },
+  {
+    "id": "google-fonts:cormorant-garamond",
+    "family": "Cormorant Garamond",
+    "classification": "serif",
+    "source": "google-fonts",
+    "availableWeights": [
+      300,
+      400,
+      500,
+      600,
+      700
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "cyrillic",
+      "cyrillic-ext",
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2015 The Cormorant Project Authors (github.com/CatharsisFonts/Cormorant) CormorantGaramond-Italic[wght].ttf: Copyright 2015 The Cormorant Project Authors (github.com/CatharsisFonts/Cormorant)",
+      "noticeUrl": "/nuance/fonts/specimens/cormorant-garamond-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Cormorant Garamond",
+      "url": "/nuance/fonts/specimens/cormorant-garamond-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "300 700",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/cormorant-garamond",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v21",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/cormorant-garamond@5.3.0/files/cormorant-garamond-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/cormorant-garamond@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/cormorant-garamond@5.3.0/LICENSE",
+      "sha256": "d80df8ff5aecd299a61549f9e29ab1ed0b9b05f4ea71d50fe978e07d5240b235",
+      "bytes": 37640
+    },
+    "sourceLabel": "Google Fonts"
+  }
+]

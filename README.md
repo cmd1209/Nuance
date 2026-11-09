@@ -2,7 +2,7 @@
 
 Nuance's Color experience builds on the existing Patternsmith React/Vite/TypeScript/Tailwind app and preserves its Figma palette-selection and manipulation screens. Palette discovery now mixes 348 Sanzo Wada combinations with 30 approved Werner · Nuance palettes using balanced collection cycles, with deterministic OKLCH extensions for compositions of up to six colors. See [the Wada integration notes](docs/sanzo-wada-integration.md) for source attribution, provenance, reset behavior, and generation details.
 
-All five main destinations are active. Colors contains the complete creative tool. Types, Spaces, and Details provide independent Explore/Saved foundations, while Designs introduces the four-ingredient assembly structure using only real saved-color availability. Switching destinations preserves the active Color workspace. See [section architecture](docs/sections.md).
+All five main destinations are active. Colors contains the complete creative tool. Types offers eight self-hosted Google Fonts with contextual detail previews and account favorites; Spaces and Details provide independent Explore/Saved foundations, while Designs introduces the four-ingredient assembly structure using only real saved-color availability. Switching destinations preserves the active Color workspace. See [section architecture](docs/sections.md).
 
 ```bash
 npm install
@@ -15,7 +15,9 @@ Choose a historical palette, click a color to see its name/origin and edit its H
 
 Explore begins with 60 interleaved palettes, split equally between Wada and Werner · Nuance, and appends balanced batches as you browse. Each collection exhausts its own shuffled cycle before repeating. The loaded order stays stable while browsing, editing, and changing themes. The slider advances by three compositions on desktop, two on tablet (701–1024px), and one on mobile (700px and below), using swipe, navigation arrows, or the keyboard. Returning from the editor restores the selected palette’s exact occurrence. See [unified discovery](docs/unified-color-exploration.md) for source registration, attribution and cycle behavior.
 
-Composition documents are versioned, serializable JSON with stable IDs. State transitions, palette generation, geometry, serialization and PNG export are separate from UI rendering. Supabase supports email/password sign-in and sign-up, email-based password recovery, a minimal private profile, and up to eight explicitly saved color compositions after applying the eight-save migration. The future Types save allowance is also eight; typography persistence is not implemented yet. See [account setup](docs/accounts.md) to connect a project and configure email templates and callback URLs. Unsaved drafts and theme preferences reset on page refresh; account sessions and saved compositions persist when Supabase is configured.
+Composition documents are versioned, serializable JSON with stable IDs. State transitions, palette generation, geometry, serialization and PNG export are separate from UI rendering. Supabase supports email/password sign-in and sign-up, email-based password recovery, a minimal private profile, and up to eight explicitly saved color compositions after applying the eight-save migration. Types has a separate eight-font favorite library after applying the typeface-favorites migration. See [account setup](docs/accounts.md) to connect a project and configure email templates and callback URLs. Unsaved drafts and theme preferences reset on page refresh; account sessions and saved compositions persist when Supabase is configured.
+
+See [Types discovery](docs/types-discovery.md) for the curated font collection, lazy specimen loading, source licenses and future favorites/pairing boundaries.
 
 See [the application shell contract](docs/application-shell.md) for document scrolling, fixed navigation, theme ownership, section conventions, and browser validation.
 

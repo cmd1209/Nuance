@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "test": "node scripts/test.mjs",
     "werner:import": "node scripts/import-werner.mjs",
-    "werner:generate": "node scripts/generate-werner.mjs"
+    "werner:generate": "node scripts/generate-werner.mjs",
+    "fonts:verify": "node scripts/vendor-typefaces.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",

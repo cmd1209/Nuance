@@ -695,8 +695,8 @@ test("application navigation and theme remain independent of a modified Color ed
   assert.equal(application.theme, "light");
 });
 
-test("Types, Spaces, and Details share real section destinations with contextual Edit unavailable", () => {
-  for (const section of ["types", "spaces", "details"] as const) {
+test("Spaces and Details retain foundational destinations with contextual Edit unavailable", () => {
+  for (const section of ["spaces", "details"] as const) {
     const markup = renderToStaticMarkup(createElement(FoundationSection, { section, hidden: false, onViewChange: noop }));
     assert.ok(markup.includes(FOUNDATION_SECTIONS[section].title));
     assert.ok(markup.includes(FOUNDATION_SECTIONS[section].descriptions.explore));

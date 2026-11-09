@@ -16,11 +16,11 @@ export const FOUNDATION_SECTIONS: Record<FoundationSectionId, FoundationSectionD
     descriptions: {
       explore: "Explore how typography shapes character and hierarchy. Experiment with type combinations, scale, and rhythm to discover what feels right.",
       saved: "Your saved typography selections, ready to revisit and refine. Select a favorite to continue editing or explore new combinations.",
-      edit: "Refine your typography through size, weight, spacing, and hierarchy. Adjust the details to create a balanced and expressive type system.",
+      edit: "A closer look at your selected typeface. Explore its character and readability.",
     },
     empty: {
       explore: "Typography exploration is coming soon.",
-      saved: "Saved typography selections will appear here when typography exploration is available.",
+      saved: "No saved typefaces yet. Explore a font and save it to see it here.",
     },
   },
   spaces: {
