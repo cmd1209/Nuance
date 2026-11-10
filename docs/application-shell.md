@@ -59,6 +59,8 @@ The document's `--color-bg-canvas` is the single full-page background source. `i
 
 Body, root mount, app shell, main, and section layout wrappers are transparent. Do not add near-black fills, gradients, opacity, or overlay pseudo-elements to layout-only wrappers. The sticky heading needs an opaque fill and uses the same canvas token. The navigation, dialogs, artwork, and existing composition-stage gradient are intentional component surfaces; the editor surface stays limited to the editor's intrinsic content height.
 
+Composition actions are a design constant: `.composition-actions` belongs at the bottom inside `.nuance-stage`, after the artwork and metadata. The shared action rule keeps the controls last and pushes them to the bottom when space is available. The stage gradient continues behind the actions; specimens inside a stage use that surface instead of painting another gradient.
+
 Avoid CSS `:has(.nuance-app)` theme patches, separate page background aliases, and fixed-height roots. Theme ownership belongs to the shell and document; section state does not own the page background.
 
 ## Scroll and focus policy

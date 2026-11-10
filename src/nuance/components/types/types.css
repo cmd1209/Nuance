@@ -1,7 +1,21 @@
 /* Specimen families are scoped to artwork; all metadata stays in Nuance's UI face. */
 .type-specimen {
+    position: relative;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     min-width: 0;
+    padding: var(--padding-lg);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(to top, var(--color-bg-surface) 0%, var(--color-bg-canvas) 90%);
+    font-family: var(--family-sans), sans-serif;
+}
+
+.type-specimen__action {
+    position: absolute;
+    top: var(--padding-sm);
+    right: var(--padding-sm);
+    z-index: 1;
 }
 
 .palette-slider__page .type-specimen__button:focus-visible {
@@ -11,10 +25,10 @@
 .type-specimen__button {
     display: flex;
     flex-direction: column;
+    flex: 1;
     width: 100%;
     padding: 0;
     border: 0;
-    border-bottom: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-sm);
     background: transparent;
     color: var(--color-text-primary);
@@ -25,6 +39,7 @@
 .type-specimen__artwork {
     display: flex;
     flex-direction: column;
+    flex: 1;
     justify-content: center;
     width: 100%;
     min-height: calc(var(--line-height-56) * 5);
@@ -58,7 +73,8 @@
     justify-content: space-between;
     align-items: baseline;
     width: 100%;
-    padding-bottom: var(--padding-md);
+    margin-top: auto;
+    padding-top: var(--padding-lg);
     gap: var(--gap-xs) var(--gap-md);
     color: var(--color-text-tertiary);
     font-size: var(--label-md-font-size);
@@ -66,8 +82,12 @@
 }
 
 .type-specimen__name {
+    margin: 0;
     color: var(--color-text-primary);
+    font-size: inherit;
+    line-height: inherit;
     font-weight: var(--font-weight-medium);
+    overflow-wrap: anywhere;
 }
 
 .type-specimen__button:hover .type-specimen__name {
@@ -84,33 +104,13 @@
     line-height: var(--caption-line-height);
 }
 
-#types-edit-panel{
-    padding-inline: var(--padding-lg);
+/* The editing stage supplies one continuous gradient through its bottom actions. */
+.nuance-stage > .type-specimen {
+    background: transparent;
 }
 
 .type-detail {
     max-width: var(--app-reading-width);
-}
-
-.type-detail__footer {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-xs);
-    margin-top: var(--gap-xl);
-}
-
-.type-detail__footer h2 {
-    margin: 0;
-    font-size: var(--heading-sm-font-size);
-    line-height: var(--heading-sm-line-height);
-    font-weight: var(--font-weight-medium);
-}
-
-.type-detail__footer p {
-    margin: 0;
-    color: var(--color-text-tertiary);
-    font-size: var(--body-sm-font-size);
-    line-height: var(--body-sm-line-height);
 }
 
 .type-detail__artwork {
@@ -139,10 +139,21 @@
     overflow-wrap: anywhere;
 }
 
-.type-detail__reading {
-    font-size: var(--body-lg-font-size);
-    line-height: 1.6;
+.type-specimen__quote {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
     overflow-wrap: anywhere;
+}
+
+.type-specimen__quote-text {
+    font-size: var(--body-md-font-size);
+    line-height: var(--body-md-line-height);
+}
+
+.type-specimen__quote-caption {
+    font-size: var(--caption-font-size);
+    line-height: var(--caption-line-height);
 }
 
 @media (max-width: 700px) {

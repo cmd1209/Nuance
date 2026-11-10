@@ -320,7 +320,7 @@
 .nuance-stage {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     gap: var(--gap-xs);
     border-radius: var(--radius-xl);
@@ -338,6 +338,12 @@
 
 .composition-actions {
     display: flex;
+    /* Every composition ends with its actions, inside the stage surface. */
+    order: 1;
+    flex-shrink: 0;
+    align-self: stretch;
+    margin-top: auto;
+    padding-block: var(--padding-sm);
     align-items: center;
     justify-content: center;
     gap: var(--gap-sm);
