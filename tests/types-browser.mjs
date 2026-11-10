@@ -87,7 +87,7 @@ try{
  await page.setViewportSize({width:1280,height:1000});await page.getByRole('tab',{name:'Explore',exact:true}).click();
  await page.evaluate(()=>document.documentElement.style.zoom='2');await layout('gallery-200%-zoom');
  await page.getByRole('tab',{name:'Edit',exact:true}).click();await layout('detail-200%-zoom');await page.evaluate(()=>document.documentElement.style.zoom='');
- assert.equal(await page.getByRole('slider').count(),0);assert.equal(await page.getByRole('combobox').count(),0);assert.equal(await page.getByRole('button',{name:'Save typeface',exact:true}).isEnabled(),true);
+ assert.equal(await page.getByRole('slider').count(),2);assert.equal(await page.getByRole('combobox').count(),0);assert.equal(await page.getByRole('button',{name:'Save typeface',exact:true}).isEnabled(),true);
  console.log('PASS shared three/two/one-card slider layouts, themes, mobile, 200% zoom, one document scroll and fixed navigation');
  const failedContext=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});
  await failedContext.route('**/*',route=>{

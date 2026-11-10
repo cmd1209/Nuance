@@ -1,6 +1,7 @@
 import { useId, type ReactNode } from "react";
 import { typefaceFamily, type Typeface } from "../../domain/typefaces";
 import { useSpecimenFont } from "./useSpecimenFont";
+import { ResizableTypeLine, type TypeLineSizes } from "./ResizableTypeLine";
 
 const SPECIMEN_HEADLINE = "Aa Bb Cc Dd";
 const SPECIMEN_SUBHEADLINE = "Form, rhythm, character.";
@@ -53,12 +54,14 @@ export function TypefaceCard({font,active,onSelect,headerAction,disabled=false}:
     </button>
   </div>;
 }
-export function TypefaceDetail({font,active}:{font:Typeface;active:boolean}) {
+export function TypefaceDetail({font,active,sizes,onResize}:{font:Typeface;active:boolean;sizes:TypeLineSizes;onResize:(line:keyof TypeLineSizes,size:number)=>void}) {
   const {element,status}=useSpecimenFont(font,active);
   return <article className="type-specimen type-detail" aria-labelledby="types-detail-heading" data-font-id={font.id} data-font-status={status}>
     <div ref={element} className="type-detail__artwork" style={{fontFamily:typefaceFamily(font),fontWeight:font.loading.specimenWeight}}>
-      <p className="type-detail__sample">{SPECIMEN_HEADLINE}</p>
-      <p className="type-detail__phrase">{SPECIMEN_SUBHEADLINE}</p>
+      <ResizableTypeLine label="Headline" className="type-detail__sample" size={sizes.headline} min={24} max={192} active={active} fontStatus={status}
+        onResize={size=>onResize("headline",size)}>{SPECIMEN_HEADLINE}</ResizableTypeLine>
+      <ResizableTypeLine label="Subheadline" className="type-detail__phrase" size={sizes.subheadline} min={14} max={96} active={active} fontStatus={status}
+        onResize={size=>onResize("subheadline",size)}>{SPECIMEN_SUBHEADLINE}</ResizableTypeLine>
       <SpecimenQuote font={font} />
     </div>
     <LoadNotice status={status} classification={font.classification} />

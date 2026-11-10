@@ -54,6 +54,12 @@ Apply `supabase/migrations/202611090002_typeface_favorites.sql` to the connected
 
 The allowance remains **eight typefaces**, separate from eight color compositions. Read-only preview selection itself is still in-memory; saved favorites persist across reloads and devices through the account. Font pairing, typography scales, advanced editing and Designs assembly remain later work.
 
+## Baseline resizing
+
+In Edit, the headline and subheadline have draggable baseline handles. Drag down to enlarge or up to shrink; arrow keys adjust by 1px (Shift: 8px), and Home/End select the size limits. Headline sizes range from 24–192px and subheadline sizes from 14–96px. Each typeface keeps its own sizes while navigating during the current session. Favorites still save the font reference only; custom sizes are not persisted to the account. Explore and Saved retain their standard preview sizes.
+
+`tests/typeface-resizing-browser.mjs` uses the isolated Playwright setup below to verify real baseline alignment, captured dragging, keyboard controls, size limits, per-font/session state, responsive wrapping, and bottom action placement.
+
 ## Extend the collection
 
 1. Choose a typeface, verify its source/license and pin a specific Fontsource package version (or another provider's equivalent).

@@ -12,10 +12,12 @@ import { DiscoverySlider } from "./DiscoverySlider";
 import { SectionLayout } from "./SectionLayout";
 import { SectionNavigation } from "./SectionNavigation";
 import { TypefaceCard, TypefaceDetail } from "./types/TypefaceSpecimen";
+import type { TypeLineSizes } from "./types/ResizableTypeLine";
 import "./types/types.css";
 
 export function TypesSection({hidden,onViewChange,account,onSignIn}:{hidden:boolean;onViewChange:()=>void;account:Pick<Account,"user"|"authLoading"|"dataLoading">;onSignIn:()=>void}) {
   const [state,dispatch]=useReducer(typesReducer,undefined,createTypesState);
+  const [specimenSizes,setSpecimenSizes]=useState<Record<string,TypeLineSizes>>({});
   const focusPreview=useRef(false);
   const explorePosition=useRef(0);
   const rememberPosition=useCallback((_id:string,index:number)=>{explorePosition.current=index;},[]);
@@ -59,7 +61,8 @@ export function TypesSection({hidden,onViewChange,account,onSignIn}:{hidden:bool
         onOpen={openTypeface} onSignIn={onSignIn} onExplore={()=>{changeView("explore");document.getElementById("types-explore-tab")?.focus({preventScroll:true});}} />
     </section>
     {selected && <section id="types-edit-panel" className="nuance-stage" role="tabpanel" aria-labelledby="types-edit-tab" hidden={state.view !== "edit"}>
-      <TypefaceDetail key={selected.id} font={selected} active={!hidden && state.view === "edit"} />
+      <TypefaceDetail key={selected.id} font={selected} active={!hidden && state.view === "edit"} sizes={specimenSizes[selected.id]??{}}
+        onResize={(line,size)=>setSpecimenSizes(previous=>({...previous,[selected.id]:{...previous[selected.id],[line]:size}}))} />
       <div className="composition-actions" role="group" aria-label="Typeface actions">
         <Button className="composition-action" onClick={()=>{void save();}} disabled={saving||account.authLoading||favorites.loading||!!account.user&&account.dataLoading||full}
           aria-busy={saving} aria-label={saving?"Saving typeface…":full?`Save typeface — limit reached (${MAX_SAVED_TYPEFACES}/${MAX_SAVED_TYPEFACES})`:"Save typeface"}
