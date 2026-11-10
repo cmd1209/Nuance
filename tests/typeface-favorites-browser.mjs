@@ -57,6 +57,22 @@ try{
  await page.getByRole('tab',{name:'Saved',exact:true}).click();await page.getByText('1 / 8 saved',{exact:true}).waitFor();
  await page.locator('#types-saved-panel').getByRole('button',{name:`Preview ${fonts[0].family}`,exact:true}).click();assert.equal(await page.locator('#types-detail-heading').textContent(),fonts[0].family);
  await page.reload();await enterTypes();await page.getByRole('tab',{name:'Saved',exact:true}).click();await page.getByText('1 / 8 saved',{exact:true}).waitFor();
+ const inter=fonts.find(font=>font.id==='google-fonts:inter');
+ await choose(inter);await page.getByRole('button',{name:/^Font weight:/}).click();await page.getByRole('button',{name:'Show alphabet',exact:true}).click();
+ await save();assert.equal(libraries.get(alice.id).find(row=>row.font_id===inter.id).font_weight,500);assert.equal(libraries.get(alice.id).find(row=>row.font_id===inter.id).alphabet,true);
+ await page.reload();await enterTypes();await page.getByRole('tab',{name:'Saved',exact:true}).click();await page.getByText('2 / 8 saved',{exact:true}).waitFor();
+ const savedInter=page.locator(`#types-saved-panel [data-font-id="${inter.id}"]`);
+ assert.equal(await savedInter.locator('.type-specimen__quote-caption').count(),0);
+ assert.match(await savedInter.locator('.type-specimen__quote-text').textContent(),/^AaBbCcDd/);
+ assert.equal(await savedInter.locator('.type-specimen__quote-text').evaluate(el=>Number(getComputedStyle(el).fontWeight)),500);
+ await savedInter.getByRole('button',{name:`Preview ${inter.family}`,exact:true}).click();
+ assert.equal(await page.getByRole('slider',{name:'Alphabet size',exact:true}).count(),1);
+ assert.match(await page.getByRole('button',{name:/^Font weight:/}).getAttribute('aria-label'),/Medium \(500\)/);
+ await page.getByRole('button',{name:'Show quote',exact:true}).click();await page.getByRole('button',{name:/^Font weight:/}).click();
+ await save();await page.getByRole('tab',{name:'Saved',exact:true}).click();await page.getByText('2 / 8 saved',{exact:true}).waitFor();
+ assert.equal(libraries.get(alice.id).find(row=>row.font_id===inter.id).font_weight,600);assert.equal(libraries.get(alice.id).find(row=>row.font_id===inter.id).alphabet,false);
+ assert.equal(await savedInter.locator('.type-specimen__quote-caption').count(),1);
+ console.log('PASS saved weight and alphabet settings survive reload, render in Saved, restore in Edit, and update without duplicates');
  for(const font of fonts.slice(1)){await choose(font);await save();}
  assert.equal(libraries.get(alice.id).length,8);await save();assert.equal(libraries.get(alice.id).length,8);
  await page.getByRole('tab',{name:'Saved',exact:true}).click();await page.getByText('8 / 8 saved',{exact:true}).waitFor();assert.equal(await page.locator('#types-saved-panel [data-delete-typeface]').count(),8);
@@ -70,8 +86,8 @@ try{
  await save();assert.equal(libraries.get(alice.id).length,8);assert.equal(colorPosts,0);
  await page.getByRole('tab',{name:'Saved',exact:true}).click();await page.getByText('8 / 8 saved',{exact:true}).waitFor();
  for(const width of [1280,390,320]){await page.setViewportSize({width,height:844});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
-  const sizing=await page.locator('#types-saved-panel .saved-gallery__item').evaluateAll(items=>items.map(item=>({cell:item.getBoundingClientRect().width,specimen:item.querySelector('.type-specimen').getBoundingClientRect().width,sampleHeight:item.querySelector('.type-specimen__sample').getBoundingClientRect().height,lineHeight:parseFloat(getComputedStyle(item.querySelector('.type-specimen__sample')).lineHeight)})));
-  for(const item of sizing){assert.ok(Math.abs(item.cell-item.specimen)<1,'saved typeface must fill its grid cell');assert.ok(item.sampleHeight<=item.lineHeight+1,'Aa Bb Cc must fit on one line at normal sizes');}await page.screenshot({path:join(artifacts,`saved-${width}.png`),fullPage:true});}
+  const sizing=await page.locator('#types-saved-panel .saved-gallery__item').evaluateAll(items=>items.map(item=>({cell:item.getBoundingClientRect().width,specimen:item.querySelector('.type-specimen').getBoundingClientRect().width,quoteWidth:item.querySelector('.type-specimen__quote-text').getBoundingClientRect().width})));
+  for(const item of sizing){assert.ok(Math.abs(item.cell-item.specimen)<1,'saved typeface must fill its grid cell');assert.ok(item.quoteWidth<=item.specimen+1,'the quote must fit within its specimen');}await page.screenshot({path:join(artifacts,`saved-${width}.png`),fullPage:true});}
  console.log('PASS delete/save failures preserve records, retry works, deletion frees a slot and restores focus, responsive saved gallery, Color storage untouched');
  // Hold an old account's request while signing out and into another account.
  holdOwner=alice.id;await page.reload();await page.getByRole('button',{name:'Open your profile',exact:true}).waitFor();

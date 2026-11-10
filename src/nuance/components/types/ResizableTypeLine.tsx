@@ -1,10 +1,8 @@
 import { useLayoutEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 
-export interface TypeLineSizes { headline?:number; subheadline?:number }
-
 /** A zero-height inline marker locates the rendered text's actual last baseline. */
-export function ResizableTypeLine({children,label,className,size,min,max,active,fontStatus,onResize}:{
-  children:string;label:string;className:string;size?:number;min:number;max:number;active:boolean;fontStatus:string;onResize:(size:number)=>void;
+export function ResizableTypeLine({children,label,className,size,min,max,active,fontStatus,fontWeight,onResize}:{
+  children:string;label:string;className:string;size?:number;min:number;max:number;active:boolean;fontStatus:string;fontWeight?:number;onResize:(size:number)=>void;
 }) {
   const text=useRef<HTMLParagraphElement>(null),marker=useRef<HTMLSpanElement>(null);
   const handle=useRef<HTMLDivElement>(null);
@@ -22,7 +20,7 @@ export function ResizableTypeLine({children,label,className,size,min,max,active,
     setMetrics(previous=>previous.baseline===baseline && previous.size===fontSize ? previous : {baseline,size:fontSize});
   }
   // Font loading can change the baseline without changing the paragraph's box.
-  useLayoutEffect(()=>{if(active)measure();},[active,size,fontStatus]);
+  useLayoutEffect(()=>{if(active)measure();},[active,size,fontStatus,fontWeight,children]);
   useLayoutEffect(()=>{
     if(!active){stop();return;}
     measure();

@@ -1,10 +1,9 @@
 import { useId, type ReactNode } from "react";
 import { typefaceFamily, type Typeface } from "../../domain/typefaces";
 import { useSpecimenFont } from "./useSpecimenFont";
-import { ResizableTypeLine, type TypeLineSizes } from "./ResizableTypeLine";
+import { ResizableTypeLine } from "./ResizableTypeLine";
 
-const SPECIMEN_HEADLINE = "Aa Bb Cc Dd";
-const SPECIMEN_SUBHEADLINE = "Form, rhythm, character.";
+const SPECIMEN_ALPHABET = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
 
 const SPECIMEN_QUOTES = {
   bringhurst: { text: "Typography exists to honor content.", author: "Robert Bringhurst" },
@@ -25,12 +24,16 @@ const TYPEFACE_QUOTES: Readonly<Record<string, keyof typeof SPECIMEN_QUOTES>> = 
   "google-fonts:cormorant-garamond": "carter",
 };
 
-function SpecimenQuote({font}:{font:Typeface}) {
+function SpecimenQuote({font,size,editor,alphabet=false}:{font:Typeface;size?:number;alphabet?:boolean;editor?:{active:boolean;status:string;size?:number;weight:number;onResize:(size:number)=>void}}) {
   const quote=SPECIMEN_QUOTES[TYPEFACE_QUOTES[font.id] ?? "bringhurst"];
-  return <span className="type-specimen__quote">
-    <span className="type-specimen__quote-text">“{quote.text}”</span>
-    <span className="type-specimen__quote-caption">— {quote.author}</span>
-  </span>;
+  const text=alphabet?SPECIMEN_ALPHABET:quote.text;
+  const Container=editor?"div":"span";
+  return <Container className="type-specimen__quote">
+    {editor ? <ResizableTypeLine label={alphabet?"Alphabet":"Quote"} className="type-specimen__quote-text" size={editor.size} min={14} max={192}
+      active={editor.active} fontStatus={editor.status} fontWeight={editor.weight} onResize={editor.onResize}>{text}</ResizableTypeLine>
+      : <span className="type-specimen__quote-text" style={size===undefined?undefined:{fontSize:`${size}px`}}>{text}</span>}
+    {!alphabet && <span className="type-specimen__quote-caption">— {quote.author}</span>}
+  </Container>;
 }
 
 function LoadNotice({status,classification}:{status:string;classification:Typeface["classification"]}) {
@@ -50,31 +53,25 @@ function SpecimenHeader({font,action,heading=false,classificationId}:{font:Typef
   </header>;
 }
 
-export function TypefaceCard({font,active,onSelect,headerAction,disabled=false}:{font:Typeface;active:boolean;onSelect:()=>void;headerAction?:ReactNode;disabled?:boolean}) {
+export function TypefaceCard({font,active,onSelect,headerAction,disabled=false,size,weight=font.loading.specimenWeight,alphabet=false}:{font:Typeface;active:boolean;onSelect:()=>void;headerAction?:ReactNode;disabled?:boolean;size?:number;weight?:number;alphabet?:boolean}) {
   const {element,status}=useSpecimenFont(font,active);
   const classificationId=useId();
   return <div ref={element} className="type-specimen" data-font-id={font.id} data-font-status={status}>
     <SpecimenHeader font={font} action={headerAction} classificationId={classificationId} />
     <button type="button" className="type-specimen__button" disabled={disabled} aria-label={`Preview ${font.family}`} aria-describedby={classificationId} onClick={onSelect}>
-      <span className="type-specimen__artwork" style={{fontFamily:typefaceFamily(font),fontWeight:font.loading.specimenWeight}}>
-        <span className="type-specimen__sample">{SPECIMEN_HEADLINE}</span>
-        <span className="type-specimen__sentence">{SPECIMEN_SUBHEADLINE}</span>
-        <SpecimenQuote font={font} />
+      <span className="type-specimen__artwork" style={{fontFamily:typefaceFamily(font),fontWeight:weight}}>
+        <SpecimenQuote font={font} size={size} alphabet={alphabet} />
       </span>
       <LoadNotice status={status} classification={font.classification} />
     </button>
   </div>;
 }
-export function TypefaceDetail({font,active,sizes,onResize}:{font:Typeface;active:boolean;sizes:TypeLineSizes;onResize:(line:keyof TypeLineSizes,size:number)=>void}) {
+export function TypefaceDetail({font,active,size,onResize,alphabet=false,weight=font.loading.specimenWeight}:{font:Typeface;active:boolean;size?:number;alphabet?:boolean;weight?:number;onResize:(size:number)=>void}) {
   const {element,status}=useSpecimenFont(font,active);
   return <article className="type-specimen type-detail" aria-labelledby="types-detail-heading" data-font-id={font.id} data-font-status={status}>
     <SpecimenHeader font={font} heading />
-    <div ref={element} className="type-detail__artwork" style={{fontFamily:typefaceFamily(font),fontWeight:font.loading.specimenWeight}}>
-      <ResizableTypeLine label="Headline" className="type-detail__sample" size={sizes.headline} min={24} max={192} active={active} fontStatus={status}
-        onResize={size=>onResize("headline",size)}>{SPECIMEN_HEADLINE}</ResizableTypeLine>
-      <ResizableTypeLine label="Subheadline" className="type-detail__phrase" size={sizes.subheadline} min={14} max={96} active={active} fontStatus={status}
-        onResize={size=>onResize("subheadline",size)}>{SPECIMEN_SUBHEADLINE}</ResizableTypeLine>
-      <SpecimenQuote font={font} />
+    <div ref={element} className="type-detail__artwork" style={{fontFamily:typefaceFamily(font),fontWeight:weight}}>
+      <SpecimenQuote font={font} alphabet={alphabet} editor={{active,status,size,weight,onResize}} />
     </div>
     <LoadNotice status={status} classification={font.classification} />
   </article>;

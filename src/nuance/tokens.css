@@ -137,7 +137,7 @@
     --font-weight-bold: 700;
 
     /* Typography roles */
-    --caption-font-size: var(--font-size-12);
+    --caption-font-size: var(--font-size-14);
     --caption-line-height: var(--line-height-16);
     --caption-font-weight: var(--font-weight-regular);
     --body-sm-font-size: var(--font-size-14);

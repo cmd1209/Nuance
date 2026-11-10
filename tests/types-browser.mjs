@@ -49,7 +49,7 @@ try{
   await page.waitForFunction(id=>document.querySelector(`.type-specimen[data-font-id="${id}"]`).dataset.fontStatus==='loaded',font.id);
   assert.match(await card.locator('.type-specimen__artwork').evaluate(el=>getComputedStyle(el).fontFamily),new RegExp(font.loading.family));
   assert.match(await card.locator('.type-specimen__metadata').evaluate(el=>getComputedStyle(el).fontFamily),/Clarity City/);
-  const {root}=await cdp.send('DOM.getDocument'),{nodeId}=await cdp.send('DOM.querySelector',{nodeId:root.nodeId,selector:`.type-specimen[data-font-id="${font.id}"] .type-specimen__sample`});
+  const {root}=await cdp.send('DOM.getDocument'),{nodeId}=await cdp.send('DOM.querySelector',{nodeId:root.nodeId,selector:`.type-specimen[data-font-id="${font.id}"] .type-specimen__quote-text`});
   const used=await cdp.send('CSS.getPlatformFontsForNode',{nodeId});
   assert.ok(used.fonts.some(face=>face.isCustomFont&&face.glyphCount>0&&face.familyName.toLowerCase().replace(/[^a-z]/g,'').includes(font.family.toLowerCase().replace(/[^a-z]/g,''))),`${font.family} must render from its real custom font`);
  }
@@ -87,7 +87,7 @@ try{
  await page.setViewportSize({width:1280,height:1000});await page.getByRole('tab',{name:'Explore',exact:true}).click();
  await page.evaluate(()=>document.documentElement.style.zoom='2');await layout('gallery-200%-zoom');
  await page.getByRole('tab',{name:'Edit',exact:true}).click();await layout('detail-200%-zoom');await page.evaluate(()=>document.documentElement.style.zoom='');
- assert.equal(await page.getByRole('slider').count(),2);assert.equal(await page.getByRole('combobox').count(),0);assert.equal(await page.getByRole('button',{name:'Save typeface',exact:true}).isEnabled(),true);
+ assert.equal(await page.getByRole('slider').count(),1);assert.equal(await page.getByRole('combobox').count(),0);assert.equal(await page.getByRole('button',{name:'Save typeface',exact:true}).isEnabled(),true);
  console.log('PASS shared three/two/one-card slider layouts, themes, mobile, 200% zoom, one document scroll and fixed navigation');
  const failedContext=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});
  await failedContext.route('**/*',route=>{

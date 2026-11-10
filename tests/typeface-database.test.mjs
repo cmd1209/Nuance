@@ -23,6 +23,14 @@ test('typeface favorites enforce private, independent eight-item quotas without 
   for(let i=1;i<8;i++)await save(alice,`google-fonts:test-${i}`);
   await assert.rejects(save(alice,'google-fonts:ninth'),/up to eight typefaces/);
   await save(alice);assert.equal((await db.query('select saved_typeface_count,saved_composition_count from public.profiles')).rows[0].saved_typeface_count,8);
+  await db.exec('reset role');await db.exec(await readFile('supabase/migrations/202611100001_typeface_specimen_settings.sql','utf8'));await asUser(alice);
+  const legacy=(await db.query('select font_weight,alphabet from public.typeface_favorites')).rows;
+  assert.equal(legacy.length,8);assert.ok(legacy.every(row=>row.font_weight===400 && row.alphabet===false));
+  await db.query("update public.typeface_favorites set font_weight=600,alphabet=true where font_id='google-fonts:inter'");
+  assert.deepEqual((await db.query("select font_weight,alphabet from public.typeface_favorites where font_id='google-fonts:inter'")).rows,[{font_weight:600,alphabet:true}]);
+  assert.equal((await db.query('select saved_typeface_count from public.profiles')).rows[0].saved_typeface_count,8,'editing settings at capacity does not consume another slot');
+  await assert.rejects(db.query('update public.typeface_favorites set font_weight=450'),/check constraint/);
+  await assert.rejects(db.query('update public.typeface_favorites set alphabet=null'),/not-null constraint/);
   assert.equal((await db.query('select saved_composition_count from public.profiles')).rows[0].saved_composition_count,8);
   await assert.rejects(db.query('update public.profiles set saved_typeface_count=0'),/permission denied/);
   await assert.rejects(db.query('select public.nuance_typeface_quota()'),/permission denied/);
@@ -32,7 +40,7 @@ test('typeface favorites enforce private, independent eight-item quotas without 
   await assert.rejects(save(alice),/row-level security/);assert.equal((await db.query('delete from public.typeface_favorites returning font_id')).rows.length,0);
   await save(bob);assert.equal((await db.query('select saved_typeface_count from public.profiles')).rows[0].saved_typeface_count,1);
   await assert.rejects(db.query('update public.typeface_favorites set owner_id=$1',[alice]),/row-level security/);
-  await assert.rejects(db.query("insert into public.typeface_favorites values($1,'bad-font','google-fonts',1,now(),now())",[bob]),/check constraint/);
+  await assert.rejects(db.query("insert into public.typeface_favorites(owner_id,font_id,source,registry_version) values($1,'bad-font','google-fonts',1)",[bob]),/check constraint/);
   await db.query('delete from public.typeface_favorites');assert.equal((await db.query('select saved_typeface_count from public.profiles')).rows[0].saved_typeface_count,0);
   await asUser(alice);assert.equal((await db.query('select * from public.typeface_favorites')).rows.length,8);assert.deepEqual((await db.query('select id,document from public.compositions order by id')).rows,colorsBefore);
   await db.exec('reset role;set role anon');for(const action of ['select * from','delete from'])await assert.rejects(db.query(action+' public.typeface_favorites'),/permission denied/);

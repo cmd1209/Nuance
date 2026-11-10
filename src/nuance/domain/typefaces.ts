@@ -34,6 +34,8 @@ export interface TypefaceSelection {
   readonly fontId:string;
   readonly source:Typeface["source"];
   readonly registryVersion:typeof TYPEFACE_REGISTRY_VERSION;
+  readonly fontWeight?:number;
+  readonly alphabet?:boolean;
 }
 export function selectTypeface(id:string):TypefaceSelection {
   const font=typefaceById(id);

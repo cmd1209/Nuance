@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
-import { HeartPlus } from "lucide-react";
+import { CaseSensitive, HeartPlus, MessageSquareQuote, TypeOutline } from "lucide-react";
 import { TYPEFACES, typefaceById } from "../domain/typefaces";
 import { FOUNDATION_SECTIONS, type CreativeView } from "../domain/sections";
 import { createTypesState, typesReducer } from "../state/types";
@@ -12,12 +12,16 @@ import { DiscoverySlider } from "./DiscoverySlider";
 import { SectionLayout } from "./SectionLayout";
 import { SectionNavigation } from "./SectionNavigation";
 import { TypefaceCard, TypefaceDetail } from "./types/TypefaceSpecimen";
-import type { TypeLineSizes } from "./types/ResizableTypeLine";
 import "./types/types.css";
+
+const WEIGHT_LABELS:Readonly<Record<number,string>>={100:"Thin",200:"Extra Light",300:"Light",400:"Normal",500:"Medium",600:"Semibold",700:"Bold",800:"Extra Bold",900:"Black"};
+const weightLabel=(weight:number)=>`${WEIGHT_LABELS[weight]??"Weight"} (${weight})`;
 
 export function TypesSection({hidden,onViewChange,account,onSignIn}:{hidden:boolean;onViewChange:()=>void;account:Pick<Account,"user"|"authLoading"|"dataLoading">;onSignIn:()=>void}) {
   const [state,dispatch]=useReducer(typesReducer,undefined,createTypesState);
-  const [specimenSizes,setSpecimenSizes]=useState<Record<string,TypeLineSizes>>({});
+  const [specimenSizes,setSpecimenSizes]=useState<Record<string,number>>({});
+  const [alphabetModes,setAlphabetModes]=useState<Record<string,boolean>>({});
+  const [specimenWeights,setSpecimenWeights]=useState<Record<string,number>>({});
   const focusPreview=useRef(false);
   const explorePosition=useRef(0);
   const rememberPosition=useCallback((_id:string,index:number)=>{explorePosition.current=index;},[]);
@@ -30,6 +34,11 @@ export function TypesSection({hidden,onViewChange,account,onSignIn}:{hidden:bool
     previousOwner.current=account.user?.id;
   },[account.user?.id]);
   const selected=state.selection ? typefaceById(state.selection.fontId) : null;
+  const alphabet=selected ? alphabetModes[selected.id]??false : false;
+  const weight=selected ? specimenWeights[selected.id]??selected.loading.specimenWeight : 400;
+  const weights=selected?.availableWeights??[];
+  const nextWeight=weights[(weights.indexOf(weight)+1)%weights.length]??weight;
+  const weightAction=weights.length>1 ? `Font weight: ${weightLabel(weight)}. Switch to ${weightLabel(nextWeight)}` : `Font weight: ${weightLabel(weight)}. Only available weight`;
   useLayoutEffect(()=>{
     if(focusPreview.current && !hidden && state.view === "edit"){
       document.getElementById("types-detail-heading")?.focus({preventScroll:true});
@@ -43,7 +52,7 @@ export function TypesSection({hidden,onViewChange,account,onSignIn}:{hidden:bool
     if(!account.user){onSignIn();return;}
     const operationOwner=account.user.id;
     saveInProgress.current=true;setSaving(true);setNotice("");
-    try{await favorites.save(state.selection);if(owner.current===operationOwner)setNotice("Typeface saved to your account.");}
+    try{await favorites.save({...state.selection,fontWeight:weight,alphabet});if(owner.current===operationOwner)setNotice("Typeface saved to your account.");}
     catch(error){if(owner.current===operationOwner)setNotice(accountError(error));}
     finally{saveInProgress.current=false;setSaving(false);}
   }
@@ -54,16 +63,26 @@ export function TypesSection({hidden,onViewChange,account,onSignIn}:{hidden:bool
     <section id="types-explore-panel" role="tabpanel" aria-labelledby="types-explore-tab" hidden={state.view !== "explore"}>
       <DiscoverySlider items={TYPEFACES} activeId={selected?.id??null} activeIndex={explorePosition.current} onPositionChange={rememberPosition}
         label="Typefaces" itemLabel="Typefaces" navigationLabel="Typeface navigation" scrollLabel="Scroll typefaces with left and right arrow keys" previousLabel="Previous typefaces" nextLabel="Next typefaces"
-        renderItem={(font,index)=><TypefaceCard font={font} active={!hidden && state.view === "explore"} onSelect={()=>openTypeface(font.id,index)} />} />
+        renderItem={(font,index)=><TypefaceCard font={font} active={!hidden && state.view === "explore"} size={specimenSizes[font.id]} weight={specimenWeights[font.id]} onSelect={()=>openTypeface(font.id,index)} />} />
     </section>
     <section id="types-saved-panel" role="tabpanel" aria-labelledby="types-saved-tab" hidden={state.view !== "saved"}>
       <SavedTypefaces key={account.user?.id??"guest"} account={account} favorites={favorites} active={!hidden && state.view === "saved"}
-        onOpen={openTypeface} onSignIn={onSignIn} onExplore={()=>{changeView("explore");document.getElementById("types-explore-tab")?.focus({preventScroll:true});}} />
+        onOpen={item=>{
+          setSpecimenWeights(previous=>({...previous,[item.id]:item.selection.fontWeight??item.typeface.loading.specimenWeight}));
+          setAlphabetModes(previous=>({...previous,[item.id]:item.selection.alphabet??false}));
+          openTypeface(item.id);
+        }} onSignIn={onSignIn} onExplore={()=>{changeView("explore");document.getElementById("types-explore-tab")?.focus({preventScroll:true});}} />
     </section>
     {selected && <section id="types-edit-panel" className="nuance-stage" role="tabpanel" aria-labelledby="types-edit-tab" hidden={state.view !== "edit"}>
-      <TypefaceDetail key={selected.id} font={selected} active={!hidden && state.view === "edit"} sizes={specimenSizes[selected.id]??{}}
-        onResize={(line,size)=>setSpecimenSizes(previous=>({...previous,[selected.id]:{...previous[selected.id],[line]:size}}))} />
+      <TypefaceDetail key={selected.id} font={selected} active={!hidden && state.view === "edit"} size={specimenSizes[selected.id]} alphabet={alphabet} weight={weight}
+        onResize={size=>setSpecimenSizes(previous=>({...previous,[selected.id]:size}))} />
       <div className="composition-actions" role="group" aria-label="Typeface actions">
+        <Button className="composition-action" onClick={()=>setAlphabetModes(previous=>({...previous,[selected.id]:!alphabet}))}
+          aria-label={alphabet?"Show quote":"Show alphabet"} aria-pressed={alphabet} title={alphabet?"Show quote":"Show alphabet"}
+          leadingIcon={alphabet?<MessageSquareQuote size={20} aria-hidden="true" />:<CaseSensitive size={20} aria-hidden="true" />} />
+        <Button className="composition-action" disabled={weights.length<2} aria-label={weightAction} title={weightAction}
+          onClick={()=>setSpecimenWeights(previous=>({...previous,[selected.id]:nextWeight}))}
+          leadingIcon={<TypeOutline size={20} aria-hidden="true" />} />
         <Button className="composition-action" onClick={()=>{void save();}} disabled={saving||account.authLoading||favorites.loading||!!account.user&&account.dataLoading||full}
           aria-busy={saving} aria-label={saving?"Saving typeface…":full?`Save typeface — limit reached (${MAX_SAVED_TYPEFACES}/${MAX_SAVED_TYPEFACES})`:"Save typeface"}
           title={full?"Delete a typeface in Saved to make room.":saving?"Saving typeface…":"Save typeface"} leadingIcon={<HeartPlus size={20} aria-hidden="true" />} />

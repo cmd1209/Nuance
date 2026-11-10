@@ -49,7 +49,7 @@ test("Types starts in Explore, enables contextual Edit after selection and prese
 test("Types Explore renders eight named specimen buttons with their own family stacks, no fake saves or initial Edit",()=>{
  const markup=renderToStaticMarkup(createElement(TypesSection,{hidden:false,onViewChange:()=>{},account:{user:null,authLoading:false,dataLoading:false},onSignIn:()=>{}}));
  for(const font of TYPEFACES){assert.ok(markup.includes(`Preview ${font.family}`));assert.ok(markup.includes(font.loading.family));assert.ok(markup.includes(font.family));}
- assert.equal((markup.match(/class="type-specimen__sample"/g)||[]).length,8);assert.ok(!markup.includes('id="types-edit-tab"'));assert.ok(!markup.includes('Typography exploration is coming soon'));
+ assert.equal((markup.match(/class="type-specimen__quote-text"/g)||[]).length,8);assert.ok(!markup.includes('id="types-edit-tab"'));assert.ok(!markup.includes('Typography exploration is coming soon'));
  assert.ok(markup.includes('types-explore-panel'));assert.ok(markup.includes('types-saved-panel'));assert.ok(!markup.includes('Save typeface'));
 });
 test("specimen font loader caches concurrent requests and degrades safely after failures",async()=>{
@@ -75,9 +75,16 @@ test("specimen font loader caches concurrent requests and degrades safely after 
 import { canSaveTypeface, MAX_SAVED_TYPEFACES, readSavedTypeface } from "../src/nuance/account/typefaceRepository";
 test("saved typefaces resolve canonical family metadata and enforce an independent eight-font allowance",()=>{
  const row={font_id:TYPEFACES[0].id,source:TYPEFACES[0].source,registry_version:1,updated_at:new Date().toISOString()};
- const saved=readSavedTypeface(row);assert.equal(saved.id,TYPEFACES[0].id);assert.equal(saved.typeface,TYPEFACES[0]);assert.deepEqual(saved.selection,selectTypeface(TYPEFACES[0].id));
+ const saved=readSavedTypeface(row);assert.equal(saved.id,TYPEFACES[0].id);assert.equal(saved.typeface,TYPEFACES[0]);assert.deepEqual(saved.selection,{...selectTypeface(TYPEFACES[0].id),fontWeight:400,alphabet:false});
  for(const change of [{font_id:'google-fonts:invented'},{source:'other-library'},{registry_version:2},{updated_at:'invalid'}])assert.throws(()=>readSavedTypeface({...row,...change}));
  assert.equal(MAX_SAVED_TYPEFACES,8);const full=TYPEFACES.map(font=>({id:font.id}));
  assert.equal(canSaveTypeface(full,TYPEFACES[0].id),true);assert.equal(canSaveTypeface(full,'future:font'),false);assert.equal(canSaveTypeface(full.slice(1),'future:font'),true);
  const cleared=typesReducer(typesReducer(createTypesState(),{type:'select',fontId:TYPEFACES[0].id}),{type:'clear-account'});assert.deepEqual(cleared,createTypesState());
+});
+
+test("saved specimen settings restore supported weights and alphabet mode, with legacy defaults",()=>{
+ const row={font_id:'google-fonts:inter',source:'google-fonts',registry_version:1,updated_at:new Date().toISOString(),font_weight:600,alphabet:true};
+ assert.deepEqual(readSavedTypeface(row).selection,{...selectTypeface(row.font_id),fontWeight:600,alphabet:true});
+ for(const change of [{font_weight:450},{font_weight:'600'},{font_weight:null},{alphabet:'true'},{alphabet:null},{font_id:TYPEFACES[0].id}])assert.throws(()=>readSavedTypeface({...row,...change}));
+ assert.equal(readSavedTypeface({...row,font_weight:100,alphabet:false}).selection.fontWeight,100);
 });
