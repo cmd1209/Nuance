@@ -61,6 +61,8 @@ Body, root mount, app shell, main, and section layout wrappers are transparent. 
 
 Composition actions are a design constant: `.composition-actions` belongs at the bottom inside `.nuance-stage`, after the artwork and metadata. The shared action rule keeps the controls last and pushes them to the bottom when space is available. The stage gradient continues behind the actions; specimens inside a stage use that surface instead of painting another gradient.
 
+Use `.palette-card__header` as the shared pattern for example/composition headers going forward. Place it above the example, with the name styled using both `.palette-card__label` and `.composition-source__name`. Saved views place the delete control in the same header, beside the label. Type specimens use this pattern in Explore, Saved, and Edit; `.type-specimen__metadata` sits next to the name, separated by `|`, at the same caption size.
+
 Avoid CSS `:has(.nuance-app)` theme patches, separate page background aliases, and fixed-height roots. Theme ownership belongs to the shell and document; section state does not own the page background.
 
 ## Scroll and focus policy

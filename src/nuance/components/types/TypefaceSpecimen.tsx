@@ -38,11 +38,23 @@ function LoadNotice({status,classification}:{status:string;classification:Typefa
     {status === "unavailable" ? `Font unavailable. Showing a ${classification} fallback.` : status === "loading" ? "Loading typeface…" : ""}
   </span>;
 }
+
+function SpecimenHeader({font,action,heading=false,classificationId}:{font:Typeface;action?:ReactNode;heading?:boolean;classificationId?:string}) {
+  return <header className="palette-card__header">
+    <div className="type-specimen__identity">
+      {heading ? <h2 className="palette-card__label composition-source__name" id="types-detail-heading" tabIndex={-1}>{font.family}</h2>
+        : <span className="palette-card__label composition-source__name">{font.family}</span>}
+      <span className="type-specimen__metadata"><span aria-hidden="true">|</span><span id={classificationId} title={font.sourceLabel}>{font.classification === "serif" ? "Serif" : "Sans-serif"}</span></span>
+    </div>
+    {action}
+  </header>;
+}
+
 export function TypefaceCard({font,active,onSelect,headerAction,disabled=false}:{font:Typeface;active:boolean;onSelect:()=>void;headerAction?:ReactNode;disabled?:boolean}) {
   const {element,status}=useSpecimenFont(font,active);
   const classificationId=useId();
   return <div ref={element} className="type-specimen" data-font-id={font.id} data-font-status={status}>
-    {headerAction && <div className="type-specimen__action">{headerAction}</div>}
+    <SpecimenHeader font={font} action={headerAction} classificationId={classificationId} />
     <button type="button" className="type-specimen__button" disabled={disabled} aria-label={`Preview ${font.family}`} aria-describedby={classificationId} onClick={onSelect}>
       <span className="type-specimen__artwork" style={{fontFamily:typefaceFamily(font),fontWeight:font.loading.specimenWeight}}>
         <span className="type-specimen__sample">{SPECIMEN_HEADLINE}</span>
@@ -50,13 +62,13 @@ export function TypefaceCard({font,active,onSelect,headerAction,disabled=false}:
         <SpecimenQuote font={font} />
       </span>
       <LoadNotice status={status} classification={font.classification} />
-      <span className="type-specimen__metadata"><span className="type-specimen__name">{font.family}</span><span id={classificationId}>{font.classification === "serif" ? "Serif" : "Sans-serif"}</span></span>
     </button>
   </div>;
 }
 export function TypefaceDetail({font,active,sizes,onResize}:{font:Typeface;active:boolean;sizes:TypeLineSizes;onResize:(line:keyof TypeLineSizes,size:number)=>void}) {
   const {element,status}=useSpecimenFont(font,active);
   return <article className="type-specimen type-detail" aria-labelledby="types-detail-heading" data-font-id={font.id} data-font-status={status}>
+    <SpecimenHeader font={font} heading />
     <div ref={element} className="type-detail__artwork" style={{fontFamily:typefaceFamily(font),fontWeight:font.loading.specimenWeight}}>
       <ResizableTypeLine label="Headline" className="type-detail__sample" size={sizes.headline} min={24} max={192} active={active} fontStatus={status}
         onResize={size=>onResize("headline",size)}>{SPECIMEN_HEADLINE}</ResizableTypeLine>
@@ -65,9 +77,5 @@ export function TypefaceDetail({font,active,sizes,onResize}:{font:Typeface;activ
       <SpecimenQuote font={font} />
     </div>
     <LoadNotice status={status} classification={font.classification} />
-    <div className="type-specimen__metadata">
-      <h2 className="type-specimen__name" id="types-detail-heading" tabIndex={-1}>{font.family}</h2>
-      <span title={font.sourceLabel}>{font.classification === "serif" ? "Serif" : "Sans-serif"}</span>
-    </div>
   </article>;
 }
