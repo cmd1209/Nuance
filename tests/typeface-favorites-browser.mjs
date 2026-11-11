@@ -68,12 +68,26 @@ try{
  await savedInter.getByRole('button',{name:`Preview ${inter.family}`,exact:true}).click();
  assert.equal(await page.getByRole('slider',{name:'Alphabet size',exact:true}).count(),1);
  assert.match(await page.getByRole('button',{name:/^Font weight:/}).getAttribute('aria-label'),/Medium \(500\)/);
+ await page.getByRole('button',{name:'Edit text',exact:true}).click();
+ await page.getByRole('textbox',{name:'Specimen text',exact:true}).fill('Custom <type> specimen\nSecond line');
+ assert.equal(await page.locator('#types-edit-panel .type-specimen__quote-caption').count(),0);
+ await save();
+ const customRow=libraries.get(alice.id).find(row=>row.font_id===inter.id);
+ assert.equal(customRow.custom,true);assert.equal(customRow.custom_text,'Custom <type> specimen\nSecond line');
+ await page.reload();await enterTypes();await page.getByRole('tab',{name:'Saved',exact:true}).click();await page.getByText('2 / 8 saved',{exact:true}).waitFor();
+ assert.equal(await savedInter.locator('.type-specimen__quote-text').textContent(),'Custom <type> specimen\nSecond line');
+ assert.equal(await savedInter.locator('.type-specimen__quote-caption').count(),0);
+ await savedInter.getByRole('button',{name:`Preview ${inter.family}`,exact:true}).click();
+ await page.getByRole('button',{name:'Edit custom text',exact:true}).press('Enter');
+ await page.getByRole('textbox',{name:'Specimen text',exact:true}).press('Control+Enter');
+ assert.equal(await page.getByRole('slider',{name:'Custom text size',exact:true}).count(),1);
+ assert.equal(await page.locator('#types-edit-panel .type-specimen__quote-text').evaluate(el=>getComputedStyle(el).letterSpacing),'1px');
  await page.getByRole('button',{name:'Show quote',exact:true}).click();await page.getByRole('button',{name:/^Font weight:/}).click();
  await save();await page.getByRole('tab',{name:'Saved',exact:true}).click();await page.getByText('2 / 8 saved',{exact:true}).waitFor();
  assert.equal(libraries.get(alice.id).find(row=>row.font_id===inter.id).font_weight,600);assert.equal(libraries.get(alice.id).find(row=>row.font_id===inter.id).alphabet,false);
  assert.equal(await savedInter.locator('.type-specimen__quote-caption').count(),1);
  console.log('PASS saved weight and alphabet settings survive reload, render in Saved, restore in Edit, and update without duplicates');
- for(const font of fonts.slice(1)){await choose(font);await save();}
+ for(const font of fonts.slice(1,8)){await choose(font);await save();}
  assert.equal(libraries.get(alice.id).length,8);await save();assert.equal(libraries.get(alice.id).length,8);
  await page.getByRole('tab',{name:'Saved',exact:true}).click();await page.getByText('8 / 8 saved',{exact:true}).waitFor();assert.equal(await page.locator('#types-saved-panel [data-delete-typeface]').count(),8);
  const ids=await page.locator('[id]').evaluateAll(nodes=>nodes.map(node=>node.id));assert.equal(new Set(ids).size,ids.length,'classification IDs remain unique between Explore and Saved');

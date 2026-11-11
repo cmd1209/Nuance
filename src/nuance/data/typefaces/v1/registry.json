@@ -413,5 +413,1331 @@
       "bytes": 37640
     },
     "sourceLabel": "Google Fonts"
+  },
+  {
+    "id": "google-fonts:lato",
+    "family": "Lato",
+    "classification": "sans-serif",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      100,
+      300,
+      400,
+      700,
+      900
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": false,
+    "supportedSubsets": [
+      "latin",
+      "latin-ext"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright (c) 2010-2011 by tyPoland Lukasz Dziedzic (team@latofonts.com) with Reserved Font Name \"Lato\". Licensed under the SIL Open Font License, Version 1.1. Lato-HairlineItalic.ttf: Copyright (c) 2010-2011 by tyPoland Lukasz Dziedzic (team@latofonts.com) with Reserved Font Name \"Lato\". Licensed under the SIL Open Font License, Version 1.1. Lato-Light.ttf: Copyright (c) 2010-2011 by tyPoland Lukasz Dziedzic (team@latofonts.com) with Reserved Font Name \"Lato\". Licensed under the SIL Open Font License, Version 1.1. Lato-LightItalic.ttf: Copyright (c) 2010-2011 by tyPoland Lukasz Dziedzic (team@latofonts.com) with Reserved Font Name \"Lato\". Licensed under the SIL Open Font License, Version 1.1. Lato-Regular.ttf: Copyright (c) 2010-2011 by tyPoland Lukasz Dziedzic (team@latofonts.com) with Reserved Font Name \"Lato\". Licensed under the SIL Open Font License, Version 1.1. Lato-Italic.ttf: Copyright (c) 2010-2011 by tyPoland Lukasz Dziedzic (team@latofonts.com) with Reserved Font Name \"Lato\". Licensed under the SIL Open Font License, Version 1.1. Lato-Bold.ttf: Copyright (c) 2010-2011 by tyPoland Lukasz Dziedzic (team@latofonts.com) with Reserved Font Name \"Lato\". Licensed under the SIL Open Font License, Version 1.1. Lato-BoldItalic.ttf: Copyright (c) 2010-2011 by tyPoland Lukasz Dziedzic (team@latofonts.com) with Reserved Font Name \"Lato\". Licensed under the SIL Open Font License, Version 1.1. Lato-Black.ttf: Copyright (c) 2010-2011 by tyPoland Lukasz Dziedzic (team@latofonts.com) with Reserved Font Name \"Lato\". Licensed under the SIL Open Font License, Version 1.1. Lato-BlackItalic.ttf: Copyright (c) 2010-2011 by tyPoland Lukasz Dziedzic (team@latofonts.com) with Reserved Font Name \"Lato\". Licensed under the SIL Open Font License, Version 1.1.",
+      "noticeUrl": "/nuance/fonts/specimens/lato-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Lato",
+      "url": "/nuance/fonts/specimens/lato-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "400",
+      "display": "swap",
+      "specimenWeight": 400,
+      "additionalFaces": [
+        {
+          "weight": 100,
+          "url": "/nuance/fonts/specimens/lato-5.3.0-latin-100-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/lato@5.3.0/files/lato-latin-100-normal.woff2",
+          "sha256": "a79b4c65b454a795ff3868156f54be09ac8360b9fd3ba21431b5c48fd9b66afa",
+          "bytes": 21508
+        },
+        {
+          "weight": 300,
+          "url": "/nuance/fonts/specimens/lato-5.3.0-latin-300-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/lato@5.3.0/files/lato-latin-300-normal.woff2",
+          "sha256": "115f6a626ca115d4ad5581b59275327e0e860b30330a52b0f785561332dd2429",
+          "bytes": 23236
+        },
+        {
+          "weight": 700,
+          "url": "/nuance/fonts/specimens/lato-5.3.0-latin-700-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/lato@5.3.0/files/lato-latin-700-normal.woff2",
+          "sha256": "c447dd7677b419db7b21dbdfc6277c7816a913ffda76fd2e52702df538de0e49",
+          "bytes": 23040
+        },
+        {
+          "weight": 900,
+          "url": "/nuance/fonts/specimens/lato-5.3.0-latin-900-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/lato@5.3.0/files/lato-latin-900-normal.woff2",
+          "sha256": "08664859baab5ed98f0bf818ed77e38464ff1826dc6406d5ecbd651409afbd92",
+          "bytes": 22504
+        }
+      ]
+    },
+    "upstream": {
+      "package": "@fontsource/lato",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v25",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/lato@5.3.0/files/lato-latin-400-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource/lato@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource/lato@5.3.0/LICENSE",
+      "sha256": "918b7dc3e2e2d015c16ce08b57bcb64d2253bafc1707658f361e72865498e537",
+      "bytes": 23580
+    }
+  },
+  {
+    "id": "google-fonts:noto-sans",
+    "family": "Noto Sans",
+    "classification": "sans-serif",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "cyrillic",
+      "cyrillic-ext",
+      "devanagari",
+      "greek",
+      "greek-ext",
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/latin-greek-cyrillic) NotoSans-Italic[wdth,wght].ttf: Copyright 2022 The Noto Project Authors (https://github.com/notofonts/latin-greek-cyrillic)",
+      "noticeUrl": "/nuance/fonts/specimens/noto-sans-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Noto Sans",
+      "url": "/nuance/fonts/specimens/noto-sans-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "100 900",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/noto-sans",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v42",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/noto-sans@5.3.0/files/noto-sans-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/noto-sans@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/noto-sans@5.3.0/LICENSE",
+      "sha256": "51ca196f49a33e79e7870ff88ebd2829a3f627a51e7d690986618f0e7ad2b52d",
+      "bytes": 35820
+    }
+  },
+  {
+    "id": "google-fonts:roboto",
+    "family": "Roboto",
+    "classification": "sans-serif",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "cyrillic",
+      "cyrillic-ext",
+      "greek",
+      "greek-ext",
+      "latin",
+      "latin-ext",
+      "math",
+      "symbols",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2011 The Roboto Project Authors (https://github.com/googlefonts/roboto-classic) Roboto-Italic[wdth,wght].ttf: Copyright 2011 The Roboto Project Authors (https://github.com/googlefonts/roboto-classic)",
+      "noticeUrl": "/nuance/fonts/specimens/roboto-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Roboto",
+      "url": "/nuance/fonts/specimens/roboto-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "100 900",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/roboto",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v51",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/roboto@5.3.0/files/roboto-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/roboto@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/roboto@5.3.0/LICENSE",
+      "sha256": "1404ca348bd75ef836f4dd8b6f2cc719458642d1237c368296b2fc652dca47dc",
+      "bytes": 43136
+    }
+  },
+  {
+    "id": "google-fonts:nunito-sans",
+    "family": "Nunito Sans",
+    "classification": "sans-serif",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "cyrillic",
+      "cyrillic-ext",
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2016 The Nunito Sans Project Authors (https://github.com/Fonthausen/NunitoSans) NunitoSans-Italic[YTLC,opsz,wdth,wght].ttf: Copyright 2016 The Nunito Sans Project Authors (https://github.com/Fonthausen/NunitoSans)",
+      "noticeUrl": "/nuance/fonts/specimens/nunito-sans-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Nunito Sans",
+      "url": "/nuance/fonts/specimens/nunito-sans-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "200 1000",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/nunito-sans",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v19",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/nunito-sans@5.3.0/files/nunito-sans-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/nunito-sans@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/nunito-sans@5.3.0/LICENSE",
+      "sha256": "29e3890496844a9ea81975c52771c587c872b4eb317026422d1995b88d21b57d",
+      "bytes": 31076
+    }
+  },
+  {
+    "id": "google-fonts:pt-serif",
+    "family": "PT Serif",
+    "classification": "serif",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      400,
+      700
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": false,
+    "supportedSubsets": [
+      "cyrillic",
+      "cyrillic-ext",
+      "latin",
+      "latin-ext"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright © 2010 ParaType Ltd. All rights reserved. PT_Serif-Web-Italic.ttf: Copyright © 2010 ParaType Ltd. All rights reserved. PT_Serif-Web-Bold.ttf: Copyright © 2010 ParaType Ltd. All rights reserved. PT_Serif-Web-BoldItalic.ttf: Copyright © 2010 ParaType Ltd. All rights reserved.",
+      "noticeUrl": "/nuance/fonts/specimens/pt-serif-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen PT Serif",
+      "url": "/nuance/fonts/specimens/pt-serif-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "400",
+      "display": "swap",
+      "specimenWeight": 400,
+      "additionalFaces": [
+        {
+          "weight": 700,
+          "url": "/nuance/fonts/specimens/pt-serif-5.3.0-latin-700-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/pt-serif@5.3.0/files/pt-serif-latin-700-normal.woff2",
+          "sha256": "bf23a7a4eebedbb87d4084a69496b29815914a18e339a00f5dc73a03c9c9328f",
+          "bytes": 29588
+        }
+      ]
+    },
+    "upstream": {
+      "package": "@fontsource/pt-serif",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v19",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/pt-serif@5.3.0/files/pt-serif-latin-400-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource/pt-serif@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource/pt-serif@5.3.0/LICENSE",
+      "sha256": "4271064a37f3ffc0aac5f3806db8a72acc23e19447d1804e4e80d8796cbf6330",
+      "bytes": 33116
+    }
+  },
+  {
+    "id": "google-fonts:work-sans",
+    "family": "Work Sans",
+    "classification": "sans-serif",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2019 The Work Sans Project Authors (https://github.com/weiweihuanghuang/Work-Sans) WorkSans-Italic[wght].ttf: Copyright 2019 The Work Sans Project Authors (https://github.com/weiweihuanghuang/Work-Sans)",
+      "noticeUrl": "/nuance/fonts/specimens/work-sans-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Work Sans",
+      "url": "/nuance/fonts/specimens/work-sans-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "100 900",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/work-sans",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v24",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/work-sans@5.3.0/files/work-sans-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/work-sans@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/work-sans@5.3.0/LICENSE",
+      "sha256": "1dd49afc07fb2231b2ff686cbf007725fb2742271bb1f28ebd98f22a0d817343",
+      "bytes": 50316
+    }
+  },
+  {
+    "id": "google-fonts:fira-sans",
+    "family": "Fira Sans",
+    "classification": "sans-serif",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": false,
+    "supportedSubsets": [
+      "cyrillic",
+      "cyrillic-ext",
+      "greek",
+      "greek-ext",
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "http://scripts.sil.org/OFL",
+      "attribution": "Google Inc.",
+      "noticeUrl": "/nuance/fonts/specimens/fira-sans-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Fira Sans",
+      "url": "/nuance/fonts/specimens/fira-sans-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "400",
+      "display": "swap",
+      "specimenWeight": 400,
+      "additionalFaces": [
+        {
+          "weight": 100,
+          "url": "/nuance/fonts/specimens/fira-sans-5.3.0-latin-100-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/fira-sans@5.3.0/files/fira-sans-latin-100-normal.woff2",
+          "sha256": "abbc67498728b9d5a93845568ab5e0965eee8436e42a3b0461a06b56b1ba2b36",
+          "bytes": 22896
+        },
+        {
+          "weight": 200,
+          "url": "/nuance/fonts/specimens/fira-sans-5.3.0-latin-200-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/fira-sans@5.3.0/files/fira-sans-latin-200-normal.woff2",
+          "sha256": "936457f54fdf9033c448d865b52afc1ba4674a37877887a04cfadab8184d2ae5",
+          "bytes": 23572
+        },
+        {
+          "weight": 300,
+          "url": "/nuance/fonts/specimens/fira-sans-5.3.0-latin-300-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/fira-sans@5.3.0/files/fira-sans-latin-300-normal.woff2",
+          "sha256": "868c1d1412b0b61c6c88c1e42af6d52440ca414004f40ca5330371349613d60c",
+          "bytes": 23604
+        },
+        {
+          "weight": 500,
+          "url": "/nuance/fonts/specimens/fira-sans-5.3.0-latin-500-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/fira-sans@5.3.0/files/fira-sans-latin-500-normal.woff2",
+          "sha256": "88d3e420adee3fa99ae50c15b123e3c9a07ce0ec0c03a01bd6bdd5232822da28",
+          "bytes": 24056
+        },
+        {
+          "weight": 600,
+          "url": "/nuance/fonts/specimens/fira-sans-5.3.0-latin-600-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/fira-sans@5.3.0/files/fira-sans-latin-600-normal.woff2",
+          "sha256": "55e09735e30d8492afac5d59ac433c6b367bb7dd00c46e157cfe95c9fb29e833",
+          "bytes": 24844
+        },
+        {
+          "weight": 700,
+          "url": "/nuance/fonts/specimens/fira-sans-5.3.0-latin-700-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/fira-sans@5.3.0/files/fira-sans-latin-700-normal.woff2",
+          "sha256": "c753d7153cac2cfeb877264d18f11197ca672d3e04ba1472154a54777a4e354d",
+          "bytes": 25012
+        },
+        {
+          "weight": 800,
+          "url": "/nuance/fonts/specimens/fira-sans-5.3.0-latin-800-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/fira-sans@5.3.0/files/fira-sans-latin-800-normal.woff2",
+          "sha256": "00204449031623c1427dcfe782a19a0232847bdb2700f3d5a43a529dc643888a",
+          "bytes": 25048
+        },
+        {
+          "weight": 900,
+          "url": "/nuance/fonts/specimens/fira-sans-5.3.0-latin-900-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/fira-sans@5.3.0/files/fira-sans-latin-900-normal.woff2",
+          "sha256": "7af06155afaee6d8984649172f51f9ceb32de10a04a844d973a9ea45e9f6132e",
+          "bytes": 24676
+        }
+      ]
+    },
+    "upstream": {
+      "package": "@fontsource/fira-sans",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v18",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/fira-sans@5.3.0/files/fira-sans-latin-400-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource/fira-sans@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource/fira-sans@5.3.0/LICENSE",
+      "sha256": "3e38d8c01fe97529fbf0a086bf958d724b723ca7fc8be77b4ba5745f6259b6ca",
+      "bytes": 23872
+    }
+  },
+  {
+    "id": "google-fonts:noto-serif",
+    "family": "Noto Serif",
+    "classification": "serif",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "cyrillic",
+      "cyrillic-ext",
+      "greek",
+      "greek-ext",
+      "latin",
+      "latin-ext",
+      "math",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2022 The Noto Project Authors (https://github.com/notofonts/latin-greek-cyrillic) NotoSerif-Italic[wdth,wght].ttf: Copyright 2022 The Noto Project Authors (https://github.com/notofonts/latin-greek-cyrillic)",
+      "noticeUrl": "/nuance/fonts/specimens/noto-serif-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Noto Serif",
+      "url": "/nuance/fonts/specimens/noto-serif-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "100 900",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/noto-serif",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v33",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/noto-serif@5.3.0/files/noto-serif-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/noto-serif@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/noto-serif@5.3.0/LICENSE",
+      "sha256": "46281456234014ceb2a79bff447245de0f76b8d803be0738972ed374c3206c5b",
+      "bytes": 36756
+    }
+  },
+  {
+    "id": "google-fonts:inconsolata",
+    "family": "Inconsolata",
+    "classification": "monospace",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900
+    ],
+    "availableStyles": [
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2006 The Inconsolata Project Authors (https://github.com/cyrealtype/Inconsolata)",
+      "noticeUrl": "/nuance/fonts/specimens/inconsolata-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Inconsolata",
+      "url": "/nuance/fonts/specimens/inconsolata-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "200 900",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/inconsolata",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v37",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/inconsolata@5.3.0/files/inconsolata-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/inconsolata@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/inconsolata@5.3.0/LICENSE",
+      "sha256": "4914e68b98699a8f3d5d552fe60fd7a1c2cb631a0f66f0a148392f161d3155ab",
+      "bytes": 34084
+    }
+  },
+  {
+    "id": "google-fonts:dm-sans",
+    "family": "DM Sans",
+    "classification": "sans-serif",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "latin",
+      "latin-ext"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2014 The DM Sans Project Authors (https://github.com/googlefonts/dm-fonts) DMSans-Italic[opsz,wght].ttf: Copyright 2014 The DM Sans Project Authors (https://github.com/googlefonts/dm-fonts)",
+      "noticeUrl": "/nuance/fonts/specimens/dm-sans-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen DM Sans",
+      "url": "/nuance/fonts/specimens/dm-sans-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "100 1000",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/dm-sans",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v17",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/dm-sans@5.3.0/files/dm-sans-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/dm-sans@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/dm-sans@5.3.0/LICENSE",
+      "sha256": "9fea608a947e67020c33cad9a6fe3d60c54119dfb8cff87768a8117a15ed7543",
+      "bytes": 36932
+    }
+  },
+  {
+    "id": "google-fonts:josefin-sans",
+    "family": "Josefin Sans",
+    "classification": "sans-serif",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2010 The Josefin Sans Project Authors (https://github.com/ThomasJockin/JosefinSansFont-master), with Reserved Font Name \"Josefin Sans\". JosefinSans-Italic[wght].ttf: Copyright 2010 The Josefin Sans Project Authors (https://github.com/ThomasJockin/JosefinSansFont-master), with Reserved Font Name \"Josefin Sans\".",
+      "noticeUrl": "/nuance/fonts/specimens/josefin-sans-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Josefin Sans",
+      "url": "/nuance/fonts/specimens/josefin-sans-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "100 700",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/josefin-sans",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v34",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/josefin-sans@5.3.0/files/josefin-sans-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/josefin-sans@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/josefin-sans@5.3.0/LICENSE",
+      "sha256": "21efe1559a026f9ad7f880772917faa3a621186688e8e79e0568e4308c0bafa9",
+      "bytes": 28528
+    }
+  },
+  {
+    "id": "google-fonts:barlow",
+    "family": "Barlow",
+    "classification": "sans-serif",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": false,
+    "supportedSubsets": [
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow) Barlow-ThinItalic.ttf: Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow) Barlow-ExtraLight.ttf: Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow) Barlow-ExtraLightItalic.ttf: Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow) Barlow-Light.ttf: Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow) Barlow-LightItalic.ttf: Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow) Barlow-Regular.ttf: Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow) Barlow-Italic.ttf: Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow) Barlow-Medium.ttf: Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow) Barlow-MediumItalic.ttf: Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow) Barlow-SemiBold.ttf: Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow) Barlow-SemiBoldItalic.ttf: Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow) Barlow-Bold.ttf: Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow) Barlow-BoldItalic.ttf: Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow) Barlow-ExtraBold.ttf: Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow) Barlow-ExtraBoldItalic.ttf: Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow) Barlow-Black.ttf: Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow) Barlow-BlackItalic.ttf: Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow)",
+      "noticeUrl": "/nuance/fonts/specimens/barlow-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Barlow",
+      "url": "/nuance/fonts/specimens/barlow-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "400",
+      "display": "swap",
+      "specimenWeight": 400,
+      "additionalFaces": [
+        {
+          "weight": 100,
+          "url": "/nuance/fonts/specimens/barlow-5.3.0-latin-100-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/barlow@5.3.0/files/barlow-latin-100-normal.woff2",
+          "sha256": "79213a0cddd7c9ee19cdd9e258827d840c5b69d508e88a5c18a85f6fa85cee8d",
+          "bytes": 21444
+        },
+        {
+          "weight": 200,
+          "url": "/nuance/fonts/specimens/barlow-5.3.0-latin-200-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/barlow@5.3.0/files/barlow-latin-200-normal.woff2",
+          "sha256": "8452443f54db2db87d5a0efee9a68b42b2775303a5e23b90cbf112e25e03be9e",
+          "bytes": 21644
+        },
+        {
+          "weight": 300,
+          "url": "/nuance/fonts/specimens/barlow-5.3.0-latin-300-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/barlow@5.3.0/files/barlow-latin-300-normal.woff2",
+          "sha256": "889347d7bc19d53d984a12f413457fbc8b3723757464cf514121534f626dc4db",
+          "bytes": 22076
+        },
+        {
+          "weight": 500,
+          "url": "/nuance/fonts/specimens/barlow-5.3.0-latin-500-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/barlow@5.3.0/files/barlow-latin-500-normal.woff2",
+          "sha256": "cd759df8ef9efc98fee14307b4eb5ba27f08b1f8f2f3ad2872432e25c89907a8",
+          "bytes": 22008
+        },
+        {
+          "weight": 600,
+          "url": "/nuance/fonts/specimens/barlow-5.3.0-latin-600-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/barlow@5.3.0/files/barlow-latin-600-normal.woff2",
+          "sha256": "4b52ddd4836b592df0e4832b8286956883cdc651b015126bdd18f184b7f90cc3",
+          "bytes": 22772
+        },
+        {
+          "weight": 700,
+          "url": "/nuance/fonts/specimens/barlow-5.3.0-latin-700-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/barlow@5.3.0/files/barlow-latin-700-normal.woff2",
+          "sha256": "2d797dd8b35dcb3413e1af9d7052b3f4f8c341a147cdcb01f4f06af80db53289",
+          "bytes": 22788
+        },
+        {
+          "weight": 800,
+          "url": "/nuance/fonts/specimens/barlow-5.3.0-latin-800-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/barlow@5.3.0/files/barlow-latin-800-normal.woff2",
+          "sha256": "231d487a993e28bc5567c2be8da48acd8e0a209891c11448491eab45db0f8d7c",
+          "bytes": 22976
+        },
+        {
+          "weight": 900,
+          "url": "/nuance/fonts/specimens/barlow-5.3.0-latin-900-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/barlow@5.3.0/files/barlow-latin-900-normal.woff2",
+          "sha256": "6f5d995ccc4d8ffd9e8cb4c303fc1f3646d6c62d40269ef59463332f12d5b897",
+          "bytes": 22368
+        }
+      ]
+    },
+    "upstream": {
+      "package": "@fontsource/barlow",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v13",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/barlow@5.3.0/files/barlow-latin-400-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource/barlow@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource/barlow@5.3.0/LICENSE",
+      "sha256": "b0a8ad37ac45f5fb22ced461576db72e44e295107aad7a9c8a7a4bad728fd03b",
+      "bytes": 22196
+    }
+  },
+  {
+    "id": "google-fonts:bitter",
+    "family": "Bitter",
+    "classification": "serif",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "cyrillic",
+      "cyrillic-ext",
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2011 The Bitter Project Authors (https://github.com/solmatas/BitterPro) Bitter-Italic[wght].ttf: Copyright 2011 The Bitter Project Authors (https://github.com/solmatas/BitterPro)",
+      "noticeUrl": "/nuance/fonts/specimens/bitter-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Bitter",
+      "url": "/nuance/fonts/specimens/bitter-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "100 900",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/bitter",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v42",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/bitter@5.3.0/files/bitter-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/bitter@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/bitter@5.3.0/LICENSE",
+      "sha256": "0efe0fbe6068354f3fad5a88bf31384051206652468eaa22232119354e7ea423",
+      "bytes": 34072
+    }
+  },
+  {
+    "id": "google-fonts:source-code-pro",
+    "family": "Source Code Pro",
+    "classification": "monospace",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "cyrillic",
+      "cyrillic-ext",
+      "greek",
+      "greek-ext",
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "http://scripts.sil.org/OFL",
+      "attribution": "Google Inc.",
+      "noticeUrl": "/nuance/fonts/specimens/source-code-pro-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Source Code Pro",
+      "url": "/nuance/fonts/specimens/source-code-pro-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "200 900",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/source-code-pro",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v31",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/source-code-pro@5.3.0/files/source-code-pro-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/source-code-pro@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/source-code-pro@5.3.0/LICENSE",
+      "sha256": "8b774aaa5137a38ef40f4ac9d36db9a5eee152b2f66589dfdc82ff007fc87135",
+      "bytes": 22044
+    }
+  },
+  {
+    "id": "google-fonts:arvo",
+    "family": "Arvo",
+    "classification": "serif",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      400,
+      700
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": false,
+    "supportedSubsets": [
+      "latin"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2010 Anton Koovit. Arvo-Italic.ttf: Copyright 2010 Anton Koovit, Yassin Baggar. Arvo-Bold.ttf: Copyright (c) 2010 by Anton Koovit. Arvo-BoldItalic.ttf: Copyright 2010 Anton Koovit, Yassin Baggar.",
+      "noticeUrl": "/nuance/fonts/specimens/arvo-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Arvo",
+      "url": "/nuance/fonts/specimens/arvo-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "400",
+      "display": "swap",
+      "specimenWeight": 400,
+      "additionalFaces": [
+        {
+          "weight": 700,
+          "url": "/nuance/fonts/specimens/arvo-5.3.0-latin-700-normal.woff2",
+          "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/arvo@5.3.0/files/arvo-latin-700-normal.woff2",
+          "sha256": "3d908a2c04ec4c59d26d1454008b2d6744480654663a5f88e439f6483976bd37",
+          "bytes": 17348
+        }
+      ]
+    },
+    "upstream": {
+      "package": "@fontsource/arvo",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v23",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/arvo@5.3.0/files/arvo-latin-400-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource/arvo@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource/arvo@5.3.0/LICENSE",
+      "sha256": "b4eb4284188dcd4a4643d900bbe50b2d6b336afeb7c126eace219276b5d30521",
+      "bytes": 17268
+    }
+  },
+  {
+    "id": "google-fonts:exo-2",
+    "family": "Exo 2",
+    "classification": "sans-serif",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "cyrillic",
+      "cyrillic-ext",
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2013 The Exo 2 Project Authors (https://github.com/googlefonts/Exo-2.0) Exo2-Italic[wght].ttf: Copyright 2013 The Exo 2 Project Authors (https://github.com/googlefonts/Exo-2.0)",
+      "noticeUrl": "/nuance/fonts/specimens/exo-2-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Exo 2",
+      "url": "/nuance/fonts/specimens/exo-2-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "100 900",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/exo-2",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v26",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/exo-2@5.3.0/files/exo-2-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/exo-2@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/exo-2@5.3.0/LICENSE",
+      "sha256": "4a259dde317e08aa5d37e6eb684e222ae833516b2a0fccba36ee5e36224f16be",
+      "bytes": 40896
+    }
+  },
+  {
+    "id": "google-fonts:comfortaa",
+    "family": "Comfortaa",
+    "classification": "display",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      300,
+      400,
+      500,
+      600,
+      700
+    ],
+    "availableStyles": [
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "cyrillic",
+      "cyrillic-ext",
+      "greek",
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2011 The Comfortaa Project Authors (https://github.com/alexeiva/comfortaa), with Reserved Font Name \"Comfortaa\".",
+      "noticeUrl": "/nuance/fonts/specimens/comfortaa-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Comfortaa",
+      "url": "/nuance/fonts/specimens/comfortaa-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "300 700",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/comfortaa",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v47",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/comfortaa@5.3.0/files/comfortaa-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/comfortaa@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/comfortaa@5.3.0/LICENSE",
+      "sha256": "408f20ae9895ceefa460a383d76497a91abc469e3d00b49f080efc7f4b12c60e",
+      "bytes": 30872
+    }
+  },
+  {
+    "id": "google-fonts:vollkorn",
+    "family": "Vollkorn",
+    "classification": "serif",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      400,
+      500,
+      600,
+      700,
+      800,
+      900
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "cyrillic",
+      "cyrillic-ext",
+      "greek",
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2018 The Vollkorn Project Authors (https://github.com/FAlthausen/Vollkorn-Typeface) Vollkorn-Italic[wght].ttf: Copyright 2018 The Vollkorn Project Authors (https://github.com/FAlthausen/Vollkorn-Typeface)",
+      "noticeUrl": "/nuance/fonts/specimens/vollkorn-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Vollkorn",
+      "url": "/nuance/fonts/specimens/vollkorn-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "400 900",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/vollkorn",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v30",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/vollkorn@5.3.0/files/vollkorn-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/vollkorn@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/vollkorn@5.3.0/LICENSE",
+      "sha256": "3d9ff812bd542e52bb7f0c204f3a21152e22aead4572ff09722c1b38f30d7567",
+      "bytes": 46356
+    }
+  },
+  {
+    "id": "google-fonts:signika-negative",
+    "family": "Signika Negative",
+    "classification": "sans-serif",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      300,
+      400,
+      500,
+      600,
+      700
+    ],
+    "availableStyles": [
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2018 The Signika Project Authors (https://github.com/googlefonts/Signika).",
+      "noticeUrl": "/nuance/fonts/specimens/signika-negative-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Signika Negative",
+      "url": "/nuance/fonts/specimens/signika-negative-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "300 700",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/signika-negative",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v26",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/signika-negative@5.3.0/files/signika-negative-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/signika-negative@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/signika-negative@5.3.0/LICENSE",
+      "sha256": "bf2332238b84602fc5100440e34610c1544ca1379428035d734e48aff44baa00",
+      "bytes": 40776
+    }
+  },
+  {
+    "id": "google-fonts:figtree",
+    "family": "Figtree",
+    "classification": "sans-serif",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      300,
+      400,
+      500,
+      600,
+      700,
+      800,
+      900
+    ],
+    "availableStyles": [
+      "italic",
+      "normal"
+    ],
+    "variable": true,
+    "supportedSubsets": [
+      "latin",
+      "latin-ext"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2022 The Figtree Project Authors (https://github.com/erikdkennedy/figtree) Figtree-Italic[wght].ttf: Copyright 2022 The Figtree Project Authors (https://github.com/erikdkennedy/figtree)",
+      "noticeUrl": "/nuance/fonts/specimens/figtree-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Figtree",
+      "url": "/nuance/fonts/specimens/figtree-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "300 900",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource-variable/figtree",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v9",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/figtree@5.3.0/files/figtree-latin-wght-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/figtree@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource-variable/figtree@5.3.0/LICENSE",
+      "sha256": "4ba7d3d096695818fe0686be4f1e82c6b05134e18a22260336130335027462dd",
+      "bytes": 20156
+    }
+  },
+  {
+    "id": "google-fonts:questrial",
+    "family": "Questrial",
+    "classification": "sans-serif",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      400
+    ],
+    "availableStyles": [
+      "normal"
+    ],
+    "variable": false,
+    "supportedSubsets": [
+      "latin",
+      "latin-ext",
+      "vietnamese"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2011 The Questrial Project Authors (https://github.com/googlefonts/questrial)",
+      "noticeUrl": "/nuance/fonts/specimens/questrial-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Questrial",
+      "url": "/nuance/fonts/specimens/questrial-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "400",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource/questrial",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v19",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/questrial@5.3.0/files/questrial-latin-400-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource/questrial@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource/questrial@5.3.0/LICENSE",
+      "sha256": "89ccc12b1889293597ece5fe971b0bc352464a9f7ca870e4f3b473f5940a2025",
+      "bytes": 20668
+    }
+  },
+  {
+    "id": "google-fonts:archivo-black",
+    "family": "Archivo Black",
+    "classification": "sans-serif",
+    "source": "google-fonts",
+    "sourceLabel": "Google Fonts",
+    "availableWeights": [
+      400
+    ],
+    "availableStyles": [
+      "normal"
+    ],
+    "variable": false,
+    "supportedSubsets": [
+      "latin",
+      "latin-ext"
+    ],
+    "license": {
+      "spdx": "OFL-1.1",
+      "url": "https://openfontlicense.org",
+      "attribution": "Copyright 2017 The Archivo Black Project Authors (https://github.com/Omnibus-Type/ArchivoBlack)",
+      "noticeUrl": "/nuance/fonts/specimens/archivo-black-LICENSE.txt"
+    },
+    "loading": {
+      "family": "Nuance Specimen Archivo Black",
+      "url": "/nuance/fonts/specimens/archivo-black-5.3.0-latin-normal.woff2",
+      "format": "woff2",
+      "subset": "latin",
+      "style": "normal",
+      "weight": "400",
+      "display": "swap",
+      "specimenWeight": 400
+    },
+    "upstream": {
+      "package": "@fontsource/archivo-black",
+      "packageVersion": "5.3.0",
+      "fontVersion": "v23",
+      "assetUrl": "https://cdn.jsdelivr.net/npm/@fontsource/archivo-black@5.3.0/files/archivo-black-latin-400-normal.woff2",
+      "metadataUrl": "https://cdn.jsdelivr.net/npm/@fontsource/archivo-black@5.3.0/metadata.json",
+      "licenseUrl": "https://cdn.jsdelivr.net/npm/@fontsource/archivo-black@5.3.0/LICENSE",
+      "sha256": "25f33e61cf995abd6be62931cf03bf427286259177b43618cc410ee0157cfd30",
+      "bytes": 18604
+    }
   }
 ]

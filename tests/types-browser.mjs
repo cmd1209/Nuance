@@ -36,7 +36,7 @@ try{
  await page.locator('.palette-card').first().click();await page.locator('.color-region__select').first().click();await page.getByLabel('HEX',{exact:true}).fill('#123456');await page.getByRole('button',{name:'Close color editor',exact:true}).click();
  const editedColor=await colorState();await types();
  await page.waitForFunction(()=>[...document.querySelectorAll('.type-specimen')].some(el=>el.dataset.fontStatus==='loading'));
- assert.ok(requested.length>0&&requested.length<8,'visible specimens load on demand');assert.equal(await cards.count(),8);assert.equal(await columns(),3);
+ assert.ok(requested.length>0&&requested.length<fonts.length,'visible specimens load on demand');assert.equal(await cards.count(),fonts.length);assert.equal(await columns(),3);
  assert.equal(await page.getByRole('tab',{name:'Edit',exact:true}).count(),0);
  const before=await cards.evaluateAll(nodes=>nodes.map(node=>({x:node.getBoundingClientRect().x,y:node.getBoundingClientRect().y,height:node.getBoundingClientRect().height})));
  hold=false;releases.splice(0).forEach(resolve=>resolve());
@@ -53,8 +53,8 @@ try{
   const used=await cdp.send('CSS.getPlatformFontsForNode',{nodeId});
   assert.ok(used.fonts.some(face=>face.isCustomFont&&face.glyphCount>0&&face.familyName.toLowerCase().replace(/[^a-z]/g,'').includes(font.family.toLowerCase().replace(/[^a-z]/g,''))),`${font.family} must render from its real custom font`);
  }
- assert.equal(requested.length,8);assert.equal(new Set(requested).size,8);assert.ok(!external.some(origin=>/googleapis|gstatic|fontsource|jsdelivr/.test(origin)));
- console.log('PASS eight real custom fonts, accurate specimens, on-demand local files, no font-arrival layout shift, unchanged UI typography');
+ assert.equal(requested.length,fonts.length);assert.equal(new Set(requested).size,fonts.length);assert.ok(!external.some(origin=>/googleapis|gstatic|fontsource|jsdelivr/.test(origin)));
+ console.log('PASS 30 real custom fonts, accurate specimens, on-demand local files, no font-arrival layout shift, unchanged UI typography');
  const viewport=page.locator('#types-explore-panel .palette-slider__viewport');
  await page.getByRole('button',{name:'Previous typefaces',exact:true}).click();
  await viewport.evaluate(el=>el.scrollTo({left:0,behavior:'instant'}));
@@ -74,7 +74,7 @@ try{
  await nav.getByRole('button',{name:'Colors',exact:true}).click();assert.deepEqual(await colorState(),editedColor);
  await types();assert.equal(await page.getByRole('tab',{name:'Edit',selected:true,exact:true}).count(),1);assert.equal(await page.locator('#types-detail-heading').textContent(),'DM Serif Display');
  await page.getByRole('tab',{name:'Explore',exact:true}).click();await page.getByRole('button',{name:'Preview Inter',exact:true}).click();assert.equal(await page.locator('#types-detail-heading').textContent(),'Inter');
- assert.equal(requested.length,8,'detail and return visits reuse loaded fonts');
+ assert.equal(requested.length,fonts.length,'detail and return visits reuse loaded fonts');
  console.log('PASS keyboard selection, contextual Edit, local/main navigation preservation, independent unsaved Color workspace, and no duplicate font requests');
  for(const width of [1280,900,390,320])for(const theme of ['dark','light']){
   await page.setViewportSize({width,height:844});

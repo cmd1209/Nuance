@@ -1,8 +1,8 @@
 import { useLayoutEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 
 /** A zero-height inline marker locates the rendered text's actual last baseline. */
-export function ResizableTypeLine({children,label,className,size,min,max,active,fontStatus,fontWeight,onResize}:{
-  children:string;label:string;className:string;size?:number;min:number;max:number;active:boolean;fontStatus:string;fontWeight?:number;onResize:(size:number)=>void;
+export function ResizableTypeLine({children,label,className,size,min,max,active,fontStatus,fontWeight,onResize,onEdit}:{
+  onEdit?:()=>void;children:string;label:string;className:string;size?:number;min:number;max:number;active:boolean;fontStatus:string;fontWeight?:number;onResize:(size:number)=>void;
 }) {
   const text=useRef<HTMLParagraphElement>(null),marker=useRef<HTMLSpanElement>(null);
   const handle=useRef<HTMLDivElement>(null);
@@ -50,7 +50,8 @@ export function ResizableTypeLine({children,label,className,size,min,max,active,
     event.preventDefault();resize(next);
   }
   return <div className={`type-line ${dragging?"is-resizing":""}`}>
-    <p ref={text} className={className} style={size===undefined?undefined:{fontSize:`${size}px`}}>{children}<span ref={marker} className="type-line__baseline-marker" aria-hidden="true" /></p>
+    <p ref={text} onDoubleClick={onEdit} role={onEdit?"button":undefined} tabIndex={onEdit && active?0:undefined}
+      onKeyDown={event=>{if(onEdit && (event.key==="Enter" || event.key===" ")){event.preventDefault();onEdit();}}} aria-label={onEdit?"Edit custom text":undefined} title={onEdit?"Double-click to edit text":undefined} className={className} style={size===undefined?undefined:{fontSize:`${size}px`}}>{children}<span ref={marker} className="type-line__baseline-marker" aria-hidden="true" /></p>
     <div ref={handle} className="type-line__handle" role="slider" tabIndex={active?0:-1}
       aria-label={`${label} size`} aria-orientation="vertical" aria-valuemin={min} aria-valuemax={max}
       aria-valuenow={Math.round(metrics.size)} aria-valuetext={`${Math.round(metrics.size)} pixels`}

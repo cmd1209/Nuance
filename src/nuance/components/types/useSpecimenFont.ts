@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import type { Typeface } from "../../domain/typefaces";
 import { loadSpecimenFont, type FontLoadStatus } from "../../typography/fontLoading";
 
-export function useSpecimenFont(font:Typeface,active:boolean) {
+export function useSpecimenFont(font:Typeface,active:boolean,weight=font.loading.specimenWeight) {
   const element=useRef<HTMLDivElement>(null);
   const [status,setStatus]=useState<FontLoadStatus>("idle");
   useEffect(()=>{
@@ -13,7 +13,7 @@ export function useSpecimenFont(font:Typeface,active:boolean) {
       if(disposed)return;
       observer?.disconnect();
       setStatus("loading");
-      void loadSpecimenFont(font).then(result=>{if(!disposed)setStatus(result);});
+      void loadSpecimenFont(font,weight).then(result=>{if(!disposed)setStatus(result);});
     };
     if(typeof IntersectionObserver === "undefined")load();
     else {
@@ -21,6 +21,6 @@ export function useSpecimenFont(font:Typeface,active:boolean) {
       if(element.current)observer.observe(element.current);
     }
     return ()=>{disposed=true;observer?.disconnect();};
-  },[font,active]);
+  },[font,active,weight]);
   return {element,status};
 }

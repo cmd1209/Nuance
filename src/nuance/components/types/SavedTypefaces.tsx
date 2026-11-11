@@ -43,7 +43,7 @@ export function SavedTypefaces({account,favorites,active,onOpen,onExplore,onSign
         {favorites.error && <div><p role="alert">{favorites.error}</p><Button disabled={favorites.loading||busy} onClick={()=>{void favorites.refresh();}}>Try again</Button></div>}
         {(!favorites.loading && !favorites.error || favorites.saved.length>0) && <SavedGallery items={favorites.saved} maximum={MAX_SAVED_TYPEFACES}
           empty={<EmptyState message="No saved typefaces yet. Explore a font and save it to see it here." action={<Button onClick={onExplore}>Explore typefaces</Button>} />}
-          renderItem={item=><TypefaceCard font={item.typeface} active={active} disabled={busy} weight={item.selection.fontWeight} alphabet={item.selection.alphabet} onSelect={()=>onOpen(item)}
+          renderItem={item=><TypefaceCard font={item.typeface} active={active} disabled={busy} weight={item.selection.fontWeight} alphabet={item.selection.alphabet} custom={item.selection.custom} customText={item.selection.customText} onSelect={()=>onOpen(item)}
             headerAction={<Button size="XS" disabled={busy||favorites.loading} className="saved-compositions__delete" data-delete-typeface={item.id}
               aria-label={`Delete ${item.typeface.family}`} title="Delete typeface" onClick={()=>{void remove(item);}} leadingIcon={<Trash2 size={16} aria-hidden="true" />} />} />}
         />}

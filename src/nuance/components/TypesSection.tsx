@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
-import { CaseSensitive, HeartPlus, MessageSquareQuote, TypeOutline } from "lucide-react";
+import { CaseSensitive, HeartPlus, MessageSquareQuote, RotateCcw, TextCursorInput, TypeOutline } from "lucide-react";
 import { TYPEFACES, typefaceById } from "../domain/typefaces";
 import { FOUNDATION_SECTIONS, type CreativeView } from "../domain/sections";
 import { createTypesState, typesReducer } from "../state/types";
@@ -20,7 +20,9 @@ const weightLabel=(weight:number)=>`${WEIGHT_LABELS[weight]??"Weight"} (${weight
 export function TypesSection({hidden,onViewChange,account,onSignIn}:{hidden:boolean;onViewChange:()=>void;account:Pick<Account,"user"|"authLoading"|"dataLoading">;onSignIn:()=>void}) {
   const [state,dispatch]=useReducer(typesReducer,undefined,createTypesState);
   const [specimenSizes,setSpecimenSizes]=useState<Record<string,number>>({});
-  const [alphabetModes,setAlphabetModes]=useState<Record<string,boolean>>({});
+  const [specimenModes,setSpecimenModes]=useState<Record<string,"quote"|"alphabet"|"edit">>({});
+  const [customTexts,setCustomTexts]=useState<Record<string,string>>({});
+  const [editingText,setEditingText]=useState(false);
   const [specimenWeights,setSpecimenWeights]=useState<Record<string,number>>({});
   const focusPreview=useRef(false);
   const explorePosition=useRef(0);
@@ -30,11 +32,14 @@ export function TypesSection({hidden,onViewChange,account,onSignIn}:{hidden:bool
   const saveInProgress=useRef(false),owner=useRef(account.user?.id),previousOwner=useRef(account.user?.id);
   owner.current=account.user?.id;
   useEffect(()=>{
-    if(previousOwner.current && previousOwner.current!==account.user?.id){dispatch({type:"clear-account"});setNotice("");}
+    if(previousOwner.current && previousOwner.current!==account.user?.id){dispatch({type:"clear-account"});setCustomTexts({});setSpecimenModes({});setEditingText(false);setNotice("");}
     previousOwner.current=account.user?.id;
   },[account.user?.id]);
   const selected=state.selection ? typefaceById(state.selection.fontId) : null;
-  const alphabet=selected ? alphabetModes[selected.id]??false : false;
+  const mode=selected ? specimenModes[selected.id]??"quote" : "quote";
+  const alphabet=mode==="alphabet";
+  const nextMode=mode==="quote"?"alphabet":mode==="alphabet"?"edit":"quote";
+  const modeAction=nextMode==="edit"?"Edit text":nextMode==="quote"?"Show quote":"Show alphabet";
   const weight=selected ? specimenWeights[selected.id]??selected.loading.specimenWeight : 400;
   const weights=selected?.availableWeights??[];
   const nextWeight=weights[(weights.indexOf(weight)+1)%weights.length]??weight;
@@ -45,14 +50,15 @@ export function TypesSection({hidden,onViewChange,account,onSignIn}:{hidden:bool
       focusPreview.current=false;
     }
   },[state.view,state.selection,hidden]);
-  function changeView(view:CreativeView){dispatch({type:"view",view});setNotice("");onViewChange();}
-  function openTypeface(fontId:string,index?:number){if(index!==undefined)explorePosition.current=index;focusPreview.current=true;dispatch({type:"select",fontId});setNotice("");onViewChange();}
+  function changeView(view:CreativeView){setEditingText(false);dispatch({type:"view",view});setNotice("");onViewChange();}
+  function openTypeface(fontId:string,index?:number){setEditingText(false);if(index!==undefined)explorePosition.current=index;focusPreview.current=true;dispatch({type:"select",fontId});setNotice("");onViewChange();}
   async function save(){
     if(!state.selection || saveInProgress.current)return;
+    setEditingText(false);
     if(!account.user){onSignIn();return;}
     const operationOwner=account.user.id;
     saveInProgress.current=true;setSaving(true);setNotice("");
-    try{await favorites.save({...state.selection,fontWeight:weight,alphabet});if(owner.current===operationOwner)setNotice("Typeface saved to your account.");}
+    try{await favorites.save({...state.selection,fontWeight:weight,alphabet,custom:mode==="edit",customText:customTexts[state.selection.fontId]});if(owner.current===operationOwner)setNotice("Typeface saved to your account.");}
     catch(error){if(owner.current===operationOwner)setNotice(accountError(error));}
     finally{saveInProgress.current=false;setSaving(false);}
   }
@@ -69,17 +75,25 @@ export function TypesSection({hidden,onViewChange,account,onSignIn}:{hidden:bool
       <SavedTypefaces key={account.user?.id??"guest"} account={account} favorites={favorites} active={!hidden && state.view === "saved"}
         onOpen={item=>{
           setSpecimenWeights(previous=>({...previous,[item.id]:item.selection.fontWeight??item.typeface.loading.specimenWeight}));
-          setAlphabetModes(previous=>({...previous,[item.id]:item.selection.alphabet??false}));
+          setSpecimenModes(previous=>({...previous,[item.id]:item.selection.custom?"edit":item.selection.alphabet?"alphabet":"quote"}));
+          setCustomTexts(previous=>{const next={...previous};if(item.selection.customText===undefined)delete next[item.id];else next[item.id]=item.selection.customText;return next;});
           openTypeface(item.id);
         }} onSignIn={onSignIn} onExplore={()=>{changeView("explore");document.getElementById("types-explore-tab")?.focus({preventScroll:true});}} />
     </section>
     {selected && <section id="types-edit-panel" className="nuance-stage" role="tabpanel" aria-labelledby="types-edit-tab" hidden={state.view !== "edit"}>
-      <TypefaceDetail key={selected.id} font={selected} active={!hidden && state.view === "edit"} size={specimenSizes[selected.id]} alphabet={alphabet} weight={weight}
+      <TypefaceDetail key={selected.id} font={selected} active={!hidden && state.view === "edit"} size={specimenSizes[selected.id]} alphabet={alphabet} weight={weight} custom={mode==="edit"} customText={customTexts[selected.id]} editing={editingText}
+        onTextChange={text=>setCustomTexts(previous=>({...previous,[selected.id]:text}))} onFinishEditing={()=>setEditingText(false)} onEdit={()=>setEditingText(true)}
         onResize={size=>setSpecimenSizes(previous=>({...previous,[selected.id]:size}))} />
       <div className="composition-actions" role="group" aria-label="Typeface actions">
-        <Button className="composition-action" onClick={()=>setAlphabetModes(previous=>({...previous,[selected.id]:!alphabet}))}
-          aria-label={alphabet?"Show quote":"Show alphabet"} aria-pressed={alphabet} title={alphabet?"Show quote":"Show alphabet"}
-          leadingIcon={alphabet?<MessageSquareQuote size={20} aria-hidden="true" />:<CaseSensitive size={20} aria-hidden="true" />} />
+        <Button className="composition-action" onClick={()=>{setSpecimenModes(previous=>({...previous,[selected.id]:nextMode}));setEditingText(nextMode==="edit");}}
+          aria-label={modeAction} title={`${modeAction} · Quote | Alphabet | Edit`}
+          leadingIcon={nextMode==="edit"?<TextCursorInput size={20} aria-hidden="true" />:nextMode==="quote"?<MessageSquareQuote size={20} aria-hidden="true" />:<CaseSensitive size={20} aria-hidden="true" />} />
+        <Button className="composition-action" aria-label="Reset typeface" title="Reset text, size and weight" onClick={()=>{
+          setSpecimenModes(previous=>({...previous,[selected.id]:"quote"}));
+          setCustomTexts(previous=>{const next={...previous};delete next[selected.id];return next;});
+          setSpecimenSizes(previous=>{const next={...previous};delete next[selected.id];return next;});
+          setSpecimenWeights(previous=>({...previous,[selected.id]:selected.loading.specimenWeight}));setEditingText(false);
+        }} leadingIcon={<RotateCcw size={20} aria-hidden="true" />} />
         <Button className="composition-action" disabled={weights.length<2} aria-label={weightAction} title={weightAction}
           onClick={()=>setSpecimenWeights(previous=>({...previous,[selected.id]:nextWeight}))}
           leadingIcon={<TypeOutline size={20} aria-hidden="true" />} />

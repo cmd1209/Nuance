@@ -24,6 +24,13 @@ test('typeface favorites enforce private, independent eight-item quotas without 
   await assert.rejects(save(alice,'google-fonts:ninth'),/up to eight typefaces/);
   await save(alice);assert.equal((await db.query('select saved_typeface_count,saved_composition_count from public.profiles')).rows[0].saved_typeface_count,8);
   await db.exec('reset role');await db.exec(await readFile('supabase/migrations/202611100001_typeface_specimen_settings.sql','utf8'));await asUser(alice);
+  await db.exec('reset role');await db.exec(await readFile('supabase/migrations/202611110001_typeface_custom_text.sql','utf8'));await asUser(alice);
+  const customDefaults=(await db.query('select custom,custom_text from public.typeface_favorites')).rows;
+  assert.ok(customDefaults.every(row=>row.custom===false && row.custom_text===null));
+  await db.query("update public.typeface_favorites set custom=true,custom_text=$1 where font_id='google-fonts:inter'",['Custom specimen\nSecond line']);
+  assert.deepEqual((await db.query("select custom,custom_text from public.typeface_favorites where font_id='google-fonts:inter'")).rows,[{custom:true,custom_text:'Custom specimen\nSecond line'}]);
+  await assert.rejects(db.query('update public.typeface_favorites set custom_text=$1',['x'.repeat(2001)]),/check constraint/);
+  await assert.rejects(db.query('update public.typeface_favorites set custom=null'),/not-null constraint/);
   const legacy=(await db.query('select font_weight,alphabet from public.typeface_favorites')).rows;
   assert.equal(legacy.length,8);assert.ok(legacy.every(row=>row.font_weight===400 && row.alphabet===false));
   await db.query("update public.typeface_favorites set font_weight=600,alphabet=true where font_id='google-fonts:inter'");
