@@ -1,4 +1,6 @@
-import { useLayoutEffect, type ReactNode, type Ref } from "react";
+import { useLayoutEffect, useRef, type ReactNode, type Ref } from "react";
+
+import { useMobileEditing } from "./mobile/useMobileEditing";
 
 type Theme = "light" | "dark";
 
@@ -6,6 +8,8 @@ type Theme = "light" | "dark";
 export function AppShell({ theme, header, navigation, children, overlays, mainRef }: {
   theme: Theme; header: ReactNode; navigation: ReactNode; children: ReactNode; overlays?: ReactNode; mainRef?: Ref<HTMLElement>;
 }) {
+  const root=useRef<HTMLDivElement>(null);
+  useMobileEditing(root);
   useLayoutEffect(() => {
     const root = document.documentElement;
     const previous = root.getAttribute("data-theme");
@@ -16,7 +20,7 @@ export function AppShell({ theme, header, navigation, children, overlays, mainRe
     };
   }, [theme]);
 
-  return <div className="nuance-app" data-theme={theme}>
+  return <div ref={root} className="nuance-app" data-theme={theme}>
     {header}
     <main ref={mainRef} className="nuance-main">{children}</main>
     {navigation}

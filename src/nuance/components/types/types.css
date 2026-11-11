@@ -23,7 +23,6 @@
 .type-specimen__button {
     display: flex;
     flex-direction: column;
-    flex: 1;
     width: 100%;
     padding: 0;
     border: 0;
@@ -176,7 +175,7 @@
 .type-specimen__quote-text {
     letter-spacing: 1px;
     white-space: pre-wrap;
-    font-size: var(--font-size-36);
+    font-size: 28px;
     line-height: 1.5;
 }
 
@@ -203,4 +202,27 @@
     font-family: inherit;
     font-weight: inherit;
     resize: none;
+}
+
+.type-specimen__finish-editing {
+    display: none;
+}
+
+.nuance-app[data-mobile-editing="text"] .type-specimen__text-input {
+    min-height: min(1lh, var(--mobile-editor-height));
+    max-height: var(--mobile-editor-height);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.nuance-app[data-mobile-editing="text"] .type-specimen__finish-editing {
+    position: fixed;
+    z-index: calc(var(--z-navigation) + 1);
+    right: max(var(--app-gutter), env(safe-area-inset-right, 0px));
+    bottom: calc(100% - var(--mobile-viewport-bottom) + var(--gap-sm));
+    display: inline-flex;
+    min-height: var(--size-target-min);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-full);
+    background: var(--color-bg-surface-raised);
 }

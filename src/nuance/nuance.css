@@ -65,6 +65,15 @@
     padding-bottom: var(--app-bottom-clearance);
 }
 
+/* Editing controls follow the visible viewport while the keyboard is open. */
+.nuance-app[data-mobile-editing] .nuance-navigation {
+    display: none;
+}
+
+.nuance-app[data-mobile-editing] .nuance-main {
+    padding-bottom: calc(var(--app-bottom-clearance) + var(--mobile-keyboard-inset, 0px) + var(--gap-xl));
+}
+
 /* Sections group their own content at the top, independently of shell height. */
 .section-layout {
     min-width: 0;
@@ -1013,6 +1022,31 @@
         max-width: calc(100% - 16px);
     }
 
+}
+
+/* Keep the mobile color panel outside the artwork's clipped stacking context. */
+@media (max-width: 700px), (pointer: coarse) {
+    .color-editor {
+        position: fixed;
+        z-index: calc(var(--z-navigation) + 1);
+        top: auto;
+        right: max(var(--app-gutter), env(safe-area-inset-right, 0px));
+        bottom: calc(100% - var(--mobile-viewport-bottom, 100dvh) + var(--app-bottom-clearance));
+        width: min(360px, calc(100% - var(--app-gutter) * 2));
+        max-width: calc(100% - var(--app-gutter) * 2);
+        max-height: max(44px, calc(var(--mobile-viewport-height, 100dvh) - var(--app-bottom-clearance) - var(--gap-lg)));
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+
+    .nuance-app[data-mobile-editing="color"] .color-editor {
+        bottom: calc(100% - var(--mobile-viewport-bottom, 100dvh) + var(--gap-sm));
+        max-height: calc(var(--mobile-viewport-height, 100dvh) - var(--gap-sm) * 2);
+    }
+
+    .color-editor #hex-input {
+        font-size: max(16px, var(--body-sm-font-size));
+    }
 }
 
 /* ==========================================================================

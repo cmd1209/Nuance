@@ -32,7 +32,7 @@ try{
   await page.getByRole('navigation',{name:'Design exploration'}).getByRole('button',{name:'Types',exact:true}).click();
   assert.equal(await page.getByRole('slider').count(),0,'discovery specimens stay read-only');
   const exploreSize=fontId=>page.locator(`#types-explore-panel [data-font-id="${fontId}"] .type-specimen__quote-text`).evaluate(el=>parseFloat(getComputedStyle(el).fontSize));
-  assert.equal(await exploreSize('google-fonts:dm-serif-display'),36,'Explore defaults to 36px');
+  assert.equal(await exploreSize('google-fonts:dm-serif-display'),28,'Explore defaults to 28px');
   await page.getByRole('button',{name:'Preview DM Serif Display',exact:true}).click();
   await page.locator('.type-detail[data-font-status="loaded"]').waitFor();
   const weightButton=()=>page.getByRole('button',{name:/^Font weight:/});
@@ -77,7 +77,7 @@ try{
   assert.equal(await size(quote),192);assert.equal(await captionSize(),captionOriginal);
   await explore();
   assert.equal(await exploreSize('google-fonts:dm-serif-display'),192,'Explore reflects the manually edited size');
-  assert.equal(await exploreSize('google-fonts:inter'),36,'unedited typefaces stay at 36px');
+  assert.equal(await exploreSize('google-fonts:inter'),28,'unedited typefaces stay at 28px');
   await page.getByRole('button',{name:'Preview Inter',exact:true}).click();
   await page.locator('.type-detail[data-font-status="loaded"]').waitFor();
   assert.notEqual(await size(quote),192,'other typefaces keep independent sizes');
@@ -91,7 +91,7 @@ try{
   }
   await page.getByRole('button',{name:'Show alphabet',exact:true}).click();
   await weightButton().click();assert.equal(await renderedWeight(),500,'weight changes also apply to alphabet mode');
-  await aligned();assert.equal(await size(alphabet),36,'changing weight keeps the text size');
+  await aligned();assert.equal(await size(alphabet),28,'changing weight keeps the text size');
   await page.getByRole('button',{name:'Show quote',exact:true}).click();assert.equal(await renderedWeight(),500);
   await explore();
   assert.equal(await page.locator('#types-explore-panel [data-font-id="google-fonts:inter"] .type-specimen__quote-text').evaluate(el=>Number(getComputedStyle(el).fontWeight)),500,'Explore reflects the edited weight');

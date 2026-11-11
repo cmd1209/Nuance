@@ -1,6 +1,7 @@
 import { useId, useLayoutEffect, useRef, type ReactNode } from "react";
 import { TYPEFACE_CLASSIFICATION_LABELS, typefaceFamily, type Typeface } from "../../domain/typefaces";
 import { useSpecimenFont } from "./useSpecimenFont";
+import { Button } from "../Button";
 import { ResizableTypeLine } from "./ResizableTypeLine";
 
 const SPECIMEN_ALPHABET = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
@@ -66,11 +67,13 @@ function SpecimenQuote({font,size,editor,alphabet=false,custom=false,customText,
     observer.observe(textarea);
     return ()=>observer.disconnect();
   },[editing,text,editor?.active,editor?.size,editor?.status,editor?.weight]);
+  function finishEditing(){input.current?.blur();onFinishEditing?.();}
   const Container=editor?"div":"span";
-  return <Container className="type-specimen__quote">
-    {editing ? <textarea ref={input} rows={1} autoFocus aria-label="Specimen text" title="Press Ctrl+Enter or Command+Enter to finish editing" className="type-specimen__quote-text type-specimen__text-input" maxLength={2000} value={text}
+  return <Container className="type-specimen__quote" data-mobile-editor>
+    {editing ? <><textarea ref={input} rows={1} data-mobile-edit-field="text" autoFocus aria-label="Specimen text" title="Press Ctrl+Enter or Command+Enter to finish editing" className="type-specimen__quote-text type-specimen__text-input" maxLength={2000} value={text}
       style={editor?.size===undefined?undefined:{fontSize:`${editor.size}px`}} onChange={event=>onTextChange?.(event.target.value)}
-      onKeyDown={event=>{if(event.key==="Escape" || event.key==="Enter" && (event.metaKey || event.ctrlKey)){event.preventDefault();onFinishEditing?.();}}} />
+      onKeyDown={event=>{if(event.key==="Escape" || event.key==="Enter" && (event.metaKey || event.ctrlKey)){event.preventDefault();finishEditing();}}} />
+      <Button className="type-specimen__finish-editing" data-mobile-editor-controls onPointerDown={event=>event.preventDefault()} onClick={finishEditing}>Done</Button></>
       : editor ? <ResizableTypeLine onEdit={custom?onEdit:undefined} label={custom?"Custom text":alphabet?"Alphabet":"Quote"} className="type-specimen__quote-text" size={editor.size} min={14} max={192}
       active={editor.active} fontStatus={editor.status} fontWeight={editor.weight} onResize={editor.onResize}>{text}</ResizableTypeLine>
       : <span className="type-specimen__quote-text" style={size===undefined?undefined:{fontSize:`${size}px`}}>{text}</span>}

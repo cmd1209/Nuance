@@ -1,7 +1,7 @@
 import { applicationReducer, createApplicationState } from "../src/nuance/state/application";
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { createComposition, normalizeHex, updateColor } from "../src/nuance/domain/composition";
+import { cloneComposition, createComposition, normalizeHex, updateColor, type Composition } from "../src/nuance/domain/composition";
 import { addColor, colorProportions, computeLayout, MIN_EXTENT, paintedRect, removeColor, resizeSplit } from "../src/nuance/domain/layout";
 import { discoverPalettes, generatePalettes, initialPalettes, legacyInitialPalettes, nextColor, PRESET_HEXES, shuffledPalettes } from "../src/nuance/domain/palettes";
 import { deserializeComposition, serializeComposition } from "../src/nuance/domain/serialization";
@@ -737,4 +737,26 @@ test("Designs derives available palette names and counts from actual saved recor
   assert.ok(markup.includes(paletteAttribution(composition)));
   assert.match(markup, /View saved colors/);
   assert.ok(!markup.includes('No saved palettes yet'));
+});
+
+test("plain HTTP LAN previews initialize and edit with secure UUIDs when randomUUID is unavailable",()=>{
+  const previous=Object.getOwnPropertyDescriptor(globalThis,"crypto");
+  const secureRandom=crypto.getRandomValues.bind(crypto);
+  Object.defineProperty(globalThis,"crypto",{configurable:true,value:{getRandomValues:secureRandom}});
+  try{
+    const state=createEditorState();
+    assert.ok(state.suggestions.length>0);
+    const draft=cloneComposition(state.suggestions[0]);
+    const expanded=addColor(editorComposition(draft),"#123456");
+    const nodes:string[]=[];
+    const collect=(node:Composition["layout"])=>{nodes.push(node.id);if(node.kind==="split"){collect(node.first);collect(node.second);}};
+    collect(expanded.layout);
+    const ids=[expanded.id,...expanded.colors.map(color=>color.id),...nodes];
+    assert.equal(new Set(ids).size,ids.length);
+    for(const id of ids)assert.match(id,/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
+    assert.equal(deserializeComposition(serializeComposition(expanded)).id,expanded.id);
+  }finally{
+    if(previous)Object.defineProperty(globalThis,"crypto",previous);
+    else delete (globalThis as Record<string,unknown>).crypto;
+  }
 });

@@ -136,3 +136,15 @@ Phase 2 validation passed the production build and 53 Node/component/PostgreSQL 
 ## Types discovery
 
 Types now uses its own `TypesSection` and local selection reducer. Its eight-font Explore gallery and read-only contextual Edit preview follow the same mounted/hidden section contract. Specimen fonts load lazily from self-hosted WOFF2 assets only for active/visible artwork; UI typography, shell geometry and Color state are unchanged. Spaces and Details remain `FoundationSection` instances. See [Types discovery](types-discovery.md) for the registry, licenses, loading policy, responsive layout and future favorites/pairing boundary.
+
+## Mobile editing and the keyboard
+
+`components/mobile/useMobileEditing.ts` tracks the visual viewport and focused specimen/HEX fields on narrow or touch screens. It hides the main navigation during text entry, provides scroll clearance, and scrolls the specimen into the visible area after focus, input, and viewport resizing. Viewport scrolling updates control positions without forcing the user's document scroll. After an observed keyboard height reduction ends, navigation returns even if the browser leaves the field focused.
+
+The mobile color editor is portaled into the app shell so artwork clipping and stacking cannot hide it. It opens with the dialog focused, leaving the software keyboard closed until the user taps HEX. During typing, its color swatch, field, and Done button follow the visible viewport. Desktop retains the anchored popover and HEX autofocus. The HEX field uses at least 16px type on mobile to avoid input zoom.
+
+Specimen editing supplies a mobile Done control above the keyboard. Long text is capped to the remaining visible height and scrolls inside the textarea; its complete content and chosen font size are retained. Done finishes text editing without requiring a hardware keyboard shortcut.
+
+Run `tests/mobile-editing-browser.mjs` using the Playwright settings documented above. It explicitly simulates visual-viewport resize/pan events, verifies editor/control clearance, live HEX changes, long-text caret scrolling, touch Done actions, native-dismissal navigation restoration, and unchanged desktop behavior. These checks cannot open a real iOS software keyboard; validate the final interaction on an iPhone as well.
+
+For testing from a phone on the same Wi-Fi, run `npm run dev -- --host` and open Vite's printed Network URL, including its port. HTTP LAN addresses do not expose `crypto.randomUUID()`, so `domain/composition.ts` falls back to a UUID v4 built from cryptographically secure `crypto.getRandomValues()`. Localhost/HTTPS continues to use the native UUID method. The regression test covers initial palette creation, editing, and serialization without `randomUUID`.
