@@ -7,7 +7,7 @@
     min-width: 0;
     padding: var(--padding-lg);
     border-radius: var(--radius-xl);
-    background: linear-gradient(to top, var(--color-bg-surface) 0%, var(--color-bg-canvas) 90%);
+    background-color: var(--color-bg-surface);
     font-family: var(--family-sans), sans-serif;
 }
 

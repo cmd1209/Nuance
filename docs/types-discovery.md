@@ -104,6 +104,17 @@ The specimen control cycles Quote → Alphabet → Edit. Edit uses the TextCurso
 
 `node scripts/import-typefaces.mjs <fontsource-id> ...` imports explicitly named families from pinned Fontsource 5.3.0 packages. It stages metadata, original license notices, and verified WOFF2 downloads before writing the registry; existing IDs are skipped. The versioned registry remains at v1 because existing IDs and selection formats are unchanged. Adding these families needs no database migration.
 
-All 30 families have explicit assignments to the same four quotes in `TypefaceSpecimen.tsx`: reading-oriented serifs and Noto Sans use Bringhurst; text and code-oriented families primarily use Spiekermann; expressive letterforms use Carter; versatile and geometric families use Vignelli. Original assignments remain stable.
+All 30 families have explicit assignments to 10 quotes in `TypefaceSpecimen.tsx`, with exactly three families per quote. Assignments use permanent font IDs so shuffling, navigation, and theme changes keep each family’s quote stable. The collection includes Robert Bringhurst, Erik Spiekermann, Matthew Carter, Massimo Vignelli, Ellen Lupton, Beatrice Warde, Paul Rand, Dieter Rams, Saul Bass, and Jessica Helfand.
+
+Sources for the six additions (wording follows the linked source):
+
+| Author | Quote | Source |
+| --- | --- | --- |
+| Ellen Lupton | Typography is the art of designing letterforms and arranging them in space and time. | [Fluid Mechanics: Typographic Design Now](https://www.typotheque.com/articles/fluid-mechanics-typographic-design-now) |
+| Beatrice Warde | The great thing about printing is it should be invisible. | [1959 interview transcript](https://www.eyemagazine.com/feature/article/beatrice-warde-manners-and-type) |
+| Paul Rand | Design is a relationship between form and content. | [Conversations with Students](https://assets.paulrand.design/Life/Books%20and%20Articles%20About%20Rand/Books/2007%20Paul%20Rand%2C%20Conversations%20with%20Students/Source/Paul%20Rand%20-%20Conversations%20with%20Students%20%28Art%20Ebook%29.pdf) |
+| Dieter Rams | Good design is as little design as possible. | [Ten principles for good design](https://www.vitsoe.com/gb/about/good-design) |
+| Saul Bass | Designs have to be popular but also complex and rich. | [1993 exhibition statement](https://dnpfcp.jp/gallery/ggg/eng/00000215) |
+| Jessica Helfand | Today, we can visualise concepts in four action-packed, digital dimensions. | [Electronic Typography: The New Visual Language](https://www.typotheque.com/articles/electronic-typography-the-new-visual-language) |
 
 `tests/typeface-weights-browser.mjs` verifies every static weight in Lato, PT Serif, Fira Sans, Barlow, and Arvo using Chromium's actual rendered PostScript face names; each weight must use a distinct bundled face and each file must be requested only once. It also checks Monospace/Display labels, single-weight controls, and mobile wrapping. Use the same `NUANCE_PLAYWRIGHT_MODULE` and `NUANCE_BASE_URL` settings as the main Types browser suite.

@@ -75,7 +75,7 @@ Source: `fWnLFvrPLaTtREPwyHzoLi`, frames `35:1311` (selection) and `40:1796` (ma
 - The contextual picker concept contains only HEX and Adjust. A compact contextual native color picker/validated HEX form supplies the requested interaction; there is no permanent sidebar.
 - The Figma User control remains visible but disabled. Type, Space and Detail remain visible, keyboard discoverable, and marked unavailable. No authentication or placeholder feature pages were built.
 - Narrow screens retain the same navigation, three-card row and artwork hierarchy. Toolbar actions wrap when needed; touch controls expand to 44px minimum height.
-- All eleven Figma SVG assets are downloaded unmodified into `public/nuance/icons`. CSS masks preserve their geometry and inherit semantic theme colors. Clarity City and its license are bundled locally; no Figma asset URLs or remote font requests remain at runtime.
+- All eleven Figma SVG assets are downloaded unmodified into `public/nuance/icons`. `Icon.tsx` renders their path geometry as inline SVG with `currentColor` for semantic theme colors, avoiding CSS mask repainting during scrolling. Clarity City and its license are bundled locally; no Figma asset URLs or remote font requests remain at runtime.
 
 ## Code Connect readiness
 

@@ -45,7 +45,7 @@ The small shell geometry set is defined once in `nuance.css`:
 - `--app-gutter`: 24px desktop / 16px mobile, using existing spacing tokens.
 - `--app-header-gap`: 64px desktop / 32px mobile.
 - `--app-nav-height`: 48px desktop / 68px stacked mobile navigation.
-- `--app-nav-offset`: 24px above the viewport's safe bottom edge.
+- `--app-nav-offset`: `var(--gap-lg)` (currently 16px) above the viewport's safe bottom edge.
 - `--app-bottom-clearance`: navigation height + offset + 32px breathing room + bottom safe-area inset.
 - `--section-content-gap`: 32px desktop / 24px mobile.
 

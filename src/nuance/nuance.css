@@ -37,7 +37,7 @@
     --app-gutter: var(--gap-xl);
     --app-header-gap: var(--gap-4xl);
     --app-nav-height: var(--button-lg-height);
-    --app-nav-offset: var(--gap-xl);
+    --app-nav-offset: var(--gap-lg);
     --app-bottom-clearance: calc(var(--app-nav-height) + var(--app-nav-offset) + var(--gap-2xl) + env(safe-area-inset-bottom, 0px));
     --section-content-gap: var(--gap-2xl);
     --z-navigation: 5;
@@ -638,9 +638,6 @@
 .nuance-icon {
     display: inline-block;
     flex-shrink: 0;
-    background: currentColor;
-    mask: var(--icon-url) center / contain no-repeat;
-    -webkit-mask: var(--icon-url) center / contain no-repeat;
 }
 
 /* ==========================================================================

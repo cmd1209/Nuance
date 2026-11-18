@@ -56,6 +56,18 @@ test("Types Explore renders 30 named specimen buttons with their own family stac
  assert.ok(markup.includes('class="collection-grid"'));assert.ok(!markup.includes('aria-roledescription="carousel"'));
  assert.ok(markup.includes('types-explore-panel'));assert.ok(markup.includes('types-saved-panel'));assert.ok(!markup.includes('Save typeface'));
 });
+test("Types distributes ten distinct attributed quotes evenly across all thirty specimens",()=>{
+ const markup=renderToStaticMarkup(createElement(TypesSection,{hidden:false,onViewChange:()=>{},account:{user:null,authLoading:false,dataLoading:false},onSignIn:()=>{}}));
+ const specimens=[...markup.matchAll(/class="type-specimen__quote-text"[^>]*>([^<]+)<\/span><span class="type-specimen__quote-caption">([^<]+)<\/span>/g)];
+ assert.equal(specimens.length,30);
+ const counts=new Map<string,number>();
+ for(const [,text,author] of specimens){
+  assert.ok(text.trim().length>0);assert.ok(author.startsWith('— '));
+  const key=`${text}|${author}`;counts.set(key,(counts.get(key)??0)+1);
+ }
+ assert.equal(counts.size,10);
+ assert.ok([...counts.values()].every(count=>count===3));
+});
 test("specimen font loader caches concurrent requests and degrades safely after failures",async()=>{
  const oldFont=Object.getOwnPropertyDescriptor(globalThis,'FontFace'),oldDocument=Object.getOwnPropertyDescriptor(globalThis,'document');
  let loads=0;const added:unknown[]=[];
