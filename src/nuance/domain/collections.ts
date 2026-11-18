@@ -5,8 +5,8 @@ export interface PaletteEntry { readonly id:string; create:()=>Composition }
 export interface PaletteCollection { readonly id:string; readonly palettes:readonly PaletteEntry[] }
 /** Register another collection here; discovery and Explore do not depend on source count. */
 export const COLOR_COLLECTIONS: readonly PaletteCollection[] = [
-  {id:"sanzo-wada",palettes:WADA_PALETTES.map(reference=>({id:reference.paletteId,create:()=>historicalComposition(reference)}))},
-  {id:"werner-nuance",palettes:WERNER_PALETTES.map(reference=>({id:reference.paletteId,create:()=>curatedWernerComposition(reference)}))},
+  {id:"sanzo-wada",palettes:WADA_PALETTES.filter(reference => reference.originalColorCount >= 3).map(reference=>({id:reference.paletteId,create:()=>historicalComposition(reference)}))},
+  {id:"werner-nuance",palettes:WERNER_PALETTES.filter(reference => reference.originalColorCount >= 3).map(reference=>({id:reference.paletteId,create:()=>curatedWernerComposition(reference)}))},
 ];
 export function resetSourceComposition(composition:Composition):Composition {
   const id=composition.historical?.paletteId ?? composition.curated?.paletteId;
