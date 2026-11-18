@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent } from "react";
 import { MIN_COLORS, type Composition } from "../domain/composition";
-import { colorProportions, computeLayout, paintedRect, type Divider } from "../domain/layout";
+import { colorProportions, computeLayout, type Divider } from "../domain/layout";
+import { regionStyle } from "./regionStyle";
 
 const percentage = new Intl.NumberFormat("en", { style: "percent", maximumFractionDigits: 1 });
 
@@ -71,9 +72,9 @@ export function Artwork({ composition, selectedColorId, onSelect, onAdjust, onRe
     {regions.map((region, index) => {
       const color = composition.colors.find(c => c.id === region.colorId)!;
       const rgb = `RGB ${[1, 3, 5].map(offset => parseInt(color.hex.slice(offset, offset + 2), 16)).join(", ")}`;
-      const rect = paintedRect(region, composition.artwork), selected = selectedColorId === color.id;
+      const selected = selectedColorId === color.id;
       return <div key={region.id} className={`color-region ${selected ? "is-selected" : ""} ${composition.colors.length > MIN_COLORS ? "is-removable" : ""}`} data-color-id={color.id} data-hex={color.hex}
-        style={{ left: `${rect.x * 100}%`, top: `${rect.y * 100}%`, width: `${rect.width * 100}%`, height: `${rect.height * 100}%`, background: color.hex, color: contentColor(color.hex) }}>
+        style={{ ...regionStyle(region), background: color.hex, color: contentColor(color.hex) }}>
         <button type="button" className="color-region__select" aria-pressed={selected}
           aria-label={`Color ${index + 1}: ${color.hex}, ${rgb}${color.origin === "generated" ? ", Nuance-generated extension" : color.origin === "user" ? ", custom color" : color.name ? `, ${color.name}` : ""}`}
           title={`${color.hex} · ${rgb}`}

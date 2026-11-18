@@ -33,6 +33,7 @@
     --app-content-width: 1140px;
     --app-reading-width: 780px;
     --artwork-width: 640px;
+    --color-block-gap: var(--gap-sm);
     --app-gutter: var(--gap-xl);
     --app-header-gap: var(--gap-4xl);
     --app-nav-height: var(--button-lg-height);

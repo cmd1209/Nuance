@@ -420,8 +420,8 @@ test("Saved renders actual records, accurate previews, accessible actions, and a
   assert.ok(markup.includes(`Delete ${paletteAttribution(composition)}`));
   assert.ok(markup.includes(`Edit ${composition.name}`));
   assert.ok(markup.includes('background:#123456'));
-  const rect = paintedRect(computeLayout(composition.layout).regions[0], composition.artwork);
-  assert.ok(markup.includes(`width:${rect.width * 100}%`));
+  const rect = computeLayout(composition.layout).regions[0];
+  assert.ok(markup.includes(`width:calc(${rect.width * 100}% - var(--color-block-gap) / 2)`));
   assert.ok(markup.includes(`aspect-ratio:${composition.artwork.width} / ${composition.artwork.height}`));
   const afterDeletion = savedMarkup(accountFixture({ saved: saved.slice(1) }));
   assert.match(afterDeletion, /1 \/ 8 saved/);

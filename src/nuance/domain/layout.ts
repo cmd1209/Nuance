@@ -44,7 +44,7 @@ export function colorProportions(composition: Composition): Array<{ colorId: str
   return composition.colors.map(color => ({ colorId: color.id, proportion: areas.get(color.id) ?? 0 }));
 }
 
-/** Gutters are artwork geometry, so previews and PNGs share exactly the same painted rectangles. */
+/** Export gutters use artwork units; on-screen gutters use the shared CSS spacing token. */
 export function paintedRect(rect: Rect, artwork: Composition["artwork"]): Rect {
   const gx = artwork.gap / artwork.width / 2, gy = artwork.gap / artwork.height / 2;
   const left = rect.x > 1e-9 ? gx : 0, top = rect.y > 1e-9 ? gy : 0;
