@@ -19,7 +19,8 @@ import { MAX_COLORS, paletteAttribution } from "./domain/composition";
 import { nextColor } from "./domain/palettes";
 import { activeComposition, createEditorState, editorReducer } from "./state/editor";
 import { Artwork } from "./components/Artwork";
-import { PaletteSlider } from "./components/PaletteSlider";
+import { CollectionGrid } from "./components/CollectionGrid";
+import { PaletteCard } from "./components/PaletteCard";
 import { ColorEditor } from "./components/ColorEditor";
 import { Navigation } from "./components/Navigation";
 import { Button } from "./components/Button";
@@ -42,8 +43,6 @@ export default function NuanceApp() {
     previousOwner.current = next;
   }, [account.user?.id]);
   const main = useRef<HTMLElement>(null);
-  const explorePosition = useRef<number | null>(null);
-  const rememberExplorePosition = useCallback((_id: string, index: number) => { explorePosition.current = index; }, []);
   const requestMorePalettes = useCallback(() => dispatch({ type: "more-palettes" }), []);
   const editorTrigger = useRef<HTMLElement | null>(null);
   const selectionTrigger = useRef<HTMLElement | null>(null);
@@ -152,8 +151,12 @@ export default function NuanceApp() {
       </section> : <>
       <section id="color-explore-panel" role="tabpanel" aria-labelledby="color-explore-tab" hidden={state.sectionView !== "explore"} className="nuance-palettes">
         {state.sectionView === "explore" &&
-        <PaletteSlider palettes={state.suggestions} activeId={state.activeCompositionId} activeIndex={explorePosition.current ?? undefined} onPositionChange={rememberExplorePosition} onRequestMore={requestMorePalettes}
-          onSelect={(palette, index) => { explorePosition.current = index; rememberEditorTrigger(); dispatch({ type: "select-palette", palette }); closeEditor(); setNotice(""); }} />}
+        <>
+          <CollectionGrid items={state.suggestions} label="Color palettes"
+            renderItem={(palette, index) => <PaletteCard composition={palette} occurrence={index} showName
+              onSelect={() => { rememberEditorTrigger(); dispatch({ type: "select-palette", palette }); closeEditor(); setNotice(""); }} />} />
+          <Button className="collection-grid__more" onClick={requestMorePalettes}>Explore more palettes</Button>
+        </>}
       </section>
       <section id="color-saved-panel" role="tabpanel" aria-labelledby="color-saved-tab" hidden={state.sectionView !== "saved"}>
         {state.sectionView === "saved" && <SavedCompositions key={account.user?.id ?? "guest"} account={account}

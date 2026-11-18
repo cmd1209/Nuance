@@ -221,53 +221,21 @@
     gap: var(--gap-lg);
 }
 
-.palette-slider {
-    --palette-columns: 3;
-    --palette-gap: var(--gap-xl);
+.collection-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--collection-columns, 3), minmax(0, 1fr));
+    gap: var(--gap-xl);
     width: 100%;
     min-width: 0;
 }
 
-.palette-slider__viewport {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 100%;
-    gap: var(--palette-gap);
-    width: 100%;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-}
-
-.palette-slider__viewport::-webkit-scrollbar {
-    display: none;
-}
-
-.palette-slider__page {
-    display: grid;
-    grid-template-columns: repeat(var(--palette-columns), minmax(0, 1fr));
-    gap: var(--palette-gap);
+.collection-grid__item {
     min-width: 0;
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
 }
 
-.palette-slider__page .palette-card:focus-visible {
-    outline-offset: -4px;
-}
-
-.palette-slider__navigation {
+.collection-grid__more {
     display: flex;
-    justify-content: center;
-    gap: var(--gap-xs);
-    margin-top: var(--gap-sm);
-}
-
-.nuance-button.palette-slider__arrow {
-    width: var(--size-target-min);
-    height: var(--size-target-min);
-    padding: 0;
+    margin: var(--gap-xl) auto 0;
 }
 
 .palette-card {
@@ -967,8 +935,8 @@
    ========================================================================== */
 
 @media (max-width: 1024px) {
-    .palette-slider {
-        --palette-columns: 2;
+    .collection-grid {
+        --collection-columns: 2;
     }
 }
 
@@ -993,8 +961,8 @@
         min-height: 52px;
     }
 
-    .palette-slider {
-        --palette-columns: 1;
+    .collection-grid {
+        --collection-columns: 1;
     }
 
     .nuance-navigation {
@@ -1151,12 +1119,6 @@
     color: var(--color-text-tertiary);
 }
 
-.saved-gallery__grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--gap-xl);
-}
-
 .saved-gallery__item {
     display: flex;
     flex-direction: column;
@@ -1180,13 +1142,6 @@
 .saved-compositions__delete {
     flex-shrink: 0;
     color: var(--color-text-tertiary);
-}
-
-@media (max-width: 700px) {
-
-    .saved-gallery__grid {
-        grid-template-columns: minmax(0, 1fr);
-    }
 }
 
 /* Designs groups saved ingredients without introducing a second tool editor. */

@@ -98,9 +98,9 @@ try {
   assert.equal(await target.locator('.werner-studio').count(),0);
   assert.equal(await target.evaluate(key=>localStorage.getItem(key),key),null);
   await target.goto(origin);await target.getByRole('heading',{name:'Color',exact:true}).waitFor();
-  assert.equal(await target.locator('.palette-slider [data-composition-id^="werner-nuance-"]').count(),30);
-  assert.equal(await target.locator('.palette-slider [data-composition-id^="sanzo-wada-"]').count(),30);
-  await target.locator('.palette-slider [data-composition-id^="werner-nuance-"]').first().click();
+  assert.equal(await target.locator('#color-explore-panel .collection-grid [data-composition-id^="werner-nuance-"]').count(),30);
+  assert.equal(await target.locator('#color-explore-panel .collection-grid [data-composition-id^="sanzo-wada-"]').count(),30);
+  await target.locator('#color-explore-panel .collection-grid [data-composition-id^="werner-nuance-"]').first().click();
   await target.getByRole('button',{name:'Reset composition',exact:true}).waitFor();
   assert.match(await target.locator('.artwork-anchor .composition-source__name').textContent(),/Werner · Nuance No\./);
   await production.close();console.log('PASS production studio route unavailable; unified 30/30 Explore and Werner editing work in production');

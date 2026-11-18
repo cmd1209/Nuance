@@ -19,7 +19,7 @@ await context.route('**/*',async route=>{
 const page=await context.newPage();page.on('pageerror',error=>errors.push(error.message));
 const nav=page.getByRole('navigation',{name:'Design exploration'}),cards=page.locator('.type-specimen');
 const types=()=>nav.getByRole('button',{name:'Types',exact:true}).click();
-const columns=()=>page.locator('#types-explore-panel .palette-slider__page').first().evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
+const columns=()=>page.locator('#types-explore-panel .collection-grid').first().evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
 async function layout(label){
  const result=await page.evaluate(()=>{
   const root=document.documentElement,main=document.querySelector('.nuance-main');
@@ -55,17 +55,12 @@ try{
  }
  assert.equal(requested.length,fonts.length);assert.equal(new Set(requested).size,fonts.length);assert.ok(!external.some(origin=>/googleapis|gstatic|fontsource|jsdelivr/.test(origin)));
  console.log('PASS 30 real custom fonts, accurate specimens, on-demand local files, no font-arrival layout shift, unchanged UI typography');
- const viewport=page.locator('#types-explore-panel .palette-slider__viewport');
- await page.getByRole('button',{name:'Previous typefaces',exact:true}).click();
- await viewport.evaluate(el=>el.scrollTo({left:0,behavior:'instant'}));
- await page.getByRole('button',{name:'Next typefaces',exact:true}).click();
- await page.waitForFunction(()=>document.querySelector('#types-explore-panel .palette-slider__viewport').scrollLeft>0);
- const position=await viewport.evaluate(el=>el.scrollLeft);
+ const previewLabels=await page.locator('#types-explore-panel .type-specimen__button').evaluateAll(buttons=>buttons.map(button=>button.getAttribute('aria-label')));
  await nav.getByRole('button',{name:'Spaces',exact:true}).click();await types();
- await page.waitForFunction(position=>Math.abs(document.querySelector('#types-explore-panel .palette-slider__viewport').scrollLeft-position)<1,position);
- await viewport.focus();await page.keyboard.press('ArrowLeft');
- await page.waitForFunction(()=>document.querySelector('#types-explore-panel .palette-slider__viewport').scrollLeft<1);
- await page.getByRole('tab',{name:'Explore',selected:true,exact:true}).focus();await page.keyboard.press('Tab');await page.keyboard.press('Tab');assert.equal(await page.getByRole('button',{name:'Preview DM Serif Display',exact:true}).evaluate(el=>getComputedStyle(el).outlineStyle),'solid');
+ assert.deepEqual(await page.locator('#types-explore-panel .type-specimen__button').evaluateAll(buttons=>buttons.map(button=>button.getAttribute('aria-label'))),previewLabels);
+ assert.equal(await page.locator('[aria-roledescription="carousel"]').count(),0);
+ await page.getByRole('button',{name:'Preview DM Serif Display',exact:true}).focus();
+ assert.equal(await page.getByRole('button',{name:'Preview DM Serif Display',exact:true}).evaluate(el=>getComputedStyle(el).outlineStyle),'solid');
  await page.keyboard.press('Enter');await page.getByRole('tab',{name:'Edit',selected:true,exact:true}).waitFor();
  assert.equal(await page.locator('#types-detail-heading').textContent(),'DM Serif Display');assert.equal(await page.locator('#types-detail-heading').evaluate(el=>el===document.activeElement),true);
  assert.equal(await page.locator('.type-detail').getAttribute('data-font-status'),'loaded');
@@ -88,7 +83,7 @@ try{
  await page.evaluate(()=>document.documentElement.style.zoom='2');await layout('gallery-200%-zoom');
  await page.getByRole('tab',{name:'Edit',exact:true}).click();await layout('detail-200%-zoom');await page.evaluate(()=>document.documentElement.style.zoom='');
  assert.equal(await page.getByRole('slider').count(),1);assert.equal(await page.getByRole('combobox').count(),0);assert.equal(await page.getByRole('button',{name:'Save typeface',exact:true}).isEnabled(),true);
- console.log('PASS shared three/two/one-card slider layouts, themes, mobile, 200% zoom, one document scroll and fixed navigation');
+ console.log('PASS shared three/two/one-column grid layouts, themes, mobile, 200% zoom, one document scroll and fixed navigation');
  const failedContext=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});
  await failedContext.route('**/*',route=>{
   const url=new URL(route.request().url());

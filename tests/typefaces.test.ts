@@ -53,6 +53,7 @@ test("Types Explore renders 30 named specimen buttons with their own family stac
  const markup=renderToStaticMarkup(createElement(TypesSection,{hidden:false,onViewChange:()=>{},account:{user:null,authLoading:false,dataLoading:false},onSignIn:()=>{}}));
  for(const font of TYPEFACES){assert.ok(markup.includes(`Preview ${font.family}`));assert.ok(markup.includes(font.loading.family));assert.ok(markup.includes(font.family));}
  assert.equal((markup.match(/class="type-specimen__quote-text"/g)||[]).length,30);assert.ok(!markup.includes('id="types-edit-tab"'));assert.ok(!markup.includes('Typography exploration is coming soon'));
+ assert.ok(markup.includes('class="collection-grid"'));assert.ok(!markup.includes('aria-roledescription="carousel"'));
  assert.ok(markup.includes('types-explore-panel'));assert.ok(markup.includes('types-saved-panel'));assert.ok(!markup.includes('Save typeface'));
 });
 test("specimen font loader caches concurrent requests and degrades safely after failures",async()=>{

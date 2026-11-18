@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
 import { CaseSensitive, HeartPlus, MessageSquareQuote, RotateCcw, TextCursorInput, TypeOutline } from "lucide-react";
 import { TYPEFACES, typefaceById } from "../domain/typefaces";
 import { FOUNDATION_SECTIONS, type CreativeView } from "../domain/sections";
@@ -8,7 +8,7 @@ import { accountError, type Account } from "../account/useAccount";
 import { useTypefaceFavorites } from "../account/useTypefaceFavorites";
 import { canSaveTypeface, MAX_SAVED_TYPEFACES } from "../account/typefaceRepository";
 import { SavedTypefaces } from "./types/SavedTypefaces";
-import { DiscoverySlider } from "./DiscoverySlider";
+import { CollectionGrid } from "./CollectionGrid";
 import { SectionLayout } from "./SectionLayout";
 import { SectionNavigation } from "./SectionNavigation";
 import { TypefaceCard, TypefaceDetail } from "./types/TypefaceSpecimen";
@@ -25,8 +25,6 @@ export function TypesSection({hidden,onViewChange,account,onSignIn}:{hidden:bool
   const [editingText,setEditingText]=useState(false);
   const [specimenWeights,setSpecimenWeights]=useState<Record<string,number>>({});
   const focusPreview=useRef(false);
-  const explorePosition=useRef(0);
-  const rememberPosition=useCallback((_id:string,index:number)=>{explorePosition.current=index;},[]);
   const favorites=useTypefaceFavorites(account.user?.id);
   const [saving,setSaving]=useState(false),[notice,setNotice]=useState("");
   const saveInProgress=useRef(false),owner=useRef(account.user?.id),previousOwner=useRef(account.user?.id);
@@ -51,7 +49,7 @@ export function TypesSection({hidden,onViewChange,account,onSignIn}:{hidden:bool
     }
   },[state.view,state.selection,hidden]);
   function changeView(view:CreativeView){setEditingText(false);dispatch({type:"view",view});setNotice("");onViewChange();}
-  function openTypeface(fontId:string,index?:number){setEditingText(false);if(index!==undefined)explorePosition.current=index;focusPreview.current=true;dispatch({type:"select",fontId});setNotice("");onViewChange();}
+  function openTypeface(fontId:string){setEditingText(false);focusPreview.current=true;dispatch({type:"select",fontId});setNotice("");onViewChange();}
   async function save(){
     if(!state.selection || saveInProgress.current)return;
     setEditingText(false);
@@ -67,9 +65,8 @@ export function TypesSection({hidden,onViewChange,account,onSignIn}:{hidden:bool
   return <SectionLayout hidden={hidden} title={definition.title} headingId="types-heading" notice={notice} description={definition.descriptions[state.view]}
     navigation={<SectionNavigation prefix="types" label="Types views" value={state.view} hasDraft={!!selected} onChange={changeView} />}>
     <section id="types-explore-panel" role="tabpanel" aria-labelledby="types-explore-tab" hidden={state.view !== "explore"}>
-      <DiscoverySlider items={TYPEFACES} activeId={selected?.id??null} activeIndex={explorePosition.current} onPositionChange={rememberPosition}
-        label="Typefaces" itemLabel="Typefaces" navigationLabel="Typeface navigation" scrollLabel="Scroll typefaces with left and right arrow keys" previousLabel="Previous typefaces" nextLabel="Next typefaces"
-        renderItem={(font,index)=><TypefaceCard font={font} active={!hidden && state.view === "explore"} size={specimenSizes[font.id]} weight={specimenWeights[font.id]} onSelect={()=>openTypeface(font.id,index)} />} />
+      <CollectionGrid items={TYPEFACES} label="Typefaces"
+        renderItem={font=><TypefaceCard font={font} active={!hidden && state.view === "explore"} size={specimenSizes[font.id]} weight={specimenWeights[font.id]} onSelect={()=>openTypeface(font.id)} />} />
     </section>
     <section id="types-saved-panel" role="tabpanel" aria-labelledby="types-saved-tab" hidden={state.view !== "saved"}>
       <SavedTypefaces key={account.user?.id??"guest"} account={account} favorites={favorites} active={!hidden && state.view === "saved"}

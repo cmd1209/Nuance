@@ -414,6 +414,7 @@ test("Saved renders actual records, accurate previews, accessible actions, and a
   const saved = [composition, second].map(item => ({ id: item.id, updatedAt: new Date().toISOString(), composition: item }));
   const markup = savedMarkup(accountFixture({ saved }));
   assert.equal((markup.match(/<article/g) ?? []).length, 2);
+  assert.ok(markup.includes('class="collection-grid saved-gallery__grid"'));
   assert.equal((markup.match(/data-delete-composition=/g) ?? []).length, 2);
   assert.match(markup, /2 \/ 8 saved/);
   assert.ok(markup.includes(paletteAttribution(composition)));

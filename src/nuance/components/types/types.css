@@ -16,7 +16,7 @@
     overflow-wrap: anywhere;
 }
 
-.palette-slider__page .type-specimen__button:focus-visible {
+.collection-grid .type-specimen__button:focus-visible {
     outline-offset: -4px;
 }
 
