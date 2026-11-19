@@ -1,8 +1,8 @@
 import { Button } from "./Button";
 import { Icon } from "./Icon";
 
-export function AppHeader({ theme, displayName, signedIn, loading, onHome, onAccount, onTheme }: {
-  theme: "light" | "dark"; displayName: string; signedIn: boolean; loading: boolean;
+export function AppHeader({ theme, displayName, email, avatarUrl, signedIn, loading, onHome, onAccount, onTheme }: {
+  theme: "light" | "dark"; displayName: string; email?: string; avatarUrl?: string; signedIn: boolean; loading: boolean;
   onHome: () => void; onAccount: () => void; onTheme: () => void;
 }) {
   return <header className="nuance-header">
@@ -10,10 +10,13 @@ export function AppHeader({ theme, displayName, signedIn, loading, onHome, onAcc
       <img src={`/nuance/assets/nuance-logo__${theme === "dark" ? "light" : "dark"}.svg`} alt="" width={350} height={81} />
     </a>
     <div className="nuance-header__actions">
-      <Button className="account-button" disabled={loading} aria-label={signedIn ? "Open your profile" : "Sign in"}
-        onClick={onAccount} leadingIcon={<Icon name="user" />}>
-        <span className="account-button__name">{loading ? "Loading…" : signedIn ? displayName || "Account" : "Sign in"}</span>
-      </Button>
+      {signedIn ? <button type="button" className="nuance-button nuance-button--ghost nuance-button--sm account-button account-button--avatar"
+        disabled={loading} aria-label={`Open account for ${displayName || email || "you"}`} aria-haspopup="dialog" onClick={onAccount}>
+        {avatarUrl ? <img src={avatarUrl} alt="" /> : (email?.[0] || "N").toUpperCase()}
+      </button> : <Button className="account-button" disabled={loading}
+        aria-label={loading ? "Restoring your session..." : "Log in"} aria-haspopup="dialog" onClick={onAccount}>
+        {loading ? "Restoring your session..." : "Log in"}
+      </Button>}
       <Button onClick={onTheme} aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`} leadingIcon={<Icon name="moon" />}>
         {theme === "dark" ? "Dark" : "Light"}
       </Button>

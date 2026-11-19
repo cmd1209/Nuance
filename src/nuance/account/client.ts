@@ -7,4 +7,4 @@ const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 export const authReturn = readAuthReturn(window.location.href);
 
 // Only a browser-safe publishable key belongs in Vite's public environment.
-export const supabase = url && key ? createClient(url, key, { auth: { flowType: "implicit", detectSessionInUrl: true } }) : null;
+export const supabase = url && key ? createClient(url, key, { auth: { flowType: "implicit", detectSessionInUrl: true, persistSession: true, autoRefreshToken: true } }) : null;

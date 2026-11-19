@@ -17,6 +17,6 @@ try {
   await build({ entryPoints:["tests/unified-colors.test.ts"], outfile:unified, bundle:true, platform:"node", format:"esm" });
   const typefaces = join(directory, "typefaces.test.mjs");
   await build({ entryPoints:["tests/typefaces.test.ts"], outfile:typefaces, bundle:true, platform:"node", format:"esm", define:{"import.meta.env":"{}","window.location.href":JSON.stringify("http://localhost/")} });
-  const result = spawnSync(process.execPath, ["--test", outfile, werner, unified, typefaces, "tests/account-database.test.mjs", "tests/typeface-database.test.mjs"], { stdio: "inherit" });
+  const result = spawnSync(process.execPath, ["--test", outfile, werner, unified, typefaces, "tests/account-database.test.mjs", "tests/avatar-database.test.mjs", "tests/typeface-database.test.mjs"], { stdio: "inherit" });
   process.exitCode = result.status ?? 1;
 } finally { await rm(directory, { recursive: true, force: true }); }

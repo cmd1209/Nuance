@@ -38,10 +38,22 @@ export default function NuanceApp() {
   useEffect(() => {
     const next = account.user?.id ?? null;
     if (previousOwner.current && previousOwner.current !== next) {
-      dispatch({ type: "clear-account" }); setAdjusting(false); setNotice("");
+      dispatch({ type: "clear-account" }); dispatchApplication({ type: "navigate", section: "colors" }); setAccountOpen(!next); setAdjusting(false); setNotice("");
     }
     previousOwner.current = next;
   }, [account.user?.id]);
+  const destinationOwner = useRef<string | null>(null);
+  useEffect(() => {
+    if (!account.user) { destinationOwner.current = null; return; }
+    if (account.authLoading || account.dataLoading || !account.profile || account.error || destinationOwner.current === account.user.id) return;
+    destinationOwner.current = account.user.id;
+    if (account.recovery !== "none") return;
+    // Signing in to save ongoing work must keep that workspace available.
+    if (!state.activeCompositionId && application.activeSection === "colors") {
+      dispatch({ type: "section", view: account.saved.length ? "saved" : "explore" });
+    }
+    setAccountOpen(false);
+  }, [account.user?.id, account.authLoading, account.dataLoading, account.profile, account.error, account.saved.length, account.recovery]);
   const main = useRef<HTMLElement>(null);
   const requestMorePalettes = useCallback(() => dispatch({ type: "more-palettes" }), []);
   const editorTrigger = useRef<HTMLElement | null>(null);
@@ -104,7 +116,7 @@ export default function NuanceApp() {
     finally { setSaving(false); }
   }
   return <AppShell theme={application.theme} mainRef={main}
-    header={<AppHeader theme={application.theme} displayName={account.profile?.display_name ?? ""}
+    header={<AppHeader theme={application.theme} displayName={account.displayName} email={account.user?.email} avatarUrl={account.avatar.url}
       signedIn={!!account.user} loading={account.authLoading} onAccount={() => setAccountOpen(true)}
       onTheme={() => dispatchApplication({ type: "theme" })}
       onHome={() => { if (application.activeSection === "colors") dispatch({ type: "back" }); navigate("colors"); window.scrollTo({ top: 0, behavior: "instant" }); }} />}
@@ -112,8 +124,9 @@ export default function NuanceApp() {
     overlays={<>
       {state.pendingSelection && <SwitchCompositionDialog onCancel={() => dispatch({ type: "cancel-switch" })}
         onDiscard={() => { dispatch({ type: "discard-and-switch" }); closeEditor(); setNotice(""); }} />}
-      {accountOpen && <AccountDialog account={account} onClose={() => { account.dismissRecovery(); setAccountOpen(false); }} />}
+      {accountOpen && <AccountDialog key={account.user?.id ?? "guest"} account={account} onClose={() => { account.dismissRecovery(); setAccountOpen(false); }} />}
     </>}>
+    {account.authLoading && <p className="account-restoring" role="status">Restoring your session...</p>}
     <SectionLayout hidden={application.activeSection !== "colors"} title="Color" headingId="color-heading" notice={notice}
       navigation={<SectionNavigation prefix="color" label="Color views" value={editing ? "edit" : state.sectionView} hasDraft={!!composition}
         onChange={view => { dispatch(view === "edit" ? { type: "resume-editor" } : { type: "section", view }); closeEditor(); setNotice(""); }} />}

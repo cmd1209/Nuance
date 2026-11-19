@@ -1,6 +1,6 @@
 # Nuance accounts
 
-Email-and-password authentication, a private display-name profile, and explicit composition saving use Supabase. Browsing and editing work without an account. PNG download is deprecated and its control remains hidden. The header account button opens a native modal with separate Sign in, Create account, and Forgot password forms. Once signed in, the header account button opens profile editing, sign-out, and an email-based password reset action. Saved compositions are available in the main Color Saved view.
+Email-and-password authentication, optional account names, private avatars, and explicit composition saving use Supabase. Browsing and editing work without an account. PNG download is deprecated and its control remains hidden. The header Log in button opens one native dialog with Log in and Create an account modes. Once signed in, a circular avatar or uppercase email initial opens a compact, viewport-constrained account panel. The existing email-based password recovery remains available. Saved compositions are available in the main Color Saved view.
 
 ## Connect the existing project
 
@@ -14,18 +14,18 @@ Email-and-password authentication, a private display-name profile, and explicit 
    ```
 
 5. In Authentication → URL Configuration, set the Site URL to the actual app origin. Allow the app's callback URLs for both `?account=confirm` and `?account=recovery`, including your local development origin. For a root deployment at port 5173 these are `http://localhost:5173/?account=confirm` and `http://localhost:5173/?account=recovery`. Use the actual hostname, port, and path for your setup. Add the matching HTTPS production URLs before deploying. The app deliberately excludes unrelated query parameters and URL fragments from redirect targets. See [password-based auth](https://supabase.com/docs/guides/auth/passwords).
-6. The app requires at least 12 characters for newly created/reset passwords and matching confirmation. Set the project's password minimum to 12 as well so server-side enforcement matches the UI. Existing users can still sign in with their existing passwords. Supabase enforces any additional configured password rules; see [password security](https://supabase.com/docs/guides/auth/password-security).
+6. The app requires at least 12 characters for newly created/reset passwords. Only password recovery asks for matching confirmation. Set the project's password minimum to 12 as well so server-side enforcement matches the UI. Existing users can still sign in with their existing passwords. Supabase enforces any additional configured password rules; see [password security](https://supabase.com/docs/guides/auth/password-security).
 7. Configure an email sender/SMTP suitable for your users. Supabase's default sender has delivery restrictions; see [custom SMTP](https://supabase.com/docs/guides/auth/auth-smtp).
 
 The app stays usable when environment configuration is absent. It explains that sign-in is being set up instead of simulating an authenticated session.
 
 ## Behavior and data
 
-- Returning users sign in with email and password. New users supply display name, email, password, and confirmation. If the project requires email confirmation, the app shows a confirmation notice and a resend action instead of assuming an authenticated session. Confirmation links automatically open the account dialog on return.
+- Returning users sign in with email and password. New users supply optional first and last names, email, and password. Mode changes retain names and email while clearing passwords and feedback. Fields and the mode switch are disabled during requests. If the project requires email confirmation, the app shows a confirmation notice and a resend action instead of assuming an authenticated session. Confirmation links automatically open the account dialog on return.
 - Forgot password sends a reset link and displays a generic acknowledgement that does not reveal whether the email has an account. A valid Supabase `PASSWORD_RECOVERY` event opens the new-password form. Password mismatch, weak-password, and expired/invalid-link errors are handled without reporting success. The reset form can be restored after a refresh within the same tab; a session-only owner marker contains no password or authentication token and is cleared on completion, dismissal, sign-out, or account change.
 - Passwords are passed directly to Supabase Auth. They are never stored in composition documents, profile rows, application logs, or custom browser storage. Password fields support password managers and accessible show/hide controls. See [Supabase password reset](https://supabase.com/docs/reference/javascript/auth-resetpasswordforemail).
 - Existing accounts created through the earlier email-code flow use Forgot password, or Reset password in their profile, to establish a password for the same account. Saved composition ownership is unchanged. Resend/reset requests have a 60-second UI cooldown in addition to server-side limits.
-- Auth sessions persist through the Supabase browser client. Profiles contain the user's ID, display name, update timestamp, and a database-managed saved-composition counter. Clients cannot insert or update the counter. A missing profile row is initialized after authentication, using the sign-up display name. Existing profile names are preserved. Email remains managed by Supabase Auth and is read-only in the profile dialog.
+- Auth sessions persist through the Supabase browser client. Profiles contain the user's ID, display name, update timestamp, and a database-managed saved-composition counter. Clients cannot insert or update the counter. A missing profile row is initialized after authentication, using the sign-up display name. Existing profile names are preserved as a fallback first-name field until the user explicitly saves names. Optional names are stored in auth user metadata (`first_name`, `last_name`); saving names does not require a new profile table or rewrite existing profile rows. Email remains managed by Supabase Auth and is shown in the account panel.
 - Colors allows eight saved compositions, shared across all palette sources. Types has its own eight-item saved-typeface library, backed by private `typeface_favorites` rows and a separate atomic quota counter. Font pairing and advanced typography editing are not implemented yet. Form has a configured four-item allowance for future implementation, combining spacing and details. Design combines saved Color, Type, and Form ingredients. Profile controls remain global, and closing the dialog restores focus to its trigger.
 - “Save to account” explicitly stores the current editable document. Repeated saves update the same document ID. Opening a saved composition preserves that ID. PNG download remains hidden.
 - A ninth new composition is blocked in the UI and database; updating one of the eight existing saves remains allowed. Deleting a composition removes the saved copy, frees a slot, updates the library, and restores keyboard focus to the next delete control or the empty panel. It does not modify the historical palette collection. Failed deletes leave the card available for retry.
@@ -33,6 +33,14 @@ The app stays usable when environment configuration is absent. It explains that 
 - Row-level security restricts both tables to the authenticated owner. Anonymous roles receive no table privileges. No service-role client is used in the application.
 - Sign-out/account changes clear in-memory editor drafts and private library state. Guest work is retained when signing in so it can be saved. Unsaved changes remain local to the current page session.
 - Profile and library loads are guarded against responses from a previous account. Failed requests show retryable errors; failed saves do not report success.
+
+## Account panel and avatar storage
+
+Apply `supabase/migrations/202611190001_private_avatars.sql` once to the connected project to enable avatar uploads. It creates a private `avatars` bucket with a 2 MB maximum and JPEG/PNG/WebP MIME restrictions. Storage policies allow authenticated reads, inserts, replacements and deletes only at the exact `<auth.uid()>/avatar` path. Existing accounts, profiles and saved documents are unchanged. Do not make this bucket public. No service-role key is used.
+
+Names save only with **Save name**. Avatar selection validates size, MIME type and image decoding before uploading, then saves immediately. Failed replacements and removals preserve the previous image. Authenticated downloads restore avatars after login or refresh; loading failures provide **Retry avatar**. Removal restores the email initial. Blob URLs are revoked when replaced or unmounted and results are scoped to the current owner.
+
+During session restoration the header announces **Restoring your session...** and does not show an active login control. With no ongoing guest workspace, accounts with saved color compositions open Color Saved; empty accounts open Color Explore to choose their first palette. Signing in during creative work preserves that workspace. Logout returns to the login card and clears editor drafts and account libraries, including when another tab signs out.
 
 ## Validation
 
@@ -47,3 +55,16 @@ After configuring the real project, verify confirmation and reset email delivery
 ## Enable saved typefaces
 
 If the existing account and eight-color migrations are already installed, run `supabase/migrations/202611090002_typeface_favorites.sql`, then `supabase/migrations/202611100001_typeface_specimen_settings.sql` in the Supabase SQL Editor. If favorites are already enabled, run only the specimen-settings migration. It adds owner-only font favorites and an independent eight-font limit without changing color saves. Run it once, then refresh the app. The application code alone cannot create the remote table. See [Types discovery and favorites](types-discovery.md) for data references, loading and account-isolation behavior.
+
+
+### Account journey verification (2026-11-19)
+
+`tests/avatar-database.test.mjs` runs the avatar policies in local PostgreSQL with two identities and an anonymous role. It checks exact-path ownership for reads, inserts, updates, deletes and attempted owner transfers, plus bucket privacy and configured file restrictions. The Storage service itself enforces the configured MIME/size limits; local PostgreSQL does not simulate that service.
+
+`tests/account-browser.mjs` uses isolated headless Chrome with all Supabase requests mocked. Run after starting Vite with Supabase browser configuration:
+
+```sh
+NUANCE_PLAYWRIGHT_MODULE=/private/tmp/nuance-account-browser/node_modules/playwright/index.mjs node tests/account-browser.mjs
+```
+
+This covers mode retention and password clearing, confirmation notices and callback targets, request disabling, optional and legacy names, save failures, invalid avatar rejection before network requests, automatic upload/replacement/removal, failure preservation, refresh restoration, loading retry, first-use/returning destinations, narrow screens, logout errors, two-account isolation, cross-tab sign-out and Escape/focus return. Artifacts are written to `/private/tmp/nuance-account-review`. It does not verify live email delivery, remote URL configuration or an applied remote storage migration.

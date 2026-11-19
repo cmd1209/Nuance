@@ -399,6 +399,7 @@ import type { Account } from "../src/nuance/account/useAccount";
 
 function accountFixture(overrides: Partial<Account> = {}): Account {
   return { configured: true, user: { id: "owner", email: "owner@example.com" }, authLoading: false, dataLoading: false,
+    firstName: "Owner", lastName: "", displayName: "Owner", avatar: { url: undefined, loading: false, error: "", reload: async () => {}, upload: async () => {}, remove: async () => {} },
     error: "", authError: "", recovery: "none", profile: { id: "owner", display_name: "Owner" }, saved: [], ...overrides } as Account;
 }
 const noop = () => {};
@@ -443,7 +444,7 @@ test("Saved distinguishes empty, signed-out, loading, and error states without p
 
 test("Profile renders account controls without saved compositions or category tabs", () => {
   const markup = renderToStaticMarkup(createElement(AccountDialog, { account: accountFixture(), onClose: noop }));
-  for (const label of ["Display name", "owner@example.com", "Reset password", "Sign out", "Save changes"]) assert.ok(markup.includes(label));
+  for (const label of ["First name (optional)", "Last name (optional)", "owner@example.com", "Reset password", "Log out", "Save name", "Upload avatar", "Uploads save automatically."]) assert.ok(markup.includes(label));
   assert.ok(!markup.includes('role="tab'));
   assert.ok(!markup.includes('palette-card'));
   assert.ok(!markup.includes('Back to library'));
@@ -762,4 +763,13 @@ test("plain HTTP LAN previews initialize and edit with secure UUIDs when randomU
     if(previous)Object.defineProperty(globalThis,"crypto",previous);
     else delete (globalThis as Record<string,unknown>).crypto;
   }
+});
+
+
+import { validateAvatarFile, MAX_AVATAR_BYTES } from "../src/nuance/account/avatar";
+test("avatar validation rejects empty, oversized and unsupported files before upload", () => {
+  assert.throws(() => validateAvatarFile({ size: 0, type: "image/png" }), /not empty/);
+  assert.throws(() => validateAvatarFile({ size: MAX_AVATAR_BYTES + 1, type: "image/png" }), /up to 2 MB/);
+  assert.throws(() => validateAvatarFile({ size: 100, type: "image/svg+xml" }), /JPEG, PNG, or WebP/);
+  for (const type of ["image/jpeg", "image/png", "image/webp"]) validateAvatarFile({ size: MAX_AVATAR_BYTES, type });
 });

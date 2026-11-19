@@ -12,10 +12,12 @@ export function AccountDialog({ account, onClose }: { account: Account; onClose:
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmation, setConfirmation] = useState("");
-  const [signupName, setSignupName] = useState("");
+  const [firstName, setFirstName] = useState(account.firstName);
+  const [lastName, setLastName] = useState(account.lastName);
+  const fileInput = useRef<HTMLInputElement>(null);
+  const [operation, setOperation] = useState("");
   const [sent, setSent] = useState(false);
   const [resendIn, setResendIn] = useState(0);
-  const [name, setName] = useState(account.profile?.display_name ?? "");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [signInFailed, setSignInFailed] = useState(false);
@@ -24,9 +26,8 @@ export function AccountDialog({ account, onClose }: { account: Account; onClose:
   const forgot = mode === "forgot";
   const recovering = account.recovery !== "none";
   const coolingDown = (signup || forgot) && resendIn > 0;
-  const title = recovering ? "Reset password" : account.user ? `Hi, ${account.profile?.display_name.trim() || "there"}` : sent ? "Check your email" : forgot ? "Forgot password?" : signup ? "Create account" : "Sign in";
-  const displayName = account.profile?.display_name || "Your account";
-  const initials = (account.profile?.display_name || account.user?.email || "N").trim().split(/\s+/).slice(0, 2).map(part => part[0]).join("").toUpperCase();
+  const title = recovering ? "Reset password" : account.user ? "Your account" : sent ? "Check your email" : forgot ? "Forgot password?" : signup ? "Create an account" : "Log in";
+  const initials = (account.user?.email?.[0] || "N").toUpperCase();
 
   useEffect(() => {
     const element = dialog.current!;
@@ -43,10 +44,12 @@ export function AccountDialog({ account, onClose }: { account: Account; onClose:
       return;
     }
     if (account.user) return;
-    const field = mode === "signup" ? "signup-name" : "email";
+    const field = mode === "signup" ? "first-name" : "email";
     dialog.current?.querySelector<HTMLInputElement>(`[id="${prefix}-${field}"]`)?.focus();
   }, [mode, sent, account.user?.id, account.recovery, prefix]);
-  useEffect(() => { setName(account.profile?.display_name ?? ""); }, [account.profile?.id, account.profile?.display_name]);
+  useEffect(() => {
+    if (account.user) { setFirstName(account.firstName); setLastName(account.lastName); }
+  }, [account.user?.id, account.firstName, account.lastName]);
   useEffect(() => {
     setError(""); setMessage(""); setSignInFailed(false); setSent(false); setPassword(""); setConfirmation(""); setMode("signin");
   }, [account.user?.id]);
@@ -56,9 +59,9 @@ export function AccountDialog({ account, onClose }: { account: Account; onClose:
     return () => window.clearTimeout(timeout);
   }, [resendIn]);
 
-  async function run(action: () => Promise<void>) {
+  async function run(action: () => Promise<void>, kind = "auth") {
     if (busy) return;
-    setBusy(true); setError(""); setMessage("");
+    setOperation(kind); setBusy(true); setError(""); setMessage("");
     try { await action(); } catch (error) { setError(accountError(error)); } finally { setBusy(false); }
   }
   function submitAuth(event: FormEvent) {
@@ -68,8 +71,9 @@ export function AccountDialog({ account, onClose }: { account: Account; onClose:
         await account.requestPasswordReset(email);
         setSent(true); setResendIn(60);
       } else if (signup) {
-        validatePassword(password, confirmation);
-        if (await account.signUp(email, password, signupName)) { setSent(true); setResendIn(60); }
+        validatePassword(password, password);
+        setEmail(email.trim()); setFirstName(firstName.trim()); setLastName(lastName.trim());
+        if (await account.signUp(email, password, firstName, lastName)) { setSent(true); setResendIn(60); }
       } else {
         try { await account.signIn(email, password); setSignInFailed(false); }
         catch (error) { setSignInFailed(true); throw error; }
@@ -94,10 +98,10 @@ export function AccountDialog({ account, onClose }: { account: Account; onClose:
   }
   function submitProfile(event: FormEvent) {
     event.preventDefault();
-    void run(async () => { await account.updateProfile(name); setMessage("Profile updated."); });
+    void run(async () => { await account.updateNames(firstName, lastName); setMessage("Name saved."); }, "name");
   }
 
-  return <dialog ref={dialog} className="account-dialog" aria-labelledby={`${prefix}-title`} onCancel={event => { event.preventDefault(); onClose(); }}>
+  return <dialog ref={dialog} className={`account-dialog${account.user && !recovering ? " account-dialog--profile" : ""}`} aria-labelledby={`${prefix}-title`} onCancel={event => { event.preventDefault(); onClose(); }}>
     <div className="account-dialog__heading">
       <div className="account-dialog__greeting">
         <h2 id={`${prefix}-title`}>{title}</h2>
@@ -105,7 +109,7 @@ export function AccountDialog({ account, onClose }: { account: Account; onClose:
       <Button className="account-dialog__close" aria-label="Close account" onClick={onClose}><X size={20} aria-hidden="true" /></Button>
     </div>
     {!account.configured ? <p>Account sign-in is being set up. You can keep exploring colors.</p>
-      : account.authLoading ? <p role="status">Loading your account…</p>
+      : account.authLoading ? <p role="status">Restoring your session...</p>
       : recovering ? account.recovery === "pending" ? <p role="status">Checking your reset link…</p>
       : account.recovery === "expired" ? <form className="account-dialog__form" onSubmit={event => { event.preventDefault(); void run(sendResetLink); }}>
         <p role="alert">This reset link has expired or is invalid. Request a new link to continue.</p>
@@ -121,7 +125,7 @@ export function AccountDialog({ account, onClose }: { account: Account; onClose:
       </form>
       : !account.user ? <>
         {sent ? <div className="account-dialog__form">
-            <p role="status">{forgot ? `If an account exists for ${email}, you’ll receive a password reset link.` : `Check ${email} for a confirmation email. Follow the link to confirm your account, then sign in.`}</p>
+            <p role="status">{forgot ? `If an account exists for ${email}, you’ll receive a password reset link.` : "Check your email to confirm your account, then log in."}</p>
             <div className="account-dialog__actions">
               <Button disabled={busy || resendIn > 0} onClick={() => { void run(async () => {
                 if (forgot) await sendResetLink();
@@ -129,59 +133,66 @@ export function AccountDialog({ account, onClose }: { account: Account; onClose:
               }); }}>
                 {resendIn > 0 ? `Resend in ${resendIn}s` : "Resend email"}
               </Button>
-              <Button disabled={busy} onClick={() => switchMode("signin")}>Back to sign in</Button>
+              <Button disabled={busy} onClick={() => switchMode("signin")}>Back to log in</Button>
             </div>
-        </div> : <form className="account-dialog__form" onSubmit={submitAuth}>
-            <p className="account-dialog__description">{forgot ? "Enter your email and we’ll send you a password reset link." : signup ? "Create your Nuance account to save your compositions." : "Welcome back. Sign in to your Nuance account."}</p>
+        </div> : <form className="account-dialog__form" aria-busy={busy} onSubmit={submitAuth}>
+            <p className="account-dialog__description">{forgot ? "Enter your email and we’ll send you a password reset link." : "Save your color compositions and typefaces to revisit them anytime."}</p>
             {signup && <>
-              <label htmlFor={`${prefix}-signup-name`}>Display name</label>
-              <input id={`${prefix}-signup-name`} autoComplete="nickname" maxLength={80} required value={signupName} disabled={busy} onChange={event => setSignupName(event.target.value)} />
+              <label htmlFor={`${prefix}-first-name`}>First name (optional)</label>
+              <input id={`${prefix}-first-name`} autoComplete="given-name" maxLength={80} value={firstName} disabled={busy} onChange={event => setFirstName(event.target.value)} />
+              <label htmlFor={`${prefix}-last-name`}>Last name (optional)</label>
+              <input id={`${prefix}-last-name`} autoComplete="family-name" maxLength={80} value={lastName} disabled={busy} onChange={event => setLastName(event.target.value)} />
             </>}
             <label htmlFor={`${prefix}-email`}>Email</label>
             <input key="email" id={`${prefix}-email`} type="email" autoFocus autoComplete="email" required value={email} disabled={busy} onChange={event => { setEmail(event.target.value); setSignInFailed(false); }} />
             {!forgot && <PasswordField label="Password" value={password} onChange={setPassword} disabled={busy} creating={signup} />}
             {signup && <>
-              <PasswordField label="Confirm password" value={confirmation} onChange={setConfirmation} disabled={busy} creating />
               <p className="account-dialog__hint">Use at least {MIN_PASSWORD_LENGTH} characters.</p>
             </>}
             {!signup && !forgot && signInFailed && <Button className="account-dialog__text-action" disabled={busy} onClick={() => switchMode("forgot")}>Forgot password?</Button>}
-            <Button type="submit" variant="primary" disabled={busy || coolingDown}>
-              {busy ? forgot ? "Sending…" : signup ? "Creating account…" : "Signing in…" : coolingDown ? `Try again in ${resendIn}s` : forgot ? "Send reset link" : signup ? "Create account" : "Sign in"}
+            <Button type="submit" variant="primary" aria-live="polite" disabled={busy || coolingDown}>
+              {busy ? "Please wait..." : coolingDown ? `Try again in ${resendIn}s` : forgot ? "Send reset link" : signup ? "Sign up" : "Log in"}
             </Button>
         </form>}
         {!sent && <div className="account-dialog__switch">
-          {!forgot && <span>{signup ? "Already have an account?" : "New to Nuance?"}</span>}
-          <Button disabled={busy} onClick={() => switchMode(forgot || signup ? "signin" : "signup")}>{forgot ? "Back to sign in" : signup ? "Sign in" : "Create account"}</Button>
+          <Button disabled={busy} onClick={() => switchMode(forgot || signup ? "signin" : "signup")}>{forgot ? "Back to log in" : signup ? "Already have an account? Log in" : "Create an account"}</Button>
         </div>}
       </> : <>
-        <section aria-label="Profile">
-          <div className="account-dialog__identity">
-            <span className="account-dialog__avatar" aria-hidden="true">{initials}</span>
-            <div><p className="account-dialog__name">{displayName}</p><p className="account-dialog__hint">{account.user.email}</p></div>
-          </div>
-          <form className="account-dialog__form" onSubmit={submitProfile}>
-            <label htmlFor={`${prefix}-name`}>Display name</label>
-            <input id={`${prefix}-name`} autoComplete="nickname" maxLength={80} value={name} disabled={busy || account.dataLoading || !!account.error} onChange={event => setName(event.target.value)} />
-            <label htmlFor={`${prefix}-profile-email`}>Email</label>
-            <input id={`${prefix}-profile-email`} type="email" value={account.user.email ?? ""} readOnly />
-            <div className="account-dialog__actions">
-              <Button type="submit" variant="primary" disabled={busy || account.dataLoading || !!account.error}>{busy ? "Saving…" : "Save changes"}</Button>
-              <Button onClick={onClose}>Cancel</Button>
-            </div>
+        <section className="account-profile" aria-label="Profile">
+          <p className="account-profile__email">{account.user.email}</p>
+          <form className="account-dialog__form" onSubmit={submitProfile} aria-busy={busy && operation === "name"}>
+            <label htmlFor={`${prefix}-first-name`}>First name (optional)</label>
+            <input id={`${prefix}-first-name`} autoComplete="given-name" maxLength={80} value={firstName} disabled={busy} onChange={event => setFirstName(event.target.value)} />
+            <label htmlFor={`${prefix}-last-name`}>Last name (optional)</label>
+            <input id={`${prefix}-last-name`} autoComplete="family-name" maxLength={80} value={lastName} disabled={busy} onChange={event => setLastName(event.target.value)} />
+            <Button className="account-profile__action" type="submit" aria-live="polite" disabled={busy}>{busy && operation === "name" ? "Saving name..." : "Save name"}</Button>
           </form>
-          <div className="account-dialog__security">
-            <h3>Password</h3>
-            <p className="account-dialog__hint">Use a secure email link to set or reset your password.</p>
+          <div className="account-profile__image-row">
+            <span className="account-dialog__avatar" aria-hidden="true">
+              {account.avatar.url ? <img src={account.avatar.url} alt="" onError={() => { void account.avatar.reload(); }} /> : initials}
+            </span>
+            <input ref={fileInput} className="account-profile__file" type="file" accept="image/jpeg,image/png,image/webp" aria-label="Choose avatar" disabled={busy || account.avatar.loading} onChange={event => {
+              const file = event.currentTarget.files?.[0];
+              event.currentTarget.value = "";
+              if (file) void run(async () => { await account.avatar.upload(file); setMessage("Avatar saved."); }, "avatar");
+            }} />
+            <Button disabled={busy || account.avatar.loading} onClick={() => fileInput.current?.click()}>{busy && operation === "avatar" ? "Uploading..." : account.avatar.url ? "Change avatar" : "Upload avatar"}</Button>
+          </div>
+          <p className="account-dialog__hint">JPEG, PNG, or WebP · up to 2 MB.<br />Uploads save automatically.</p>
+          {account.avatar.loading && <p role="status">Loading avatar...</p>}
+          {account.avatar.error && <div><p role="alert">Could not load your avatar. {account.avatar.error}</p><Button disabled={busy} onClick={() => { void account.avatar.reload(); }}>Retry avatar</Button></div>}
+          {account.avatar.url && <Button className="account-profile__action" disabled={busy} onClick={() => { void run(async () => { await account.avatar.remove(); setMessage("Avatar removed."); }, "remove"); }}>{busy && operation === "remove" ? "Removing..." : "Remove avatar"}</Button>}
+          {error && <p role="alert">{error}</p>}
+          {message && <p role="status">{message}</p>}
+          <Button className="account-profile__action" disabled={busy} leadingIcon={<LogOut size={18} aria-hidden="true" />} onClick={() => { void run(account.signOut, "logout"); }}>{busy && operation === "logout" ? "Please wait..." : "Log out"}</Button>
+          <details className="account-profile__security"><summary>Password options</summary>
             <Button disabled={busy || resendIn > 0} onClick={() => { void run(() => sendResetLink(account.user?.email || "")); }}>{resendIn > 0 ? `Send again in ${resendIn}s` : "Reset password"}</Button>
-          </div>
-          <div className="account-dialog__footer">
-            <Button disabled={busy} leadingIcon={<LogOut size={16} aria-hidden="true" />} onClick={() => { void run(account.signOut); }}>Sign out</Button>
-          </div>
+          </details>
         </section>
         {account.error && <div className="account-dialog__form"><p role="alert">{account.error}</p><Button disabled={busy} onClick={() => { void account.refresh(); }}>Try again</Button></div>}
       </>}
-    {error && <p role="alert">{error}</p>}
-    {account.authError && <p role="alert">{account.authError}</p>}
-    {message && <p role="status">{message}</p>}
+    {(!account.user || recovering) && error && <p role="alert">{error}</p>}
+    {account.authError && account.authError !== error && <p role="alert">{account.authError}</p>}
+    {(!account.user || recovering) && message && <p role="status">{message}</p>}
   </dialog>;
 }

@@ -4,11 +4,11 @@ import type { Composition } from "../domain/composition";
 import { authReturn, supabase } from "./client";
 import { authReturnUrl, validatePassword } from "./emailAuth";
 import { deleteComposition, loadCompositions, loadProfile, saveComposition, saveProfile, type Profile, type SavedComposition } from "./repository";
+import { useAvatar } from "./useAvatar";
 import { canSaveComposition } from "./compositionLimit";
 
-export function accountError(error: unknown): string {
-  return error instanceof Error ? error.message : typeof error === "object" && error !== null && "message" in error ? String(error.message) : "Something went wrong. Please try again.";
-}
+import { accountError } from "./errors";
+export { accountError } from "./errors";
 
 export function useAccount() {
   const [user, setUser] = useState<User | null>(null);
@@ -21,6 +21,7 @@ export function useAccount() {
   const owner = useRef<string | null>(null);
   const generation = useRef(0);
   const userId = user?.id;
+  const avatar = useAvatar(userId);
   const initialName = typeof user?.user_metadata?.display_name === "string" ? user.user_metadata.display_name.slice(0, 80) : "";
 
   useEffect(() => {
@@ -33,6 +34,7 @@ export function useAccount() {
       owner.current = session?.user.id ?? null;
       setUser(session?.user ?? null);
       setAuthLoading(false);
+      if (previousOwner !== owner.current) { generation.current++; setData(null); setError(""); }
       if (event === "PASSWORD_RECOVERY" && session) {
         rememberRecovery(session.user.id);
         setRecovery("ready");
@@ -79,16 +81,19 @@ export function useAccount() {
 
   async function signIn(email: string, password: string) {
     if (!supabase) throw new Error("Account sign-in is not available yet.");
+    setAuthError("");
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
     if (error) throw error;
   }
-  async function signUp(email: string, password: string, name: string) {
+  async function signUp(email: string, password: string, firstName: string, lastName: string) {
     if (!supabase) throw new Error("Account sign-in is not available yet.");
+    setAuthError("");
     validatePassword(password, password);
-    const displayName = name.trim();
-    if (!displayName || displayName.length > 80) throw new Error("Enter a display name with 1–80 characters.");
+    const first = firstName.trim(), last = lastName.trim();
+    if (first.length > 80 || last.length > 80) throw new Error("Use names with 80 characters or fewer.");
+    const displayName = [first, last].filter(Boolean).join(" ").slice(0, 80);
     const { data, error } = await supabase.auth.signUp({ email: email.trim(), password,
-      options: { data: { display_name: displayName }, emailRedirectTo: authReturnUrl("confirm", window.location.href) } });
+      options: { data: { display_name: displayName, first_name: first, last_name: last }, emailRedirectTo: authReturnUrl("confirm", window.location.href) } });
     if (error) throw error;
     return !data.session;
   }
@@ -124,6 +129,17 @@ export function useAccount() {
     setData(previous => ({ owner: userId, profile, saved: previous?.owner === userId ? previous.saved : [] }));
     await refresh();
   }
+  async function updateNames(firstName: string, lastName: string) {
+    if (!supabase || !userId || owner.current !== userId) throw new Error("Please sign in first.");
+    const first = firstName.trim(), last = lastName.trim();
+    if (first.length > 80 || last.length > 80) throw new Error("Use names with 80 characters or fewer.");
+    const { data: result, error } = await supabase.auth.updateUser({ data: {
+      first_name: first, last_name: last, display_name: [first, last].filter(Boolean).join(" ").slice(0, 80),
+    } });
+    if (error) throw error;
+    if (owner.current !== userId) throw new Error("Your account changed. Please sign in again.");
+    setUser(result.user);
+  }
   async function save(composition: Composition) {
     if (!supabase || !userId || owner.current !== userId) throw new Error("Please sign in to save your composition.");
     if (data?.owner === userId && !canSaveComposition(data.saved, composition.id)) throw new Error("You can save up to eight compositions. Delete one before saving another.");
@@ -142,11 +158,21 @@ export function useAccount() {
   }
   async function signOut() {
     if (!supabase) return;
-    const { error } = await supabase.auth.signOut({ scope: "local" });
-    if (error) throw error;
+    setAuthError("");
+    try {
+      const { error } = await supabase.auth.signOut({ scope: "local" });
+      if (error) throw error;
+    } catch (error) {
+      // The SDK can clear the local session even when server revocation fails.
+      // Keep feedback above the dialog lifecycle so the login card can show it.
+      setAuthError(accountError(error));
+      throw error;
+    }
   }
 
-  return { configured: !!supabase, user, authLoading, dataLoading, error, authError, recovery, refresh,
+  const firstName = typeof user?.user_metadata.first_name === "string" ? user.user_metadata.first_name : data?.owner === userId ? data?.profile.display_name ?? initialName : initialName;
+  const lastName = typeof user?.user_metadata.last_name === "string" ? user.user_metadata.last_name : "";
+  return { firstName, lastName, displayName: [firstName, lastName].filter(Boolean).join(" "), avatar, updateNames, configured: !!supabase, user, authLoading, dataLoading, error, authError, recovery, refresh,
     profile: data && data.owner === userId ? data.profile : null, saved: data && data.owner === userId ? data.saved : [],
     signIn, signUp, resendConfirmation, requestPasswordReset, updatePassword, dismissRecovery, updateProfile, save, remove, signOut };
 }
