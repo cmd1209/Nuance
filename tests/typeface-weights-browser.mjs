@@ -16,7 +16,7 @@ await page.route('**/*',route=>{
 });
 try{
  await page.goto(base);
- await page.getByRole('navigation',{name:'Design exploration'}).getByRole('button',{name:'Types',exact:true}).click();
+ await page.getByRole('navigation',{name:'Design exploration'}).getByRole('button',{name:'Type',exact:true}).click();
  assert.equal(await page.locator('#types-explore-panel .type-specimen').count(),30);
  const cdp=await page.context().newCDPSession(page);await cdp.send('DOM.enable');await cdp.send('CSS.enable');
  for(const font of fonts.filter(font=>font.loading.additionalFaces?.length)){

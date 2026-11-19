@@ -29,7 +29,7 @@ async function aligned(){
 }
 try{
   await page.goto(base);
-  await page.getByRole('navigation',{name:'Design exploration'}).getByRole('button',{name:'Types',exact:true}).click();
+  await page.getByRole('navigation',{name:'Design exploration'}).getByRole('button',{name:'Type',exact:true}).click();
   assert.equal(await page.getByRole('slider').count(),0,'discovery specimens stay read-only');
   const exploreSize=fontId=>page.locator(`#types-explore-panel [data-font-id="${fontId}"] .type-specimen__quote-text`).evaluate(el=>parseFloat(getComputedStyle(el).fontSize));
   assert.equal(await exploreSize('google-fonts:dm-serif-display'),28,'Explore defaults to 28px');

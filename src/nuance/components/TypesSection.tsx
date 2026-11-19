@@ -63,7 +63,7 @@ export function TypesSection({hidden,onViewChange,account,onSignIn}:{hidden:bool
   const full=!!selected && !canSaveTypeface(favorites.saved,selected.id);
   const definition=FOUNDATION_SECTIONS.types;
   return <SectionLayout hidden={hidden} title={definition.title} headingId="types-heading" notice={notice} description={definition.descriptions[state.view]}
-    navigation={<SectionNavigation prefix="types" label="Types views" value={state.view} hasDraft={!!selected} onChange={changeView} />}>
+    navigation={<SectionNavigation prefix="types" label="Type views" value={state.view} hasDraft={!!selected} onChange={changeView} />}>
     <section id="types-explore-panel" role="tabpanel" aria-labelledby="types-explore-tab" hidden={state.view !== "explore"}>
       <CollectionGrid items={TYPEFACES} label="Typefaces"
         renderItem={font=><TypefaceCard font={font} active={!hidden && state.view === "explore"} size={specimenSizes[font.id]} weight={specimenWeights[font.id]} onSelect={()=>openTypeface(font.id)} />} />

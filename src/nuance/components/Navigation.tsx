@@ -3,7 +3,7 @@ import { Icon, type IconName } from "./Icon";
 import { Layers } from "lucide-react";
 import { DESIGN_CATEGORIES, type DesignCategoryId } from "../domain/categories";
 
-const categoryIcons: Record<string, IconName> = { colors: "color", types: "type", spaces: "space", details: "detail" };
+const categoryIcons: Record<string, IconName> = { colors: "color", types: "type", form: "detail" };
 
 export function Navigation({ activeSection = "colors", onSelect }: {
   activeSection?: DesignCategoryId; onSelect?: (section: DesignCategoryId) => void;

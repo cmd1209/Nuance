@@ -18,7 +18,7 @@ await context.route('**/*',async route=>{
 });
 const page=await context.newPage();page.on('pageerror',error=>errors.push(error.message));
 const nav=page.getByRole('navigation',{name:'Design exploration'}),cards=page.locator('.type-specimen');
-const types=()=>nav.getByRole('button',{name:'Types',exact:true}).click();
+const types=()=>nav.getByRole('button',{name:'Type',exact:true}).click();
 const columns=()=>page.locator('#types-explore-panel .collection-grid').first().evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
 async function layout(label){
  const result=await page.evaluate(()=>{
@@ -56,7 +56,7 @@ try{
  assert.equal(requested.length,fonts.length);assert.equal(new Set(requested).size,fonts.length);assert.ok(!external.some(origin=>/googleapis|gstatic|fontsource|jsdelivr/.test(origin)));
  console.log('PASS 30 real custom fonts, accurate specimens, on-demand local files, no font-arrival layout shift, unchanged UI typography');
  const previewLabels=await page.locator('#types-explore-panel .type-specimen__button').evaluateAll(buttons=>buttons.map(button=>button.getAttribute('aria-label')));
- await nav.getByRole('button',{name:'Spaces',exact:true}).click();await types();
+ await nav.getByRole('button',{name:'Form',exact:true}).click();await types();
  assert.deepEqual(await page.locator('#types-explore-panel .type-specimen__button').evaluateAll(buttons=>buttons.map(button=>button.getAttribute('aria-label'))),previewLabels);
  assert.equal(await page.locator('[aria-roledescription="carousel"]').count(),0);
  await page.getByRole('button',{name:'Preview DM Serif Display',exact:true}).focus();
@@ -66,7 +66,7 @@ try{
  assert.equal(await page.locator('.type-detail').getAttribute('data-font-status'),'loaded');
  await page.getByRole('tab',{name:'Saved',exact:true}).click();await page.getByText('Sign in to see your saved typefaces.',{exact:true}).waitFor();
  await page.getByRole('tab',{name:'Edit',exact:true}).click();assert.equal(await page.locator('#types-detail-heading').textContent(),'DM Serif Display');
- await nav.getByRole('button',{name:'Colors',exact:true}).click();assert.deepEqual(await colorState(),editedColor);
+ await nav.getByRole('button',{name:'Color',exact:true}).click();assert.deepEqual(await colorState(),editedColor);
  await types();assert.equal(await page.getByRole('tab',{name:'Edit',selected:true,exact:true}).count(),1);assert.equal(await page.locator('#types-detail-heading').textContent(),'DM Serif Display');
  await page.getByRole('tab',{name:'Explore',exact:true}).click();await page.getByRole('button',{name:'Preview Inter',exact:true}).click();assert.equal(await page.locator('#types-detail-heading').textContent(),'Inter');
  assert.equal(requested.length,fonts.length,'detail and return visits reuse loaded fonts');
@@ -91,7 +91,7 @@ try{
   return url.pathname.includes('/fonts/specimens/')&&url.pathname.endsWith('.woff2')?route.abort('failed'):route.continue();
  });
  const failed=await failedContext.newPage();failed.on('pageerror',error=>errors.push(error.message));await failed.goto(base);
- await failed.getByRole('navigation',{name:'Design exploration'}).getByRole('button',{name:'Types',exact:true}).click();
+ await failed.getByRole('navigation',{name:'Design exploration'}).getByRole('button',{name:'Type',exact:true}).click();
  await failed.locator('.type-specimen[data-font-status="unavailable"]').first().waitFor();
  assert.ok(await failed.getByText('Font unavailable. Showing a serif fallback.',{exact:true}).first().isVisible());
  await failed.getByRole('button',{name:'Preview DM Serif Display',exact:true}).click();await failed.locator('.type-detail[data-font-status="unavailable"]').waitFor();assert.equal(await failed.locator('#types-detail-heading').textContent(),'DM Serif Display');

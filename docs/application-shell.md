@@ -1,6 +1,6 @@
 # Nuance application shell
 
-This is the current layout contract for all five destinations: Colors, Types, Spaces, Details, and Designs. See [section navigation and state](sections.md) for their Phase 2 foundations. Domain algorithms, composition schemas, and Supabase persistence are independent of it. Follow [CSS conventions](CSS_CONVENTIONS.md) when changing styles.
+This is the current layout contract for all four destinations: Color, Type, Form, and Design. See [section navigation and state](sections.md) for their Phase 2 foundations. Domain algorithms, composition schemas, and Supabase persistence are independent of it. Follow [CSS conventions](CSS_CONVENTIONS.md) when changing styles.
 
 ## Structure and ownership
 
@@ -18,7 +18,7 @@ NuanceApp — application navigation/theme, account, and persistent Color editor
     └── native account / unsaved-change dialogs
 ```
 
-`AppShell` receives header, navigation, content, and overlay slots. It does not know about palettes, editors, grids, or persistence. `AppHeader` receives account labels and callbacks. `SectionLayout` receives a title, heading ID, optional local navigation, description, arbitrary content, and optional status message. All five main destinations are active. Colors has its complete editor; Types, Spaces, and Details use a shared foundational view. Designs has its separate assembly-oriented structure.
+`AppShell` receives header, navigation, content, and overlay slots. It does not know about palettes, editors, grids, or persistence. `AppHeader` receives account labels and callbacks. `SectionLayout` receives a title, heading ID, optional local navigation, description, arbitrary content, and optional status message. All four main destinations are active. Colors has its complete editor; Type has its own typography workspace; Form combines spacing and detail foundations. Designs has its separate assembly-oriented structure.
 
 `NuanceApp` keeps its application reducer, Color reducer, and account hook above these layout components. Theme and active main section live in `state/application.ts`; Color work remains in `state/editor.ts`. Switching views changes content, not the owning store. The active composition, clean baseline, saved ID, and unsaved-change confirmation survive navigation. No database or composition-format changes are part of this refactor.
 
@@ -87,7 +87,7 @@ Important evidence distinction: local pre-refactor Chrome tests resolved the mai
 2. Pass local navigation and descriptions as content; do not teach the shell about fonts, colors, or saved datasets.
 3. Keep domain/editor/persistence state above view changes when work must survive navigation.
 4. Never introduce section viewport heights, primary vertical overflow, layout-only backgrounds, footer spacers, or view-specific navigation offsets.
-5. Use `Navigation.activeSection` and `onSelect` for global destinations. All five destinations are enabled; unfinished creative tools use restrained introduction states inside their real sections.
+5. Use `Navigation.activeSection` and `onSelect` for global destinations. All four destinations are enabled; unfinished creative tools use restrained introduction states inside their real sections.
 6. Keep specialized overlays local or in the shell overlay slot; use native dialogs for modal UI.
 7. Test both sparse and long content, viewport resizing, zoom/reflow, and focus navigation before shipping.
 
@@ -122,11 +122,11 @@ At completion of the refactor, the TypeScript/Vite production build and all 49 N
 
 ## Phase 2 destinations
 
-The shared shell is unchanged by the section foundation work. All five sections stay mounted as siblings inside main; exactly one `SectionLayout` is visible via its native `hidden` attribute. Hidden sections contribute no height, focus targets, or extra scrolling. The Color reducer survives global navigation, and each `FoundationSection` instance preserves its own local Explore/Saved view. There is no fake selection or Edit context in the new creative sections.
+The shared shell is unchanged by the section foundation work. All four sections stay mounted as siblings inside main; exactly one `SectionLayout` is visible via its native `hidden` attribute. Hidden sections contribute no height, focus targets, or extra scrolling. The Color reducer survives global navigation, and each `FoundationSection` instance preserves its own local Explore/Saved view. There is no fake selection or Edit context in the new creative sections.
 
 Global navigation and theme have moved into `state/application.ts`; section state has no global theme field. Shared view types and foundational copy live in `domain/sections.ts`. The Color carousel ignores zero-width measurements while hidden so leaving and returning does not reset its horizontal page.
 
-Designs uses no segmented control. Its four ingredient areas show real saved-color counts/names from the existing account hook and clear availability messages for Types, Spaces, and Details. The foundation provides links to the appropriate sections without creating design selections, a preview, export tools, or new persistence.
+Designs uses no segmented control. Its three ingredient areas show real saved-color counts/names from the existing account hook and clear availability messages for Type and Form. The foundation provides links to the appropriate sections without creating design selections, a preview, export tools, or new persistence.
 
 The existing background tokens and accepted near-black canvas value are preserved. Browser background assertions compare screenshot pixels against the active computed canvas color, rather than hardcoding an older palette value.
 
@@ -135,7 +135,7 @@ Phase 2 validation passed the production build and 53 Node/component/PostgreSQL 
 
 ## Types discovery
 
-Types now uses its own `TypesSection` and local selection reducer. Its eight-font Explore gallery and read-only contextual Edit preview follow the same mounted/hidden section contract. Specimen fonts load lazily from self-hosted WOFF2 assets only for active/visible artwork; UI typography, shell geometry and Color state are unchanged. Spaces and Details remain `FoundationSection` instances. See [Types discovery](types-discovery.md) for the registry, licenses, loading policy, responsive layout and future favorites/pairing boundary.
+Types now uses its own `TypesSection` and local selection reducer. Its 30-font Explore gallery and read-only contextual Edit preview follow the same mounted/hidden section contract. Specimen fonts load lazily from self-hosted WOFF2 assets only for active/visible artwork; UI typography, shell geometry and Color state are unchanged. Form combines spacing and details in one `FoundationSection` instance. See [Types discovery](types-discovery.md) for the registry, licenses, loading policy, responsive layout and future favorites/pairing boundary.
 
 ## Mobile editing and the keyboard
 

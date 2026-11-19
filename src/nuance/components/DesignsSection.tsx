@@ -7,9 +7,8 @@ import { EmptyState } from "./EmptyState";
 import { SectionLayout } from "./SectionLayout";
 
 const ingredients: Array<{ section: FoundationSectionId; message: string }> = [
-  { section: "types", message: "Saved typography selections will be available here when Types exploration is ready." },
-  { section: "spaces", message: "Saved spacing systems will be available here when Spaces exploration is ready." },
-  { section: "details", message: "Saved detail configurations will be available here when Details exploration is ready." },
+  { section: "types", message: "Saved typography selections will be available here when Type exploration is ready." },
+  { section: "form", message: "Saved form configurations will be available here when Form exploration is ready." },
 ];
 
 /** Assembly foundation: real saved-color availability, with no fabricated design selections. */
@@ -17,13 +16,13 @@ export function DesignsSection({ account, hidden, onSavedColors, onExploreColors
   account: Account; hidden: boolean; onSavedColors: () => void; onExploreColors: () => void;
   onVisit: (section: FoundationSectionId) => void; onSignIn: () => void;
 }) {
-  return <SectionLayout hidden={hidden} title="Designs" headingId="designs-heading"
-    description="Bring your favorite colors, typography, spacing, and details together. Combine your selections to create a design system that's uniquely yours.">
+  return <SectionLayout hidden={hidden} title="Design" headingId="designs-heading"
+    description="Bring your favorite color, type, and form selections together. Combine your selections to create a design system that's uniquely yours.">
     <div className="designs-assembly">
       <h2>Your Design</h2>
       <ol className="designs-ingredients" aria-label="Design ingredients">
         <li className="designs-ingredient">
-          <h3>Colors</h3>
+          <h3>Color</h3>
           {account.authLoading || account.user && account.dataLoading && !account.saved.length ? <p role="status">Loading saved colors…</p>
             : !account.user ? <EmptyState message="Sign in to access your saved palettes." action={<Button onClick={onSignIn}>Sign in</Button>} />
             : <>

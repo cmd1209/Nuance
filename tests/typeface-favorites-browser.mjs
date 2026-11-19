@@ -42,7 +42,7 @@ await context.route('**/*',async route=>{
  return route.abort();
 });
 const nav=()=>page.getByRole('navigation',{name:'Design exploration'});
-const enterTypes=()=>nav().getByRole('button',{name:'Types',exact:true}).click();
+const enterTypes=()=>nav().getByRole('button',{name:'Type',exact:true}).click();
 async function choose(font){await page.getByRole('tab',{name:'Explore',exact:true}).click();await page.getByRole('button',{name:`Preview ${font.family}`,exact:true}).click();}
 async function save(){await page.getByRole('button',{name:'Save typeface',exact:true}).click();await page.getByText('Typeface saved to your account.',{exact:true}).waitFor();}
 async function login(user,open=true){

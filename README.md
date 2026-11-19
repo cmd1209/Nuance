@@ -2,7 +2,7 @@
 
 Nuance's Color experience builds on the existing Patternsmith React/Vite/TypeScript/Tailwind app and preserves its Figma palette-selection and manipulation screens. Palette discovery now mixes 348 Sanzo Wada combinations with 30 approved Werner · Nuance palettes using balanced collection cycles, with deterministic OKLCH extensions for compositions of up to six colors. See [the Wada integration notes](docs/sanzo-wada-integration.md) for source attribution, provenance, reset behavior, and generation details.
 
-All five main destinations are active. Colors contains the complete creative tool. Types offers eight self-hosted Google Fonts with contextual detail previews and account favorites; Spaces and Details provide independent Explore/Saved foundations, while Designs introduces the four-ingredient assembly structure using only real saved-color availability. Switching destinations preserves the active Color workspace. See [section architecture](docs/sections.md).
+The four main destinations are Color, Type, Form, and Design. Color contains the complete creative tool. Type offers 30 self-hosted Google Fonts with contextual editing and account favorites. Form combines spacing, proportion, corners, borders, shadows, and effects in one Explore/Saved foundation, using the former Details icon. Design introduces the three-ingredient assembly structure using real saved-color availability. Switching destinations preserves the active Color workspace. See [section architecture](docs/sections.md).
 
 ```bash
 npm install

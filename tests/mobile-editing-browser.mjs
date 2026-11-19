@@ -49,7 +49,7 @@ try{
  await dialog.waitFor({state:'hidden'});await setKeyboard(page,844);
  await nav.waitFor({state:'visible'});
  assert.ok((await page.locator('.color-region').evaluateAll(nodes=>nodes.map(node=>node.dataset.hex))).includes('#123456'));
- await nav.getByRole('button',{name:'Types',exact:true}).click();
+ await nav.getByRole('button',{name:'Type',exact:true}).click();
  await page.getByRole('button',{name:'Preview PT Serif',exact:true}).click();
  await page.getByRole('button',{name:'Show alphabet',exact:true}).click();
  await page.getByRole('button',{name:'Edit text',exact:true}).click();

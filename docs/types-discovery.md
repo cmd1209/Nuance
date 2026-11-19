@@ -1,6 +1,6 @@
 # Types — Google Fonts discovery and account favorites
 
-Types Explore is a functional 30-typeface gallery. It keeps Nuance's `AppShell`, `SectionLayout`, segmented navigation, fixed bottom navigation, one document scroll, theme canvas and interface font. Spaces and Details keep their existing foundation components. Color editing, discovery and persistence are unchanged.
+Types Explore is a functional 30-typeface gallery. It keeps Nuance's `AppShell`, `SectionLayout`, segmented navigation, fixed bottom navigation, one document scroll, theme canvas and interface font. Form combines spacing and details in its foundation component. Color editing, discovery and persistence are unchanged.
 
 ## Collection and registry
 

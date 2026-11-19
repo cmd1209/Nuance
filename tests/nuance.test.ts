@@ -16,7 +16,7 @@ const fixture = () => createComposition(PRESET_HEXES[0], "Test composition");
 
 test("eight saved compositions blocks new documents while allowing edits and a replacement after deletion", () => {
   assert.equal(MAX_SAVED_COMPOSITIONS, 8);
-  assert.deepEqual(SOURCE_LIBRARY_LIMITS, { colors:8, types:8, spaces:4, details:4 });
+  assert.deepEqual(SOURCE_LIBRARY_LIMITS, { colors:8, types:8, form:4 });
   const saved = Array.from({ length: MAX_SAVED_COMPOSITIONS }, (_, index) => ({ id: `saved-${index}` }));
   assert.equal(canSaveComposition(saved, "new"), false);
   assert.equal(canSaveComposition(saved, "saved-0"), true);
@@ -666,11 +666,13 @@ test("shared section layout exposes generic content, labelled heading, and live 
   assert.ok(markup.indexOf('Section description') < markup.indexOf('Section content'));
 });
 
-test("global navigation exposes five destinations and identifies one active section", () => {
+test("global navigation exposes four singular destinations and identifies one active section", () => {
   const markup = renderToStaticMarkup(createElement(Navigation, { activeSection: "colors" }));
   assert.equal((markup.match(/aria-current="page"/g) ?? []).length, 1);
   assert.equal((markup.match(/disabled=""/g) ?? []).length, 0);
   assert.match(markup, /aria-label="Design exploration"/);
+  assert.deepEqual(DESIGN_CATEGORIES.map(({label})=>label), ["Color", "Type", "Form", "Design"]);
+  assert.equal((markup.match(/<button/g) ?? []).length, 4);
 });
 
 import { FoundationSection } from "../src/nuance/components/FoundationSection";
@@ -693,11 +695,11 @@ test("application navigation and theme remain independent of a modified Color ed
   }
   application = applicationReducer(application, { type: "navigate", section: "colors" });
   assert.equal(application.activeSection, "colors");
-  assert.equal(application.theme, "light");
+  assert.equal(application.theme, "dark");
 });
 
-test("Spaces and Details retain foundational destinations with contextual Edit unavailable", () => {
-  for (const section of ["spaces", "details"] as const) {
+test("Form combines spacing and details in one foundational destination with contextual Edit unavailable", () => {
+  for (const section of ["form"] as const) {
     const markup = renderToStaticMarkup(createElement(FoundationSection, { section, hidden: false, onViewChange: noop }));
     assert.ok(markup.includes(FOUNDATION_SECTIONS[section].title));
     assert.ok(markup.includes(FOUNDATION_SECTIONS[section].descriptions.explore));
@@ -715,10 +717,10 @@ function designsMarkup(account: Account) {
     onExploreColors: noop, onVisit: noop, onSignIn: noop }));
 }
 
-test("Designs presents four ingredients without creative tabs, fake selections, or export controls", () => {
+test("Design presents three ingredients without creative tabs, fake selections, or export controls", () => {
   const markup = designsMarkup(accountFixture());
   assert.match(markup, /Your Design/);
-  assert.equal((markup.match(/class="designs-ingredient"/g) ?? []).length, 4);
+  assert.equal((markup.match(/class="designs-ingredient"/g) ?? []).length, 3);
   assert.match(markup, /No saved palettes yet/);
   assert.match(markup, /Explore colors/);
   assert.ok(!markup.includes('role="tab'));

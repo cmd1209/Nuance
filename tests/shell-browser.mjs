@@ -163,19 +163,15 @@ try {
   }
   console.log('PASS: eight viewport sizes × two themes, Explore and empty Saved, with screenshots.');
   const appNav = page.getByRole('navigation', {name:'Design exploration'});
-  const destinations = { types:'Types', spaces:'Spaces', details:'Details', designs:'Designs' };
+  const destinations = { types:'Type', form:'Form', designs:'Design' };
   const expectedDescriptions = {
     types: {
       explore:'Explore how typography shapes character and hierarchy. Experiment with type combinations, scale, and rhythm to discover what feels right.',
       saved:'Your saved typography selections, ready to revisit and refine. Select a favorite to continue editing or explore new combinations.'
     },
-    spaces: {
-      explore:'Explore how spacing creates structure and rhythm. Discover how small changes in distance and proportion can transform a layout.',
-      saved:'Your saved spacing systems, ready to revisit and refine. Select a favorite to continue editing or explore new possibilities.'
-    },
-    details: {
-      explore:'Explore the subtle details that give interfaces their character. Discover combinations of corners, borders, shadows, and effects.',
-      saved:'Your saved detail configurations, ready to revisit and refine. Select a favorite to continue editing or explore new combinations.'
+    form: {
+      explore:'Explore how spacing, proportion, corners, borders, shadows, and effects work together to give interfaces structure and character.',
+      saved:'Your saved form configurations, ready to revisit and refine. Select a favorite to continue editing or explore new combinations.'
     }
   };
   for (const viewport of [{width:1280,height:1000},{width:390,height:844},{width:568,height:320}]) {
@@ -191,7 +187,7 @@ try {
         assert.equal(await page.locator('html').getAttribute('data-theme'),value);
         if(section==='designs') {
           assert.equal(await page.getByRole('tab').count(),0);
-          assert.equal(await page.locator('.designs-ingredients > li').count(),4);
+          assert.equal(await page.locator('.designs-ingredients > li').count(),3);
           await page.getByText('No saved palettes yet. Save a color composition to use it here.',{exact:true}).waitFor();
           await layout(`phase2-designs-${viewport.width}-${value}`);
         } else {
@@ -207,34 +203,34 @@ try {
       }
     }
   }
-  await appNav.getByRole('button',{name:'Types',exact:true}).click();
+  await appNav.getByRole('button',{name:'Type',exact:true}).click();
   assert.equal(await page.getByRole('tab',{name:'Saved',selected:true,exact:true}).count(),1);
-  await appNav.getByRole('button',{name:'Spaces',exact:true}).click();
+  await appNav.getByRole('button',{name:'Form',exact:true}).click();
   await page.getByRole('button',{name:'Back to Explore',exact:true}).click();
-  await appNav.getByRole('button',{name:'Details',exact:true}).click();
+  await appNav.getByRole('button',{name:'Type',exact:true}).click();
   assert.equal(await page.getByRole('tab',{name:'Saved',selected:true,exact:true}).count(),1);
-  await appNav.getByRole('button',{name:'Spaces',exact:true}).click();
+  await appNav.getByRole('button',{name:'Form',exact:true}).click();
   assert.equal(await page.getByRole('tab',{name:'Explore',selected:true,exact:true}).count(),1);
-  await appNav.getByRole('button',{name:'Types',exact:true}).click();
+  await appNav.getByRole('button',{name:'Type',exact:true}).click();
   assert.equal(await page.getByRole('tab',{name:'Saved',selected:true,exact:true}).count(),1);
-  console.log('PASS: all five destinations, exact descriptions, independent local views, contextual Edit, both themes, fixed navigation, and sparse layouts.');
+  console.log('PASS: all four destinations, exact descriptions, independent local views, contextual Edit, both themes, fixed navigation, and sparse layouts.');
   await page.setViewportSize({width:1280,height:1000}); await load(2);
-  await appNav.getByRole('button',{name:'Designs',exact:true}).click();
+  await appNav.getByRole('button',{name:'Design',exact:true}).click();
   await page.getByText('2 saved palettes available',{exact:true}).waitFor();
   assert.equal(await page.locator('.designs-saved-colors > li').count(),2);
   assert.deepEqual(await page.locator('.designs-saved-colors > li').allTextContents(),fixtures.slice(0,2).map(domain.paletteAttribution));
   await page.getByRole('button',{name:'View saved colors',exact:true}).click();
   await page.getByText('2 / 8 saved',{exact:true}).waitFor();
-  assert.equal(await appNav.locator('[aria-current="page"]').textContent(),'Colors');
+  assert.equal(await appNav.locator('[aria-current="page"]').textContent(),'Color');
   page.once('dialog',dialog=>dialog.accept());
   await page.locator('[data-delete-composition]').first().click();
   await page.getByText('1 / 8 saved',{exact:true}).waitFor();
-  await appNav.getByRole('button',{name:'Designs',exact:true}).click();
+  await appNav.getByRole('button',{name:'Design',exact:true}).click();
   await page.getByText('1 saved palette available',{exact:true}).waitFor();
   assert.equal(await page.locator('.designs-saved-colors > li').count(),1);
-  await page.getByRole('button',{name:'Go to Types',exact:true}).click();
-  await page.getByRole('heading',{name:'Types',level:1,exact:true}).waitFor();
-  await appNav.getByRole('button',{name:'Designs',exact:true}).click();
+  await page.getByRole('button',{name:'Go to Type',exact:true}).click();
+  await page.getByRole('heading',{name:'Type',level:1,exact:true}).waitFor();
+  await appNav.getByRole('button',{name:'Design',exact:true}).click();
   await page.getByText('1 saved palette available',{exact:true}).waitFor();
   console.log('PASS: Designs shows only real saved records, ingredient links work, and data updates after Color deletion.');
   for (const count of [1, 2, 4, 8]) {
@@ -270,8 +266,8 @@ try {
   }
   await page.setViewportSize({width:1280,height:1000});
   const paletteIds = await grid.locator('.palette-card').evaluateAll(cards=>cards.map(card=>card.dataset.compositionId));
-  await appNav.getByRole('button',{name:'Types',exact:true}).click();
-  await appNav.getByRole('button',{name:'Colors',exact:true}).click();
+  await appNav.getByRole('button',{name:'Type',exact:true}).click();
+  await appNav.getByRole('button',{name:'Color',exact:true}).click();
   assert.deepEqual(await grid.locator('.palette-card').evaluateAll(cards=>cards.map(card=>card.dataset.compositionId)),paletteIds);
   const exploredWadaId = await page.locator('.palette-card').evaluateAll(cards => cards.find(card => card.dataset.compositionId.startsWith('sanzo-wada-') && card.querySelectorAll('.palette-card__color').length === 3).dataset.compositionId);
   await page.locator(`[data-composition-id="${exploredWadaId}"]`).click();
@@ -285,15 +281,15 @@ try {
   await page.mouse.move(bounds.x + bounds.width / 2 + 40, bounds.y + bounds.height / 2, { steps: 5 }); await page.mouse.up();
   const modified = await artwork(); assert.notDeepEqual(modified, original);
   for (const view of ['Explore', 'Saved']) { await selectView(view); await selectView('Edit'); assert.deepEqual(await artwork(), modified); }
-  for(const title of ['Types','Spaces','Details','Designs']) {
+  for(const title of ['Type','Form','Design']) {
     await appNav.getByRole('button',{name:title,exact:true}).click();
     assert.equal(await page.getByRole('dialog',{name:'Switch palettes?'}).count(),0);
-    await appNav.getByRole('button',{name:'Colors',exact:true}).click();
+    await appNav.getByRole('button',{name:'Color',exact:true}).click();
     assert.equal(await page.getByRole('tab',{name:'Edit',selected:true,exact:true}).count(),1);
     assert.deepEqual(await artwork(),modified);
   }
-  await appNav.getByRole('button',{name:'Types',exact:true}).click(); await theme('light');
-  await appNav.getByRole('button',{name:'Colors',exact:true}).click();
+  await appNav.getByRole('button',{name:'Type',exact:true}).click(); await theme('light');
+  await appNav.getByRole('button',{name:'Color',exact:true}).click();
   assert.equal(await page.locator('.nuance-app').getAttribute('data-theme'),'light');
   assert.deepEqual(await artwork(),modified);
   console.log('PASS: Color editing and grid contents survive every main destination; global theme remains independent.');
@@ -415,13 +411,13 @@ try {
   await page.evaluate(()=>{ localStorage.clear(); localStorage.setItem('nuance-test-signed-out', 'true'); });
   await page.reload();
   await page.getByRole('button',{name:'Sign in',exact:true}).waitFor();
-  await appNav.getByRole('button',{name:'Designs',exact:true}).click();
+  await appNav.getByRole('button',{name:'Design',exact:true}).click();
   const activeDesigns = page.locator('.section-layout:not([hidden])');
   await activeDesigns.getByText('Sign in to access your saved palettes.',{exact:true}).waitFor();
   await activeDesigns.getByRole('button',{name:'Sign in',exact:true}).click();
   await page.getByRole('dialog').getByLabel('Email',{exact:true}).waitFor();
   await page.keyboard.press('Escape');
-  assert.equal(await page.getByRole('heading',{name:'Designs',level:1,exact:true}).count(),1);
+  assert.equal(await page.getByRole('heading',{name:'Design',level:1,exact:true}).count(),1);
   console.log('PASS: Designs signed-out state and the shared authentication dialog.');
   assert.deepEqual(exceptions, []);
   await rm(join(artifacts, 'failure.png'), {force:true});

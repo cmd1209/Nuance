@@ -167,8 +167,8 @@ export default function NuanceApp() {
       </>}
     </SectionLayout>
     <TypesSection hidden={application.activeSection !== "types"} account={account} onSignIn={() => setAccountOpen(true)} onViewChange={() => main.current?.scrollIntoView({ block: "start", behavior: "instant" })} />
-    {(["spaces", "details"] as const).map(section => <FoundationSection key={section} section={section}
-      hidden={application.activeSection !== section} onViewChange={() => main.current?.scrollIntoView({ block: "start", behavior: "instant" })} />)}
+    <FoundationSection section="form" hidden={application.activeSection !== "form"}
+      onViewChange={() => main.current?.scrollIntoView({ block: "start", behavior: "instant" })} />
     <DesignsSection hidden={application.activeSection !== "designs"} account={account} onVisit={navigate}
       onSavedColors={() => openColorView("saved")} onExploreColors={() => openColorView("explore")} onSignIn={() => setAccountOpen(true)} />
   </AppShell>;
