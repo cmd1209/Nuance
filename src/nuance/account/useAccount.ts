@@ -90,6 +90,7 @@ export function useAccount() {
     setAuthError("");
     validatePassword(password, password);
     const first = firstName.trim(), last = lastName.trim();
+    if (!first) throw new Error("Enter your first name.");
     if (first.length > 80 || last.length > 80) throw new Error("Use names with 80 characters or fewer.");
     const displayName = [first, last].filter(Boolean).join(" ").slice(0, 80);
     const { data, error } = await supabase.auth.signUp({ email: email.trim(), password,
@@ -132,6 +133,7 @@ export function useAccount() {
   async function updateNames(firstName: string, lastName: string) {
     if (!supabase || !userId || owner.current !== userId) throw new Error("Please sign in first.");
     const first = firstName.trim(), last = lastName.trim();
+    if (!first) throw new Error("Enter your first name.");
     if (first.length > 80 || last.length > 80) throw new Error("Use names with 80 characters or fewer.");
     const { data: result, error } = await supabase.auth.updateUser({ data: {
       first_name: first, last_name: last, display_name: [first, last].filter(Boolean).join(" ").slice(0, 80),

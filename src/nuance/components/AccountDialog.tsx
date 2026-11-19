@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
-import { LogOut, X } from "lucide-react";
+import { ArrowUpRight, Pencil, X } from "lucide-react";
 import { accountError, type Account } from "../account/useAccount";
 import { MIN_PASSWORD_LENGTH, validatePassword, type EmailAuthMode } from "../account/emailAuth";
 import { Button } from "./Button";
@@ -15,6 +15,11 @@ export function AccountDialog({ account, onClose }: { account: Account; onClose:
   const [firstName, setFirstName] = useState(account.firstName);
   const [lastName, setLastName] = useState(account.lastName);
   const fileInput = useRef<HTMLInputElement>(null);
+  const [editingName, setEditingName] = useState(false);
+  const [editingPicture, setEditingPicture] = useState(false);
+  const [securityOpen, setSecurityOpen] = useState(false);
+  const nameTrigger = useRef<HTMLButtonElement>(null);
+  const wasEditingName = useRef(false);
   const [operation, setOperation] = useState("");
   const [sent, setSent] = useState(false);
   const [resendIn, setResendIn] = useState(0);
@@ -26,8 +31,9 @@ export function AccountDialog({ account, onClose }: { account: Account; onClose:
   const forgot = mode === "forgot";
   const recovering = account.recovery !== "none";
   const coolingDown = (signup || forgot) && resendIn > 0;
-  const title = recovering ? "Reset password" : account.user ? "Your account" : sent ? "Check your email" : forgot ? "Forgot password?" : signup ? "Create an account" : "Log in";
-  const initials = (account.user?.email?.[0] || "N").toUpperCase();
+  const title = recovering ? "Reset password" : account.user ? `Hi ${account.firstName},` : sent ? "Check your email" : forgot ? "Forgot password?" : signup ? "Create an account" : "Log in";
+  const initials = account.displayName?.trim().split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join("").toUpperCase()
+    || (account.user?.email?.[0] || "N").toUpperCase();
 
   useEffect(() => {
     const element = dialog.current!;
@@ -58,6 +64,13 @@ export function AccountDialog({ account, onClose }: { account: Account; onClose:
     const timeout = window.setTimeout(() => setResendIn(value => Math.max(0, value - 1)), 1000);
     return () => window.clearTimeout(timeout);
   }, [resendIn]);
+
+  useEffect(() => {
+    if (busy) return;
+    if (editingName) dialog.current?.querySelector<HTMLInputElement>(`[id="${prefix}-first-name"]`)?.focus();
+    else if (wasEditingName.current) nameTrigger.current?.focus();
+    wasEditingName.current = editingName;
+  }, [editingName, busy, prefix]);
 
   async function run(action: () => Promise<void>, kind = "auth") {
     if (busy) return;
@@ -98,7 +111,7 @@ export function AccountDialog({ account, onClose }: { account: Account; onClose:
   }
   function submitProfile(event: FormEvent) {
     event.preventDefault();
-    void run(async () => { await account.updateNames(firstName, lastName); setMessage("Name saved."); }, "name");
+    void run(async () => { await account.updateNames(firstName, lastName); setMessage("Name saved."); setEditingName(false); }, "name");
   }
 
   return <dialog ref={dialog} className={`account-dialog${account.user && !recovering ? " account-dialog--profile" : ""}`} aria-labelledby={`${prefix}-title`} onCancel={event => { event.preventDefault(); onClose(); }}>
@@ -138,8 +151,8 @@ export function AccountDialog({ account, onClose }: { account: Account; onClose:
         </div> : <form className="account-dialog__form" aria-busy={busy} onSubmit={submitAuth}>
             <p className="account-dialog__description">{forgot ? "Enter your email and we’ll send you a password reset link." : "Save your color compositions and typefaces to revisit them anytime."}</p>
             {signup && <>
-              <label htmlFor={`${prefix}-first-name`}>First name (optional)</label>
-              <input id={`${prefix}-first-name`} autoComplete="given-name" maxLength={80} value={firstName} disabled={busy} onChange={event => setFirstName(event.target.value)} />
+              <label htmlFor={`${prefix}-first-name`}>First name</label>
+              <input id={`${prefix}-first-name`} autoComplete="given-name" required maxLength={80} value={firstName} disabled={busy} onChange={event => setFirstName(event.target.value)} />
               <label htmlFor={`${prefix}-last-name`}>Last name (optional)</label>
               <input id={`${prefix}-last-name`} autoComplete="family-name" maxLength={80} value={lastName} disabled={busy} onChange={event => setLastName(event.target.value)} />
             </>}
@@ -159,35 +172,61 @@ export function AccountDialog({ account, onClose }: { account: Account; onClose:
         </div>}
       </> : <>
         <section className="account-profile" aria-label="Profile">
-          <p className="account-profile__email">{account.user.email}</p>
-          <form className="account-dialog__form" onSubmit={submitProfile} aria-busy={busy && operation === "name"}>
-            <label htmlFor={`${prefix}-first-name`}>First name (optional)</label>
-            <input id={`${prefix}-first-name`} autoComplete="given-name" maxLength={80} value={firstName} disabled={busy} onChange={event => setFirstName(event.target.value)} />
-            <label htmlFor={`${prefix}-last-name`}>Last name (optional)</label>
-            <input id={`${prefix}-last-name`} autoComplete="family-name" maxLength={80} value={lastName} disabled={busy} onChange={event => setLastName(event.target.value)} />
-            <Button className="account-profile__action" type="submit" aria-live="polite" disabled={busy}>{busy && operation === "name" ? "Saving name..." : "Save name"}</Button>
-          </form>
-          <div className="account-profile__image-row">
+          <div className="account-profile__identity">
             <span className="account-dialog__avatar" aria-hidden="true">
               {account.avatar.url ? <img src={account.avatar.url} alt="" onError={() => { void account.avatar.reload(); }} /> : initials}
             </span>
+            <div className="account-profile__details">
+              <div className="account-profile__name-row">
+                <p className="account-profile__name">{account.displayName || "Your account"}</p>
+                <Button ref={nameTrigger} className="account-profile__edit-name" aria-label="Edit name" aria-expanded={editingName} aria-controls={`${prefix}-name-editor`} disabled={busy}
+                  onClick={() => setEditingName(value => !value)}><Pencil size={16} aria-hidden="true" /></Button>
+              </div>
+              <p className="account-profile__email">{account.user.email}</p>
+              <button type="button" className="account-profile__picture-link" aria-expanded={editingPicture} aria-controls={`${prefix}-picture-editor`} disabled={busy}
+                onClick={() => setEditingPicture(value => !value)}>Edit picture</button>
+            </div>
+          </div>
+          {editingName && <form id={`${prefix}-name-editor`} className="account-dialog__form account-profile__editor" onSubmit={submitProfile} aria-busy={busy && operation === "name"}>
+            <label htmlFor={`${prefix}-first-name`}>First name</label>
+            <input id={`${prefix}-first-name`} autoComplete="given-name" required maxLength={80} value={firstName} disabled={busy} onChange={event => setFirstName(event.target.value)} />
+            <label htmlFor={`${prefix}-last-name`}>Last name (optional)</label>
+            <input id={`${prefix}-last-name`} autoComplete="family-name" maxLength={80} value={lastName} disabled={busy} onChange={event => setLastName(event.target.value)} />
+            <div className="account-dialog__actions">
+              <Button className="account-profile__action" type="submit" aria-live="polite" disabled={busy}>{busy && operation === "name" ? "Saving name..." : "Save name"}</Button>
+              <Button disabled={busy} onClick={() => { setFirstName(account.firstName); setLastName(account.lastName); setEditingName(false); nameTrigger.current?.focus(); }}>Cancel</Button>
+            </div>
+          </form>}
+          {editingPicture && <div id={`${prefix}-picture-editor`} className="account-profile__editor account-profile__picture-editor">
             <input ref={fileInput} className="account-profile__file" type="file" accept="image/jpeg,image/png,image/webp" aria-label="Choose avatar" disabled={busy || account.avatar.loading} onChange={event => {
               const file = event.currentTarget.files?.[0];
               event.currentTarget.value = "";
               if (file) void run(async () => { await account.avatar.upload(file); setMessage("Avatar saved."); }, "avatar");
             }} />
-            <Button disabled={busy || account.avatar.loading} onClick={() => fileInput.current?.click()}>{busy && operation === "avatar" ? "Uploading..." : account.avatar.url ? "Change avatar" : "Upload avatar"}</Button>
-          </div>
-          <p className="account-dialog__hint">JPEG, PNG, or WebP · up to 2 MB.<br />Uploads save automatically.</p>
+            <div className="account-dialog__actions">
+              <Button className="account-profile__action" disabled={busy || account.avatar.loading} onClick={() => fileInput.current?.click()}>{busy && operation === "avatar" ? "Uploading..." : account.avatar.url ? "Change avatar" : "Upload avatar"}</Button>
+              {account.avatar.url && <Button disabled={busy} onClick={() => { void run(async () => { await account.avatar.remove(); setMessage("Avatar removed."); }, "remove"); }}>{busy && operation === "remove" ? "Removing..." : "Remove avatar"}</Button>}
+            </div>
+            <p className="account-dialog__hint">JPEG, PNG, or WebP · up to 2 MB.<br />Uploads save automatically.</p>
+          </div>}
           {account.avatar.loading && <p role="status">Loading avatar...</p>}
           {account.avatar.error && <div><p role="alert">Could not load your avatar. {account.avatar.error}</p><Button disabled={busy} onClick={() => { void account.avatar.reload(); }}>Retry avatar</Button></div>}
-          {account.avatar.url && <Button className="account-profile__action" disabled={busy} onClick={() => { void run(async () => { await account.avatar.remove(); setMessage("Avatar removed."); }, "remove"); }}>{busy && operation === "remove" ? "Removing..." : "Remove avatar"}</Button>}
-          {error && <p role="alert">{error}</p>}
-          {message && <p role="status">{message}</p>}
-          <Button className="account-profile__action" disabled={busy} leadingIcon={<LogOut size={18} aria-hidden="true" />} onClick={() => { void run(account.signOut, "logout"); }}>{busy && operation === "logout" ? "Please wait..." : "Log out"}</Button>
-          <details className="account-profile__security"><summary>Password options</summary>
-            <Button disabled={busy || resendIn > 0} onClick={() => { void run(() => sendResetLink(account.user?.email || "")); }}>{resendIn > 0 ? `Send again in ${resendIn}s` : "Reset password"}</Button>
-          </details>
+          {error && <p className="account-profile__feedback" role="alert">{error}</p>}
+          {message && <p className="account-profile__feedback" role="status">{message}</p>}
+          <div className="account-profile__security">
+            <button type="button" className="account-profile__security-toggle" disabled={busy} aria-expanded={securityOpen} aria-controls={`${prefix}-security`}
+              onClick={() => setSecurityOpen(value => !value)}>
+              <span><span className="account-profile__security-title">Security</span><span className="account-profile__security-description">Manage password and login</span></span>
+              <ArrowUpRight size={20} aria-hidden="true" />
+            </button>
+            {securityOpen && <div id={`${prefix}-security`} className="account-profile__security-content">
+              <p className="account-dialog__hint">Send a secure email link to reset your password.</p>
+              <Button className="account-profile__action" disabled={busy || resendIn > 0} onClick={() => { void run(() => sendResetLink(account.user?.email || ""), "security"); }}>{busy && operation === "security" ? "Sending..." : resendIn > 0 ? `Send again in ${resendIn}s` : "Reset password"}</Button>
+            </div>}
+          </div>
+          <div className="account-profile__footer">
+            <Button className="account-profile__logout" disabled={busy} onClick={() => { void run(account.signOut, "logout"); }}>{busy && operation === "logout" ? "Please wait..." : "Log out"}</Button>
+          </div>
         </section>
         {account.error && <div className="account-dialog__form"><p role="alert">{account.error}</p><Button disabled={busy} onClick={() => { void account.refresh(); }}>Try again</Button></div>}
       </>}

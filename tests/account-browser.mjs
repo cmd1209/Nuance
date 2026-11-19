@@ -106,12 +106,18 @@ try {
   await dialog().getByLabel('Password', { exact: true }).fill('secret');
   await button('Create an account').click();
   assert.equal(await dialog().getByLabel('Password', { exact: true }).inputValue(), '');
-  await dialog().getByLabel('First name (optional)').fill(' Alice ');
+  assert.equal(await dialog().getByLabel('First name', { exact: true }).getAttribute('required'), '');
+  await dialog().getByLabel('First name', { exact: true }).fill('   ');
+  await dialog().getByLabel('Password', { exact: true }).fill('password1234');
+  await button('Sign up').click();
+  await feedback('Enter your first name.');
+  assert.equal(signupBody, undefined, 'blank names are rejected before reaching Supabase');
+  await dialog().getByLabel('First name').fill(' Alice ');
   await dialog().getByLabel('Last name (optional)').fill(' Example ');
   await dialog().getByLabel('Password', { exact: true }).fill('password1234');
   await button('Already have an account? Log in').click();
   await button('Create an account').click();
-  assert.equal(await dialog().getByLabel('First name (optional)').inputValue(), ' Alice ');
+  assert.equal(await dialog().getByLabel('First name').inputValue(), ' Alice ');
   assert.equal(await dialog().getByLabel('Email', { exact: true }).inputValue(), alice.email);
   assert.equal(await dialog().getByLabel('Password', { exact: true }).inputValue(), '');
   await dialog().getByLabel('Password', { exact: true }).fill('password1234');
@@ -135,13 +141,21 @@ try {
   failLogin = false; await login(alice);
   assert.equal(await page.getByRole('tab', { name: 'Explore', exact: true }).getAttribute('aria-selected'), 'true');
   await openAccount();
-  assert.equal(await dialog().getByLabel('First name (optional)').inputValue(), 'Legacy Alice');
-  await dialog().getByLabel('First name (optional)').fill(' Alice ');
+  assert.equal(await dialog().getByLabel('First name').count(), 0);
+  await button('Edit name').click();
+  assert.equal(await dialog().getByLabel('First name').inputValue(), 'Legacy Alice');
+  await dialog().getByLabel('First name').fill(' Alice ');
   await dialog().getByLabel('Last name (optional)').fill(' Example ');
   assert.equal(alice.user_metadata.first_name, undefined, 'typing never saves names');
   failName = true; await button('Save name').click(); await feedback('Name could not be saved');
   failName = false; await button('Save name').click(); await feedback('Name saved.');
+  assert.equal(await button('Edit name').evaluate(element => element === document.activeElement), true);
+  assert.equal(await dialog().getByLabel('First name').count(), 0);
   assert.equal(alice.user_metadata.first_name, 'Alice'); assert.equal(alice.user_metadata.last_name, 'Example');
+  await button('Edit picture').click();
+  await dialog().getByRole('button', { name: 'Security Manage password and login', exact: true }).click();
+  await button('Reset password').waitFor();
+  await dialog().getByRole('button', { name: 'Security Manage password and login', exact: true }).click();
   const before = uploads;
   for (const [file, text] of [
     [{ name: 'empty.png', mimeType: 'image/png', buffer: Buffer.alloc(0) }, 'Choose an image that is not empty.'],
@@ -171,8 +185,8 @@ try {
   saved = true; await page.reload();
   await page.getByRole('tab', { name: 'Saved', exact: true }).waitFor();
   await page.waitForFunction(() => document.querySelector('#color-saved-tab')?.getAttribute('aria-selected') === 'true');
-  await openAccount(); await button('Change avatar').waitFor();
-  assert.equal(await dialog().getByLabel('First name (optional)').inputValue(), 'Alice');
+  await openAccount(); await dialog().getByText('Alice Example', { exact: true }).waitFor();
+  assert.equal(await button('Edit name').getAttribute('aria-expanded'), 'false');
   for (const viewport of [{ width: 390, height: 844 }, { width: 320, height: 568 }, { width: 568, height: 320 }]) {
     await page.setViewportSize(viewport);
     const geometry = await dialog().evaluate(el => { const r = el.getBoundingClientRect(); return { x: r.x, y: r.y, right: r.right, bottom: r.bottom, overflow: el.scrollWidth > el.clientWidth }; });
@@ -182,14 +196,15 @@ try {
   }
   await page.setViewportSize({ width: 1280, height: 1000 });
   await page.screenshot({ path: `${artifacts}/account-desktop.png` });
+  await button('Edit picture').click();
   await button('Remove avatar').click(); await feedback('Avatar removed.');
   assert.equal(await dialog().locator('.account-dialog__avatar img').count(), 0);
   assert.equal(await page.locator('.account-button').innerText(), 'A');
   failLogout = true; await button('Log out').click(); await feedback('Logout temporarily unavailable');
   failLogout = false; await button('Log in').waitFor();
   await login(alice); await openAccount(); await button('Log out').click(); await button('Log in').waitFor();
-  await login(bob); await openAccount();
-  assert.equal(await dialog().getByLabel('First name (optional)').inputValue(), '');
+  await login(bob); await openAccount(); await button('Edit name').click();
+  assert.equal(await dialog().getByLabel('First name').inputValue(), '');
   assert.equal(await dialog().locator('.account-dialog__avatar img').count(), 0);
   assert.equal(await page.locator('.account-button').innerText(), 'B');
   // Supabase broadcasts a sign-out to other tabs via its own local storage listener.
@@ -198,7 +213,7 @@ try {
   await button('Log out').click(); await other.locator('.nuance-header').getByRole('button', { name: 'Log in', exact: true }).waitFor();
   await other.close();
   await login(alice); failLoad = true; await page.reload(); await openAccount();
-  await button('Retry avatar').waitFor(); failLoad = false; await button('Retry avatar').click(); await button('Upload avatar').waitFor();
+  await button('Retry avatar').waitFor(); failLoad = false; await button('Retry avatar').click(); await button('Edit picture').click(); await button('Upload avatar').waitFor();
   await page.waitForFunction(() => !document.querySelector('dialog [role=alert]'));
   await page.keyboard.press('Escape');
   assert.equal(await page.locator('.account-button').evaluate(el => el === document.activeElement), true);

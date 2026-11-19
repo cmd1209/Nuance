@@ -444,7 +444,7 @@ test("Saved distinguishes empty, signed-out, loading, and error states without p
 
 test("Profile renders account controls without saved compositions or category tabs", () => {
   const markup = renderToStaticMarkup(createElement(AccountDialog, { account: accountFixture(), onClose: noop }));
-  for (const label of ["First name (optional)", "Last name (optional)", "owner@example.com", "Reset password", "Log out", "Save name", "Upload avatar", "Uploads save automatically."]) assert.ok(markup.includes(label));
+  for (const label of ["Owner", "owner@example.com", "Edit name", "Edit picture", "Security", "Manage password and login", "Log out"]) assert.ok(markup.includes(label));
   assert.ok(!markup.includes('role="tab'));
   assert.ok(!markup.includes('palette-card'));
   assert.ok(!markup.includes('Back to library'));
