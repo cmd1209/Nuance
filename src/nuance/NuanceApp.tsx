@@ -8,7 +8,7 @@ import { SavedCompositions } from "./components/SavedCompositions";
 import { SwitchCompositionDialog } from "./components/SwitchCompositionDialog";
 import { AppShell } from "./components/AppShell";
 import { AppHeader } from "./components/AppHeader";
-import { FoundationSection } from "./components/FoundationSection";
+import { FormSection } from "./components/FormSection";
 import { TypesSection } from "./components/TypesSection";
 import { DesignsSection } from "./components/DesignsSection";
 import type { DesignCategoryId } from "./domain/categories";
@@ -180,7 +180,7 @@ export default function NuanceApp() {
       </>}
     </SectionLayout>
     <TypesSection hidden={application.activeSection !== "types"} account={account} onSignIn={() => setAccountOpen(true)} onViewChange={() => main.current?.scrollIntoView({ block: "start", behavior: "instant" })} />
-    <FoundationSection section="form" hidden={application.activeSection !== "form"}
+    <FormSection hidden={application.activeSection !== "form"}
       onViewChange={() => main.current?.scrollIntoView({ block: "start", behavior: "instant" })} />
     <DesignsSection hidden={application.activeSection !== "designs"} account={account} onVisit={navigate}
       onSavedColors={() => openColorView("saved")} onExploreColors={() => openColorView("explore")} onSignIn={() => setAccountOpen(true)} />

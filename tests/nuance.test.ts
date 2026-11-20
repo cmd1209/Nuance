@@ -16,7 +16,7 @@ const fixture = () => createComposition(PRESET_HEXES[0], "Test composition");
 
 test("eight saved compositions blocks new documents while allowing edits and a replacement after deletion", () => {
   assert.equal(MAX_SAVED_COMPOSITIONS, 8);
-  assert.deepEqual(SOURCE_LIBRARY_LIMITS, { colors:8, types:8, form:4 });
+  assert.deepEqual(SOURCE_LIBRARY_LIMITS, { colors:8, types:8, form:3 });
   const saved = Array.from({ length: MAX_SAVED_COMPOSITIONS }, (_, index) => ({ id: `saved-${index}` }));
   assert.equal(canSaveComposition(saved, "new"), false);
   assert.equal(canSaveComposition(saved, "saved-0"), true);
@@ -676,7 +676,9 @@ test("global navigation exposes four singular destinations and identifies one ac
   assert.equal((markup.match(/<button/g) ?? []).length, 4);
 });
 
-import { FoundationSection } from "../src/nuance/components/FoundationSection";
+import { FormSection } from "../src/nuance/components/FormSection";
+import { SavedFormConfigurations } from "../src/nuance/components/form/SavedFormConfigurations";
+import { FORM_GROUPS, canSaveFormConfiguration, type SavedFormConfiguration } from "../src/nuance/domain/form";
 import { DesignsSection } from "../src/nuance/components/DesignsSection";
 import { FOUNDATION_SECTIONS } from "../src/nuance/domain/sections";
 import { DESIGN_CATEGORIES } from "../src/nuance/domain/categories";
@@ -699,18 +701,48 @@ test("application navigation and theme remain independent of a modified Color ed
   assert.equal(application.theme, "dark");
 });
 
-test("Form combines spacing and details in one foundational destination with contextual Edit unavailable", () => {
-  for (const section of ["form"] as const) {
-    const markup = renderToStaticMarkup(createElement(FoundationSection, { section, hidden: false, onViewChange: noop }));
-    assert.ok(markup.includes(FOUNDATION_SECTIONS[section].title));
-    assert.ok(markup.includes(FOUNDATION_SECTIONS[section].descriptions.explore));
-    assert.ok(markup.includes(FOUNDATION_SECTIONS[section].empty.explore));
-    assert.ok(markup.includes(`id="${section}-explore-tab"`));
-    assert.ok(markup.includes(`id="${section}-saved-tab"`));
-    assert.ok(!markup.includes(`id="${section}-edit-tab"`));
-    assert.ok(!markup.includes("palette-card"));
-    assert.match(markup, /role="tabpanel"/);
+test("Form discovery presents four groups and only the first three editor entry points", () => {
+  const markup = renderToStaticMarkup(createElement(FormSection, { hidden: false, onViewChange: noop }));
+  assert.ok(markup.includes(FOUNDATION_SECTIONS.form.descriptions.explore));
+  for (const group of FORM_GROUPS) {
+    assert.ok(markup.includes(`id="form-explore-${group.id}"`));
+    assert.ok(!markup.includes(group.subtitle));
+    assert.ok(!markup.includes(group.description));
   }
+  const buttons = markup.match(/<button[^>]*class="form-setting"[\s\S]*?<\/button>/g) ?? [];
+  assert.equal(buttons.length, 20);
+  const available = buttons.filter(button => !button.includes('disabled=""'));
+  assert.equal(available.length, 3);
+  for (const name of ["Spacing", "Radii", "Shadows"]) assert.ok(available.some(button => button.includes(name)));
+  assert.ok(!markup.includes('id="form-edit-tab"'));
+});
+
+test("Saved Form groups configurations by section and component without discovery copy", () => {
+  const items: SavedFormConfiguration[] = [
+    { id: "shadow-1", setting: "shadows", name: "Soft shadow", values: {} },
+    { id: "space-1", setting: "spacing", name: "Compact spacing", values: {} },
+    { id: "space-2", setting: "spacing", name: "Generous spacing", values: {} },
+  ];
+  const markup = renderToStaticMarkup(createElement(SavedFormConfigurations, { items, onOpen: noop }));
+  assert.ok(markup.indexOf("Compact spacing") < markup.indexOf("Soft shadow"));
+  assert.ok(markup.includes("2/3"));
+  assert.ok(markup.includes('aria-label="Saved Spacing"'));
+  for (const group of FORM_GROUPS) {
+    assert.ok(markup.includes(`id="form-saved-${group.id}"`));
+    assert.ok(!markup.includes(group.description));
+    assert.ok(!markup.includes(group.subtitle));
+  }
+});
+
+test("Form allows three configurations per component and updates at capacity", () => {
+  const saved: SavedFormConfiguration[] = Array.from({ length: 3 }, (_, index) => ({
+    id: `spacing-${index}`, setting: "spacing", name: `Spacing ${index}`, values: {},
+  }));
+  const next: SavedFormConfiguration = { id: "new", setting: "spacing", name: "New spacing", values: {} };
+  assert.equal(canSaveFormConfiguration(saved, next), false);
+  assert.equal(canSaveFormConfiguration(saved, { ...next, id: "spacing-0" }), true);
+  assert.equal(canSaveFormConfiguration(saved, { ...next, setting: "radii" }), true);
+  assert.equal(canSaveFormConfiguration(saved.slice(1), next), true);
 });
 
 function designsMarkup(account: Account) {
