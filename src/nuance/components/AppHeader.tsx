@@ -17,7 +17,7 @@ export function AppHeader({ theme, displayName, email, avatarUrl, signedIn, load
         aria-label={loading ? "Restoring your session..." : "Log in"} aria-haspopup="dialog" onClick={onAccount}>
         {loading ? "Restoring your session..." : "Log in"}
       </Button>}
-      <Button onClick={onTheme} aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`} leadingIcon={<Icon name="moon" />}>
+      <Button onClick={onTheme} aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`} leadingIcon={<Icon name={theme === "dark" ? "moon" : "sun"} />}>
         {theme === "dark" ? "Dark" : "Light"}
       </Button>
     </div>
