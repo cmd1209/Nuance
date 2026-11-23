@@ -11,6 +11,39 @@ import { readSavedComposition } from "../src/nuance/account/repository";
 import { authReturnUrl, readAuthReturn, validatePassword, MIN_PASSWORD_LENGTH } from "../src/nuance/account/emailAuth";
 import { canSaveComposition, MAX_SAVED_COMPOSITIONS } from "../src/nuance/account/compositionLimit";
 import { SOURCE_LIBRARY_LIMITS } from "../src/nuance/domain/categories";
+import { createSizingConfiguration, moveSizingPoint, sizingCurve, sizingTokens } from "../src/nuance/domain/sizing";
+
+test("sizing curves remain ordered and bounded through flat and steep segments", () => {
+  for (const points of [[0, 0, 0], [1, 1, 1], [0, 0.5, 1], [0.01, 0.99, 0.99], [0.25, 0.5, 0.75]] as [number, number, number][]) {
+    let previous = 0;
+    for (let step = 0; step <= 1000; step++) {
+      const value = sizingCurve(points, step / 1000);
+      assert.ok(value >= previous - 1e-12 && value >= -1e-12 && value <= 1 + 1e-12);
+      previous = value;
+    }
+    assert.equal(sizingCurve(points, 0), 0);
+    assert.equal(sizingCurve(points, 1), 1);
+  }
+});
+
+test("sizing point movement respects its neighbors and leaves the previous draft intact", () => {
+  const original = createSizingConfiguration();
+  const above = moveSizingPoint(original, 1, 2);
+  const below = moveSizingPoint(original, 1, -1);
+  assert.equal(above.points[1], original.points[2]);
+  assert.equal(below.points[1], original.points[0]);
+  assert.deepEqual(original.points, [0.0625, 0.25, 0.5625]);
+});
+
+test("sizing generates ten tokens plus zero and scales them with the maximum", () => {
+  const configuration = { ...createSizingConfiguration(), maxSize: 100, points: [0.25, 0.5, 0.75] as [number, number, number] };
+  const tokens = sizingTokens(configuration);
+  assert.equal(tokens.length, 11);
+  assert.deepEqual(tokens[0], { name: "size-0", value: 0 });
+  assert.deepEqual(tokens[10], { name: "size-10", value: 100 });
+  assert.deepEqual(tokens.map(token => token.value), [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
+  assert.deepEqual(sizingTokens({ ...configuration, maxSize: 200 }).map(token => token.value), tokens.map(token => token.value * 2));
+});
 
 const fixture = () => createComposition(PRESET_HEXES[0], "Test composition");
 
@@ -701,7 +734,7 @@ test("application navigation and theme remain independent of a modified Color ed
   assert.equal(application.theme, "dark");
 });
 
-test("Form discovery presents four groups and only the first three editor entry points", () => {
+test("Form discovery presents four groups and the four initial editor entry points", () => {
   const markup = renderToStaticMarkup(createElement(FormSection, { hidden: false, onViewChange: noop }));
   assert.ok(markup.includes(FOUNDATION_SECTIONS.form.descriptions.explore));
   for (const group of FORM_GROUPS) {
@@ -712,8 +745,8 @@ test("Form discovery presents four groups and only the first three editor entry 
   const buttons = markup.match(/<button[^>]*class="form-setting"[\s\S]*?<\/button>/g) ?? [];
   assert.equal(buttons.length, 20);
   const available = buttons.filter(button => !button.includes('disabled=""'));
-  assert.equal(available.length, 3);
-  for (const name of ["Spacing", "Radii", "Shadows"]) assert.ok(available.some(button => button.includes(name)));
+  assert.equal(available.length, 4);
+  for (const name of ["Sizing", "Spacing", "Radii", "Shadows"]) assert.ok(available.some(button => button.includes(name)));
   assert.ok(!markup.includes('id="form-edit-tab"'));
 });
 

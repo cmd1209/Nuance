@@ -7,7 +7,7 @@ export const FORM_GROUPS = [
     id: "rhythm", title: "Rhythm & Structure",
     subtitle: "Spacing, sizing, grids, containers, aspect ratios, density.",
     description: "Defines how interfaces are arranged and how much room elements occupy.",
-    settings: ["spacing", "sizing", "grids", "containers", "aspect-ratios", "density"],
+    settings: ["sizing", "spacing", "grids", "containers", "aspect-ratios", "density"],
   },
   {
     id: "shape", title: "Shape & Edges",
@@ -31,14 +31,14 @@ export const FORM_GROUPS = [
 
 export type FormSettingId = typeof FORM_GROUPS[number]["settings"][number];
 export const FORM_SETTING_LABELS: Record<FormSettingId, string> = {
-  spacing: "Spacing", sizing: "Sizing", grids: "Grids", containers: "Containers",
+  sizing: "Sizing", spacing: "Spacing", grids: "Grids", containers: "Containers",
   "aspect-ratios": "Aspect ratios", density: "Density", radii: "Radii", borders: "Borders",
   strokes: "Strokes", dividers: "Dividers", "shape-language": "Shape language",
   shadows: "Shadows", elevation: "Elevation", opacity: "Opacity", blur: "Blur",
   "surface-treatment": "Surface treatment", motion: "Motion", easing: "Easing",
   "transition-durations": "Transition durations", "interaction-states": "Interaction states",
 };
-export const INITIAL_FORM_SETTINGS: readonly FormSettingId[] = ["spacing", "radii", "shadows"];
+export const INITIAL_FORM_SETTINGS: readonly FormSettingId[] = ["sizing", "spacing", "radii", "shadows"];
 
 /** Editors will supply their own configuration values when implemented. */
 export interface SavedFormConfiguration<T = unknown> {

@@ -168,7 +168,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
-    gap: var(--gap-none);
+    gap: var(--gap-xs);
     max-width: 100%;
     margin-inline-start: auto;
     align-items: center;

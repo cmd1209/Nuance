@@ -1,0 +1,264 @@
+.sizing-editor {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(200px, 240px);
+    align-items: start;
+    gap: var(--gap-3xl);
+    width: 100%;
+    max-width: var(--app-reading-width);
+    padding-block: var(--padding-lg);
+    text-align: left;
+}
+
+.sizing-editor__workspace {
+    min-width: 0;
+}
+
+.sizing-editor__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--gap-md) var(--gap-xl);
+}
+
+.sizing-editor__steps {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm);
+    font-size: var(--body-sm-font-size);
+}
+
+.sizing-editor__steps select {
+    min-height: var(--size-target-min);
+    padding: var(--padding-sm);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-control);
+    background: var(--color-bg-canvas);
+    color: var(--color-text-primary);
+    font: inherit;
+}
+
+.sizing-editor__precision {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: var(--body-sm-font-size);
+}
+
+.sizing-editor__precision legend {
+    float: left;
+    margin-right: var(--gap-sm);
+    padding-block: var(--padding-md);
+}
+
+.sizing-editor__segments {
+    display: inline-flex;
+    padding: var(--padding-2xs);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-full);
+}
+
+.sizing-editor__segments button {
+    min-width: var(--size-target-min);
+    min-height: var(--size-control-md);
+    padding: var(--padding-sm);
+    border: 0;
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--color-text-tertiary);
+    font: inherit;
+}
+
+.sizing-editor__segments button[aria-pressed="true"] {
+    background: var(--color-bg-surface-selected);
+    color: var(--color-text-primary);
+}
+
+.sizing-editor__segments button:disabled {
+    color: var(--color-text-disabled);
+}
+
+.sizing-editor__max {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gap-lg);
+    font-size: var(--body-sm-font-size);
+}
+
+.sizing-editor__input {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-sm);
+    color: var(--color-text-tertiary);
+}
+
+.sizing-editor__input input {
+    width: 88px;
+    min-height: var(--size-target-min);
+    padding: var(--padding-sm);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-control);
+    background: var(--color-bg-canvas);
+    color: var(--color-text-primary);
+    font: inherit;
+}
+
+.sizing-editor__graph {
+    margin-top: var(--gap-2xl);
+}
+
+.sizing-editor__axis-max {
+    display: block;
+    margin-bottom: var(--gap-lg);
+    color: var(--color-text-tertiary);
+    font-size: var(--caption-font-size);
+    text-align: right;
+}
+
+.sizing-editor__plot {
+    position: relative;
+    height: 280px;
+    margin-inline: var(--gap-md);
+}
+
+.sizing-editor__plot svg {
+    display: block;
+    overflow: visible;
+    width: 100%;
+    height: 100%;
+}
+
+.sizing-editor__grid-line line {
+    stroke: var(--color-border-subtle);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+}
+
+.sizing-editor__curve {
+    fill: none;
+    stroke: var(--color-text-primary);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+}
+
+.sizing-editor__sample {
+    fill: var(--color-text-tertiary);
+}
+
+.sizing-editor__quantization {
+    stroke: var(--color-border-default);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+}
+
+.nuance-app .sizing-editor__point {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: var(--size-target-min);
+    height: var(--size-target-min);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: transparent;
+    transform: translate(-50%, -50%);
+    cursor: grab;
+    touch-action: none;
+}
+
+.nuance-app .sizing-editor__point.is-active {
+    width: var(--size-control-xl);
+    height: var(--size-control-xl);
+    cursor: grabbing;
+}
+
+.sizing-editor__plot.is-dragging {
+    cursor: grabbing;
+}
+
+.sizing-editor__point::after {
+    width: var(--size-icon-sm);
+    height: var(--size-icon-sm);
+    border: 2px solid var(--color-text-primary);
+    border-radius: var(--radius-full);
+    background: var(--color-bg-canvas);
+    content: "";
+}
+
+.sizing-editor__point:hover::after,
+.sizing-editor__point:focus-visible::after {
+    background: var(--color-bg-surface-selected);
+}
+
+.sizing-editor__point.is-active::after {
+    width: var(--size-icon-md);
+    height: var(--size-icon-md);
+    background: var(--color-text-primary);
+}
+
+.sizing-editor__axis {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--gap-xl);
+    color: var(--color-text-tertiary);
+    font-size: var(--caption-font-size);
+}
+
+.sizing-editor .sizing-editor__hint {
+    margin-top: var(--gap-lg);
+    font-size: var(--body-sm-font-size);
+}
+
+.sizing-editor__tokens {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--body-sm-font-size);
+    line-height: var(--body-sm-line-height);
+    font-variant-numeric: tabular-nums;
+}
+
+.sizing-editor__tokens th,
+.sizing-editor__tokens td {
+    padding-block: var(--padding-sm);
+    border-bottom: 1px solid var(--color-border-subtle);
+    font-weight: var(--font-weight-regular);
+    text-align: left;
+}
+
+.sizing-editor__tokens thead {
+    color: var(--color-text-tertiary);
+}
+
+.sizing-editor__tokens td:nth-child(2),
+.sizing-editor__tokens thead th:nth-child(2) {
+    text-align: right;
+}
+
+.sizing-editor__specimen-cell {
+    width: 32%;
+    padding-left: var(--padding-lg);
+}
+
+.sizing-editor__specimen {
+    display: block;
+    height: var(--dimension-6);
+    background: var(--color-text-tertiary);
+}
+
+.sizing-editor .sizing-editor__error {
+    margin-top: var(--gap-md);
+    color: var(--color-text-primary);
+    font-size: var(--body-sm-font-size);
+}
+
+@media (max-width: 700px) {
+    .sizing-editor {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--gap-2xl);
+    }
+
+    .sizing-editor__plot {
+        height: 220px;
+    }
+}
